@@ -6,11 +6,12 @@
   "author": "alMukaafih",
   "license": "MIT",
   "bin": {
-    "vsacode": "bin/main.js"
+    "vsacode": "bin/main.js",
+    "icont": "bin/icont.js"
   },
   "scripts": {
     "test": "vsacode *.vsix",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist *.zip",
     "build": "webpack",
     "build-release": "webpack --mode production",
     "start-dev": "node .vscode/start-dev"
