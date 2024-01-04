@@ -1,0 +1,15 @@
+{
+    "id": "almukaafih.icons",
+    "name": "Icons",
+    "main": "dist/main.js",
+    "version": "3.8.0",
+    "readme": "readme.md",
+    "icon": "icon.png",
+    "files": [],
+    "minVersionCode": 292,
+    "author": {
+        "name": "alMukaafih",
+        "email": "alMukaafih@gmail.com",
+        "github": "alMukaafih"
+    }
+}
