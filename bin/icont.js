@@ -7,7 +7,7 @@ const AdmZip = require("adm-zip");
 
 // cleanup task
 process.on("exit", (code) => {
-    console.log("Exiting Node.js process with code:", code);
+    //console.log("Exiting Node.js process with code:", code);
     fs.rmSync(tmpDir, { recursive: true });
 });
 
@@ -41,5 +41,5 @@ for (let iconTheme of iconThemes) {
     let _id = iconTheme.id;
     let _label = iconTheme.label;
     let _path = iconTheme.path;
-    console.log(`${_label}: ${_id}`);
+    console.log(iconTheme);
 }

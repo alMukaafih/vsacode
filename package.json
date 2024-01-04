@@ -11,7 +11,7 @@
   },
   "scripts": {
     "test": "vsacode *.vsix",
-    "clean": "rm -rf dist *.zip",
+    "clean": "rm -rf dist",
     "build": "webpack",
     "build-release": "webpack --mode production",
     "start-dev": "node .vscode/start-dev"

@@ -4,10 +4,8 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const AdmZip = require("adm-zip");
-const child_process = require("child_process");
-const { promisify } = require('util');
-const sleep = promisify(setTimeout);
 const { stylesGen } = require('../lib/libgen');
+const { distBuild } = require('../lib/libdist');
 
 // cleanup task
 process.on("exit", (code) => {
@@ -41,7 +39,6 @@ if (iconThemes == undefined)
     process.exit(1);
 
 // process each icon Theme
-let x = 1;
 for (let iconTheme of iconThemes) {
     let _id = iconTheme.id;
     let _label = iconTheme.label;
@@ -53,23 +50,5 @@ for (let iconTheme of iconThemes) {
     fs.mkdirSync(outDir, { recursive: true });
     
     stylesGen(pwDir, outDir, icon_json);
-
-    let owd = process.cwd();
-    process.chdir(acode);
-    
-    // open plugin.json
-    console.log(`building: ${_label}`);
-    sleep(2000);
-    child_process.execSync(`nano ${path.join(acode, "plugin.json")}`, { stdio: 'inherit' });
-    child_process.execSync(`nano ${path.join(acode, "readme.md")}`, { stdio: 'inherit' });
-    child_process.execSync(`npm run build-release`, { stdio: 'inherit' });
-    child_process.execSync(`npm run clean`, { stdio: 'inherit' });
-    
-    
-    
-    let outZip = _id + "zip";
-    fs.copyFileSync(path.join(acode, "dist.zip"), path.join(owd, outZip));
-    console.log(`output: ${outZip}`);
-    x ++;
+    distBuild(_label, _id, acode);
 }
-

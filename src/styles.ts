@@ -1,81 +1,70 @@
-let file_type = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/file.svg");
-let file_type_css = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/css.svg");
-let file_type_javascript = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/javascript.svg");
-let file_type_text = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/text.svg");
-let file_type_json = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/json.svg");
-let file_type_typescript = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/typescript.svg");
-let file_type_jsx = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/jsx.svg");
-let file_type_tsx = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/tsx.svg");
-let file_type_yaml = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/yaml.svg");
-let file_type_markdown = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/markdown.svg");
-let file_type_sql = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/sql.svg");
-let file_type_java = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/java.svg");
-let file_type_java_class = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/java_class.svg");
-let file_type_python = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/python.svg");
-let file_type_dart = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/dart.svg");
-let file_type_kotlin = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/kotlin.svg");
-let file_type_shell = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/shell.svg");
-let file_type_ignore = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/ignore_file.svg");
-let file_type_image = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/image.svg");
-let file_type_xml = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/xml.svg");
-let file_type_c = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/c.svg");
-let file_type_cpp = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/cpp.svg");
-let file_type_ruby = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/ruby.svg");
-let file_type_header = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/header.svg");
-let file_type_sass = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/sass.svg");
-let file_type_less = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/less.svg");
-let file_type_html = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/html.svg");
-let file_type_coffeescript = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/coffeescript.svg");
-let file_type_scala = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/scala.svg");
-let file_type_vue = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/vue.svg");
-let file_type_archive = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/archive.svg");
-let file_type_makefile = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/makefile.svg");
-let file_type_dockerfile = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/file_dockerfile.svg");
-let file_type_dockercompose = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/dockercompose.svg");
-let file_type_gradle = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/gradle.svg");
-let file_type_groovy = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/groovy.svg");
-let file_type_php = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/php.svg");
-let file_type_go = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/go.svg");
-let file_type_eslint = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/eslint.svg");
-let file_type_editorconfig = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/editorconfig.svg");
-let file_type_yarn = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/yarn.svg");
-let file_type_htaccess = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/htaccess.svg");
-let file_type_assembly = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/asm.svg");
-let file_type_cuda = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/cuda.svg");
-let file_type_cuda_header = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/cuda_header.svg");
-let file_type_model = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/model.svg");
-let file_type_csv = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/csv.svg");
-let file_type_binary = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/binary.svg");
-let file_type_toml = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/toml.svg");
-let file_type_rust = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/rust.svg");
-let file_type_julia = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/julia.svg");
-let folder_type = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/folder.svg");
-let file_type_blade = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/blade.svg");
-let file_type_twig = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/twig.svg");
-let file_type_svelte = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/svelte.svg");
-let file_type_aux = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/latex_aux.svg");
-let file_type_bbl = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/bbl.svg");
-let file_type_bib = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/bib.svg");
-let file_type_pdf = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/pdf.svg");
-let file_type_tex = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/tex.svg");
-let file_type_cls = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/cls.svg");
-let file_type_sty = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/sty.svg");
-let file_type_mdx = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/mdx.svg");
-let file_type_test_ts = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/test_ts.svg");
-let file_type_test_jsx = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/test_jsx.svg");
-let file_type_test_js = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/test_js.svg");
-let file_type_graphql = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/graphql.svg");
-let file_type_postcss = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/postcss.svg");
-let file_type_erb = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/erb.svg");
-let file_type_lua = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/lua.svg");
-let file_type_proto = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/protobuf.svg");
-let file_type_cmake = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/cmake.svg");
-let file_type_pnpm = require("/data/data/com.termux/files/usr/tmp/vsacode-JUhLbg/extension/dist/v1/dark/icons/pnpm_dark.svg");
+let file_text = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/text_auto.svg");
+let file_kotlin = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/kotlin_auto.svg");
+let folder = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/folder_auto.svg");
+let file_ignored = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/ignored_auto.svg");
+let file_css = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/css_auto.svg");
+let file_erb = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/erbFile_auto.svg");
+let file_scss = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/scss_auto.svg");
+let file_json = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/json_auto.svg");
+let file_html = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/html_auto.svg");
+let file_react = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/react_auto.svg");
+let file_ruby = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/ruby_auto.svg");
+let file_rake = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/rakeTask_auto.svg");
+let file_gemfile = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/rubyGems_auto.svg");
+let file_less = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/less_auto.svg");
+let file_javascript = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/javaScript_auto.svg");
+let file_typescript = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/typeScript_auto.svg");
+let file_csv = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/csv_auto.svg");
+let file_vue = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/vueJs_auto.svg");
+let file_editorconfig = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/editorConfig_auto.svg");
+let file_image = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/image_auto.svg");
+let file_font = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/font_auto.svg");
+let file_yaml = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/yaml_auto.svg");
+let file_java = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/java_auto.svg");
+let file_xml = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/xml_auto.svg");
+let file_sql = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/sql_auto.svg");
+let file_slim = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/slim_auto.svg");
+let file_yarn = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/yarn_auto.svg");
+let file_markdown = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/markdown_auto.svg");
+let file_gitignore = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/gitignore_auto.svg");
+let file_properties = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/properties_auto.svg");
+let file_shell = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/shell_auto.svg");
+let file_h = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/h_auto.svg");
+let file_c = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/c_auto.svg");
+let file_cpp = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/cpp_auto.svg");
+let file_scala = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/scala_auto.svg");
+let file_archive = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/archive_auto.svg");
+let file_toml = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/toml_auto.svg");
+let file_python = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/python_auto.svg");
+let file_terraform = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/terraform_auto.svg");
+let file_go = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/go_auto.svg");
+let file_http = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/http_auto.svg");
+let file_dart = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/dart_auto.svg");
+let file_docker = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/docker_auto.svg");
+let file_actionscript = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/actionScript_auto.svg");
+let file_php = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/php_auto.svg");
+let file_makefile = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/makefile_auto.svg");
+let file_config = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/config_auto.svg");
+let file_any = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/anyType_auto.svg");
+let file_svelte = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/svelte_auto.svg");
+let file_rust = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/rustFile_auto.svg");
+let file_cargo = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/cargo_auto.svg");
+let file_cargolock = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/cargoLock_auto.svg");
+let file_cmake = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/CMake_auto.svg");
+let file_pnpm = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/pnpm_auto.svg");
+let file_tailwind = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/tailwind_auto.svg");
+let file_vite = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/vite_auto.svg");
+let file_postcss = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/postcss_auto.svg");
+let file_angular = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/angularJS_auto.svg");
+let file_eslint = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/eslint_auto.svg");
+let file_cs = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/cs_auto.svg");
+let file_cshtml = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/cshtml_auto.svg");
+let file_csproj = require("/data/data/com.termux/files/usr/tmp/vsacode-wrtKFo/extension/dist/2023/auto/icons/csproj_auto.svg");
 
 export let folders: string = `.list.collapsible.hidden > div.tile[data-name][data-type="dir"] > .icon.folder::before {
 display: inline-block;
 content: '';
-background-image: url(${folder_type.default});
+background-image: url(${folder.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
@@ -83,7 +72,7 @@ width: 1em;}
 #file-browser > ul > li.tile[type="dir"]  > .icon.folder::before {
 display: inline-block;
 content: '';
-background-image: url(${folder_type.default});
+background-image: url(${folder.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
@@ -91,7 +80,7 @@ width: 1em;}
 #file-browser > ul > li.tile[type="directory"]  > .icon.folder::before {
 display: inline-block;
 content: '';
-background-image: url(${folder_type.default});
+background-image: url(${folder.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
@@ -99,7 +88,7 @@ width: 1em;}
 .list.collapsible > div.tile[data-name][data-type="dir"] > .icon.folder::before {
 display: inline-block;
 content: '';
-background-image: url(${folder_type.default});
+background-image: url(${folder.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
@@ -107,7 +96,7 @@ width: 1em;}
 .list.collapsible.hidden > div[data-type="root"] > .icon.folder::before {
 display: inline-block;
 content: '';
-background-image: url(${folder_type.default});
+background-image: url(${folder.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
@@ -115,7 +104,7 @@ width: 1em;}
 .list.collapsible > div[data-type="root"] > .icon.folder::before {
 display: inline-block;
 content: '';
-background-image: url(${folder_type.default});
+background-image: url(${folder.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
@@ -124,111 +113,7 @@ width: 1em;}
 export let files: string = `.file_type_default::before {
 display: inline-block;
 content: '';
-background-image: url(${file_type.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_css::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_css.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_js::before,.file_type_mjs::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_javascript.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_txt::before,.file_type_license::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_text.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_json::before,.file_type__prettierrc::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_json.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_ts::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_typescript.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_jsx::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_jsx.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_tsx::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_tsx.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_yml::before,.file_type_yaml::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_yaml.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_md::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_markdown.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_sql::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_sql.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_java::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_java.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_class::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_java_class.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_py::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_python.default});
+background-image: url(${file_text.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
@@ -236,7 +121,31 @@ width: 1em;}
 .file_type_dart::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_dart.default});
+background-image: url(${file_dart.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_css::before{
+display: inline-block;
+content: '';
+background-image: url(${file_css.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_scss::before,.file_type_sass::before{
+display: inline-block;
+content: '';
+background-image: url(${file_scss.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_erb::before{
+display: inline-block;
+content: '';
+background-image: url(${file_erb.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
@@ -244,79 +153,15 @@ width: 1em;}
 .file_type_kt::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_kotlin.default});
+background-image: url(${file_kotlin.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_sh::before,.file_type_bash::before{
+.file_type_json::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_shell.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_png::before,.file_type_webp::before,.file_type_jpg::before,.file_type_gif::before,.file_type_ico::before,.file_type_svg::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_image.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_xml::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_xml.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_c::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_c.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_cpp::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_cpp.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_h::before,.file_type_hpp::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_header.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_rb::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_ruby.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_sass::before,.file_type_scss::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_sass.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_less::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_less.default});
+background-image: url(${file_json.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
@@ -324,111 +169,55 @@ width: 1em;}
 .file_type_html::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_html.default});
+background-image: url(${file_html.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_coffee::before,.file_type_litcoffee::before{
+.file_type_jsx::before,.file_type_tsx::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_coffeescript.default});
+background-image: url(${file_react.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_scala::before{
+.file_type_rake::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_scala.default});
+background-image: url(${file_rake.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_vue::before{
+.file_type_rb::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_vue.default});
+background-image: url(${file_ruby.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_gz::before,.file_type_zip::before,.file_type_rar::before,.file_type_7z::before,.file_type_tar::before{
+.file_type_less::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_archive.default});
+background-image: url(${file_less.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_make::before,.file_type_mk::before,.file_type_makefile::before{
+.file_type_js::before,.file_type_cjs::before,.file_type_mjs::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_makefile.default});
+background-image: url(${file_javascript.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_gradle::before{
+.file_type_ts::before,.file_type_cts::before,.file_type_mts::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_gradle.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_groovy::before,.file_type_gvy::before,.file_type_gy::before,.file_type_gsh::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_groovy.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_php::before,.file_type_phtml::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_php.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_go::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_go.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_asm::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_assembly.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_cu::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_cuda.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_cuh::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_cuda_header.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_3ds::before,.file_type_fbx::before,.file_type_dae::before,.file_type_stp::before,.file_type_igs::before,.file_type_iges::before,.file_type_stl::before,.file_type_wrl::before,.file_type_obj::before,.file_type_prt::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_model.default});
+background-image: url(${file_typescript.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
@@ -436,15 +225,127 @@ width: 1em;}
 .file_type_csv::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_csv.default});
+background-image: url(${file_csv.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_bin::before,.file_type_dat::before{
+.file_type_vue::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_binary.default});
+background-image: url(${file_vue.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_png::before,.file_type_webp::before,.file_type_jpg::before,.file_type_jpeg::before,.file_type_gif::before,.file_type_ico::before,.file_type_svg::before{
+display: inline-block;
+content: '';
+background-image: url(${file_image.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_ttf::before,.file_type_woff::before,.file_type_oft::before,.file_type_eot::before{
+display: inline-block;
+content: '';
+background-image: url(${file_font.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_yaml::before,.file_type_yml::before{
+display: inline-block;
+content: '';
+background-image: url(${file_yaml.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_java::before{
+display: inline-block;
+content: '';
+background-image: url(${file_java.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_xml::before{
+display: inline-block;
+content: '';
+background-image: url(${file_xml.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_sql::before{
+display: inline-block;
+content: '';
+background-image: url(${file_sql.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_md::before,.file_type_README::before{
+display: inline-block;
+content: '';
+background-image: url(${file_markdown.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_properties::before{
+display: inline-block;
+content: '';
+background-image: url(${file_properties.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_sh::before,.file_type_zsh::before,.file_type_bash::before{
+display: inline-block;
+content: '';
+background-image: url(${file_shell.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_h::before,.file_type_hh::before,.file_type_hpp::before,.file_type_hxx::before{
+display: inline-block;
+content: '';
+background-image: url(${file_h.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_c::before{
+display: inline-block;
+content: '';
+background-image: url(${file_c.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_cc::before,.file_type_cpp::before,.file_type_cxx::before{
+display: inline-block;
+content: '';
+background-image: url(${file_cpp.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_scala::before{
+display: inline-block;
+content: '';
+background-image: url(${file_scala.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_gz::before,.file_type_zip::before,.file_type_rar::before,.file_type_7z::before,.file_type_tar::before{
+display: inline-block;
+content: '';
+background-image: url(${file_archive.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
@@ -452,39 +353,63 @@ width: 1em;}
 .file_type_toml::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_toml.default});
+background-image: url(${file_toml.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_rs::before{
+.file_type_py::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_rust.default});
+background-image: url(${file_python.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_jl::before{
+.file_type_tf::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_julia.default});
+background-image: url(${file_terraform.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_twig::before,.file_type_html_twig::before{
+.file_type_go::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_twig.default});
+background-image: url(${file_go.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_blade_php::before{
+.file_type_http::before,.file_type_rest::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_blade.default});
+background-image: url(${file_http.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_as::before{
+display: inline-block;
+content: '';
+background-image: url(${file_actionscript.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_php::before{
+display: inline-block;
+content: '';
+background-image: url(${file_php.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_cfg::before,.file_type_conf::before,.file_type_cnf::before{
+display: inline-block;
+content: '';
+background-image: url(${file_config.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
@@ -492,143 +417,55 @@ width: 1em;}
 .file_type_svelte::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_svelte.default});
+background-image: url(${file_svelte.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_aux::before{
+.file_type_slim::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_aux.default});
+background-image: url(${file_slim.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_bbl::before{
+.file_type_rs::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_bbl.default});
+background-image: url(${file_rust.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_bib::before{
+.file_type_cs::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_bib.default});
+background-image: url(${file_cs.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_pdf::before{
+.file_type_cshtml::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_pdf.default});
+background-image: url(${file_cshtml.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_tex::before{
+.file_type_csproj::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_tex.default});
+background-image: url(${file_csproj.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_cls::before{
+.file_type__gitignore::before,.file_type__gitattributes::before,.file_type__gitmodules::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_cls.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_sty::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_sty.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_mdx::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_mdx.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_test_ts::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_test_ts.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_test_jsx::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_test_jsx.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_test_js::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_test_js.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_gql::before,.file_type_graphql::before,.file_type_graphqls::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_graphql.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_html_erb::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_erb.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_lua::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_lua.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type_proto::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_proto.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type__gitignore::before,.file_type__dockerignore::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_ignore.default});
-background-size: contain;
-background-repeat: no-repeat;
-height: 1em;
-width: 1em;}
-.file_type__eslintignore::before,.file_type__eslintrc_js::before,.file_type__eslintrc_json::before{
-display: inline-block;
-content: '';
-background-image: url(${file_type_eslint.default});
+background-image: url(${file_gitignore.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
@@ -636,47 +473,71 @@ width: 1em;}
 .file_type__editorconfig::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_editorconfig.default});
+background-image: url(${file_editorconfig.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_dockerfile::before{
+.file_type__yarnrc::before,.file_type_yarn_lock::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_dockerfile.default});
+background-image: url(${file_yarn.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_docker-compose_yml::before{
+.file_type__dockerignore::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_dockercompose.default});
+background-image: url(${file_ignored.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_yarn_lock::before{
+.file_type_Dockerfile::before,.file_type_Dockerfile_test::before,.file_type_Dockerfile_staging::before,.file_type_Dockerfile_production::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_yarn.default});
+background-image: url(${file_docker.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type__htaccess::before{
+.file_type_Gemfile::before,.file_type_Gemfile_lock::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_htaccess.default});
+background-image: url(${file_gemfile.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_postcss_config_cjs::before,.file_type_postcss_config_js::before{
+.file_type_Makefile::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_postcss.default});
+background-image: url(${file_makefile.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type__env::before,.file_type__env_local::before,.file_type__env_test::before,.file_type__env_example::before,.file_type__env_development::before,.file_type__env_production::before,.file_type__env_test_local::before,.file_type__env_development_local::before,.file_type__env_production_local::before{
+display: inline-block;
+content: '';
+background-image: url(${file_any.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_Cargo_toml::before,.file_type_rust-toolchain_toml::before{
+display: inline-block;
+content: '';
+background-image: url(${file_cargo.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_Cargo_lock::before{
+display: inline-block;
+content: '';
+background-image: url(${file_cargolock.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
@@ -684,15 +545,55 @@ width: 1em;}
 .file_type_CMakeLists_txt::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_cmake.default});
+background-image: url(${file_cmake.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
 width: 1em;}
-.file_type_pnpm-lock_yaml::before{
+.file_type_pnpm-lock_yaml::before,.file_type_pnpm-workspace_yaml::before{
 display: inline-block;
 content: '';
-background-image: url(${file_type_pnpm.default});
+background-image: url(${file_pnpm.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_tailwind_config_js::before,.file_type_tailwind_config_cjs::before,.file_type_tailwind_config_ts::before{
+display: inline-block;
+content: '';
+background-image: url(${file_tailwind.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_vite_config_js::before,.file_type_vite_config_cjs::before,.file_type_vite_config_ts::before{
+display: inline-block;
+content: '';
+background-image: url(${file_vite.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_postcss_config_js::before,.file_type_postcss_config_cjs::before,.file_type_postcss_config_ts::before{
+display: inline-block;
+content: '';
+background-image: url(${file_postcss.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type_angular_json::before{
+display: inline-block;
+content: '';
+background-image: url(${file_angular.default});
+background-size: contain;
+background-repeat: no-repeat;
+height: 1em;
+width: 1em;}
+.file_type__eslintrc::before,.file_type__eslintrc_cjs::before,.file_type__eslintrc_js::before,.file_type__eslintrc_ts::before,.file_type__eslintrc_json::before,.file_type__eslintrc_yml::before,.file_type__eslintrc_yaml::before,.file_type__eslintignore::before{
+display: inline-block;
+content: '';
+background-image: url(${file_eslint.default});
 background-size: contain;
 background-repeat: no-repeat;
 height: 1em;
