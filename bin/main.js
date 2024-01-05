@@ -9,7 +9,7 @@ const { distBuild } = require('../lib/libdist');
 
 // cleanup task
 process.on("exit", (code) => {
-    console.log("Exiting Node.js process with code:", code);
+    console.log("Exiting main.js process with code:", code);
     fs.rmSync(tmpDir, { recursive: true });
 });
 

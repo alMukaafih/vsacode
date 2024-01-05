@@ -1,0 +1,16 @@
+{
+    "id": "acode.vscode.great.icons",
+    "name": "VSCode Great Icons",
+    "main": "dist/main.js",
+    "version": "2.1.103",
+    "readme": "readme.md",
+    "icon": "icon.png",
+    "files": [],
+    "minVersionCode": 292,
+    "price": 30,
+    "author": {
+        "name": "alMukaafih",
+        "email": "alMukaafih@gmail.com",
+        "github": "alMukaafih"
+    }
+}
