@@ -32,7 +32,10 @@ fs.symlinkSync("/data/data/com.termux/pj/vsacode", acode);
 
 // read extension/package.json file
 let _json = fs.readFileSync(path.join(tmpDir, "extension", "package.json"));
-let package_json = JSON.parse(_json);
+
+let __json = _json.toString();
+__json = __json.replace(/\s\/\/(.)+/g, "");
+let package_json = JSON.parse(__json);
 let version = package_json.version;
 let iconThemes = package_json.contributes.iconThemes;
 if (iconThemes == undefined)
@@ -45,7 +48,9 @@ for (let iconTheme of iconThemes) {
     let _path = iconTheme.path;
     let pwDir = path.join(tmpDir, "extension", _path);
     let _json = fs.readFileSync(pwDir);
-    let icon_json = JSON.parse(_json);
+    let __json = _json.toString();
+    __json = __json.replace(/\s\/\/(.)+/g, "");
+    let icon_json = JSON.parse(__json);
     let outDir = path.join(acode, "src");
     fs.mkdirSync(outDir, { recursive: true });
     

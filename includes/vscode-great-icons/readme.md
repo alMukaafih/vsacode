@@ -12,11 +12,14 @@ Enjoy ☺
 
 > Install **VSCode Great Icons** Plugin from `Acode App > Settings > Plugins > And search for VSCode Great Icons` and install it
 
+## Note
+> You can have only one Icon Theme Installed at any point in time
 
 ## Original
-- [Vscode Great Icons](https://github.com/EmmanuelBeziat/vscode-great-icons/tree/main)
+> [Vscode Great Icons](https://github.com/EmmanuelBeziat/vscode-great-icons/tree/main)
 
 ## Update
+- Fixed some Bugs
 - Fixed some issues
 
 ## Contact

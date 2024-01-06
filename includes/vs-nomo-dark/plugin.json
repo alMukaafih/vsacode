@@ -1,13 +1,13 @@
 {
-    "id": "acode.vscode.great.icons",
-    "name": "VSCode Great Icons",
+    "id": "almukaafih.nomo.dark",
+    "name": "Nomo Dark Icon Theme",
     "main": "dist/main.js",
-    "version": "2.1.105",
+    "version": "1.3.6",
     "readme": "readme.md",
     "icon": "icon.png",
+    "price": 30,
     "files": [],
     "minVersionCode": 292,
-    "price": 30,
     "author": {
         "name": "alMukaafih",
         "email": "alMukaafih@gmail.com",
