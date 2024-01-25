@@ -1,0 +1,5 @@
+[options]
+    [options.icon]
+    engine = "icontheme"
+    contrib = "iconThemes"
+    routines = ["main", "list"]

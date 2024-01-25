@@ -1,24 +1,26 @@
 {
   "name": "vsacode",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "VSCode to Acode",
   "private": true,
   "author": "alMukaafih",
   "license": "MIT",
   "bin": {
-    "vsacode": "bin/main.js",
-    "icont": "bin/icont.js"
+    "vsa": "vsacode.js"
   },
   "scripts": {
-    "test": "vsacode *.vsix",
+    "test": "vsa *.vsix",
     "clean": "rm -rf dist",
     "build": "webpack",
+    "build-doc": "jsdoc -c ./jsdoc.json",
     "build-release": "webpack --mode production",
     "start-dev": "node .vscode/start-dev"
   },
   "dependencies": {
     "adm-zip": "^0.5.10",
-    "html-tag-js": "^1.1.22"
+    "html-tag-js": "^1.1.22",
+    "js-toml": "^1.0.0",
+    "pythonia": "^1.1.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.18.10",
@@ -27,6 +29,7 @@
     "@babel/preset-env": "^7.18.10",
     "babel-loader": "^9.1.0",
     "css-loader": "^6.8.1",
+    "docdash": "^2.0.2",
     "file-loader": "^6.2.0",
     "jszip": "^3.10.1",
     "live-server": "^1.2.2",
@@ -42,5 +45,7 @@
   "resolutions": {
     "terser": ">=5.14.2 ",
     "glob-parent": ">=5.1.2"
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/alMukaafih/vsacode.git"
 }
