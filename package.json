@@ -9,8 +9,7 @@
     "vsa": "vsacode.js"
   },
   "scripts": {
-    "test": "vsa *.vsix",
-    "clean": "rm -rf dist",
+    "clean": "shx rm -rf dist",
     "build": "webpack",
     "build-doc": "jsdoc -c ./jsdoc.json",
     "build-release": "webpack --mode production",
@@ -20,7 +19,9 @@
     "adm-zip": "^0.5.10",
     "html-tag-js": "^1.1.22",
     "js-toml": "^1.0.0",
-    "pythonia": "^1.1.2"
+    "pythonia": "^1.1.2",
+    "sass-embedded": "^1.70.0",
+    "shelljs": "^0.8.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.18.10",
@@ -33,6 +34,7 @@
     "file-loader": "^6.2.0",
     "jszip": "^3.10.1",
     "live-server": "^1.2.2",
+    "shx": "^0.3.4",
     "style-loader": "^3.3.3",
     "ts-loader": "^9.4.4",
     "typescript": "^5.1.6",
