@@ -11,13 +11,17 @@
  * @requires libgen
  * @requires libdist
  */
-module.paths = ["./lib", "./engines", "./node_modules"];
 // imports
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-const AdmZip = require("adm-zip");
 
+module.paths = [
+    path.join(module.path, "lib"),
+    path.join(module.path, "engines"),
+    path.join(module.path, "node_modules")
+];
+const AdmZip = require("adm-zip");
 const toml = require("js-toml");
 
 /** Temporary directory prefix

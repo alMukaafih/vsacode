@@ -11,16 +11,11 @@
   "scripts": {
     "clean": "shx rm -rf dist",
     "build": "webpack",
-    "build-doc": "jsdoc -c ./jsdoc.json",
     "build-release": "webpack --mode production",
     "start-dev": "node .vscode/start-dev"
   },
   "dependencies": {
-    "adm-zip": "^0.5.10",
     "html-tag-js": "^1.1.22",
-    "js-toml": "^1.0.0",
-    "pythonia": "^1.1.2",
-    "sass-embedded": "^1.70.0",
     "shelljs": "^0.8.5"
   },
   "devDependencies": {
@@ -48,5 +43,6 @@
     "terser": ">=5.14.2 ",
     "glob-parent": ">=5.1.2"
   },
-  "repository": "https://github.com/alMukaafihuun/vsacode.git"
+  "main": "index.js",
+  "repository": "https://github.com/alMukaafih/vsacode.git"
 }
