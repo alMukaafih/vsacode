@@ -41,7 +41,7 @@ helpers.getIconForFile = filename => {
 
     const icon_mode = `file_type_${name}`;
 
-      return `icon file file_type_default ${icon_mode} ${type}`;
+      return `file file_type_default ${icon_mode} ${type}`;
 };
 
 class IconAcode {

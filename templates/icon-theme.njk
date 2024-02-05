@@ -1,0 +1,42 @@
+class IconTheme {
+    // Base url
+    public baseUrl: string | undefined;
+    // Plugin initialization
+    public async init(): Promise<void> {
+    // Appending style element with head
+{% for theme in themes %}
+    document.head.insertAdjacentHTML("beforeend",`<link
+            id="{{ theme.id }}",
+            name="{{ theme.name }}",
+            href="{{ theme.href }}",
+            rel="stylesheet"
+        ></link>`);
+{% endfor %}
+    }
+
+    public async destroy(): Promise<void> {
+    //
+    }
+}
+
+if (window.acode) {
+    const acodePlugin = new IconAcode();
+    acode.setPluginInit(
+    plugin.id,
+    async (
+        baseUrl: string,
+        $page: WCPage,
+        { cacheFileUrl, cacheFile }: any
+    ) => {
+        if (!baseUrl.endsWith("/")) {
+        baseUrl += "/";
+        }
+        acodePlugin.baseUrl = baseUrl;
+        await acodePlugin.init();
+    }
+    );
+    acode.setPluginUnmount(plugin.id, () => {
+    acodePlugin.destroy();
+    });
+}
+
