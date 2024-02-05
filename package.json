@@ -11,27 +11,19 @@
     "clean": "shx rm -rf dist",
     "build": "webpack",
     "build-doc": "jsdoc -c ./jsdoc.json",
-    "build-release": "webpack --mode production",
-    "start-dev": "node .vscode/start-dev"
+    "build-release": "webpack --mode production"
   },
   "dependencies": {
     "adm-zip": "^0.5.10",
-    "html-tag-js": "^1.1.22",
     "js-toml": "^1.0.0",
     "nunjucks": "^3.2.4",
-    "pythonia": "^1.1.2",
     "sass-embedded": "^1.70.0",
-    "shelljs": "^0.8.5",
-    "@babel/cli": "^7.18.10",
-    "@babel/core": "^7.18.13",
-    "@babel/plugin-transform-runtime": "^7.19.6",
-    "@babel/preset-env": "^7.18.10",
-    "babel-loader": "^9.1.0",
+    "shelljs": "^0.8.5"
+    },
+  "devDependencies": {
     "css-loader": "^6.8.1",
-    "docdash": "^2.0.2",
     "file-loader": "^6.2.0",
     "jszip": "^3.10.1",
-    "live-server": "^1.2.2",
     "shx": "^0.3.4",
     "style-loader": "^3.3.3",
     "ts-loader": "^9.4.4",
@@ -46,5 +38,23 @@
     "terser": ">=5.14.2 ",
     "glob-parent": ">=5.1.2"
   },
-  "repository": "https://github.com/alMukaafihuun/vsacode.git"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alMukaafihuun/vsacode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alMukaafihuun/vsacode/issues"
+  },
+  "homepage": "https://github.com/alMukaafihuun/vsacode#readme",
+  "main": "vsacode.js",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib",
+    "test": "tests"
+  },
+  "keywords": [
+    "acode",
+    "vsacode",
+    "cli"
+  ]
 }

@@ -16,10 +16,10 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const { stylesGen } = require('../lib/libgen');
-const { distBuild } = require('../lib/libdist');
+const { distBuild, pluginJsonGen } = require('../lib/libdist');
 
 exports.main = () => {
-    if(exports._id == undefined && exports._label == undefined && exports._path == undefined)
+    if(exports.id == undefined && exports.label == undefined && exports.path == undefined)
         return 1;
     
     let _json = fs.readFileSync(exports.pwDir);
@@ -29,13 +29,13 @@ exports.main = () => {
     let outDir = path.join(exports.acode, "src");
     fs.mkdirSync(outDir, { recursive: true });
     stylesGen(exports.pwDir, outDir, icon_json);
-    distBuild(exports._label, exports._id, exports.acode);
-    return 0;
+    pluginJsonGen(exports.author, exports.id, exports.label, exports.version, exports.acode);
+    distBuild(exports.label, exports.id, exports.acode);
 };
 
 exports.list = () => {
     console.log(
-        `id    => ${exports._id}\n` +
-        `label => ${exports._label}\n`
+        `id    => ${exports.id}\n` +
+        `label => ${exports.label}\n`
     );
 };

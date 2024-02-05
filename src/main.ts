@@ -2,7 +2,6 @@ import { folders } from './styles';
 import { files } from './styles';
 import plugin from "../plugin.json";
 //import ext from './icons.json';
-import tag from "html-tag-js";
 //const zip = require("./icons/zip.svg");
 //const python = require("./icons/python.svg");
 

@@ -1,1 +1,0 @@
-/data/data/com.termux/pj/vsacode/includes/default/readme.md

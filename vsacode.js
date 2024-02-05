@@ -119,20 +119,23 @@ fs.symlinkSync(__dirname, acode);
 let _json = fs.readFileSync(path.join(tmpDir, "extension", "package.json"));
 let __json = _json.toString();
 __json = __json.replace(/\s\/\/(.)+/g, "");
-let package_json = JSON.parse(__json);
-let version = package_json.version;
-let contributes = package_json.contributes[option.contrib];
+let packageJson = JSON.parse(__json);
+let author = packageJson.author;
+let version = packageJson.version;
+let contributes = packageJson.contributes[option.contrib];
 if (contributes == undefined)
     process.exit(1);
 
 // process each icon Theme
 for (let contrib of contributes) {
-    engine._id = contrib.id;
-    engine._label = contrib.label;
-    engine._path = contrib.path;
+    engine.id = contrib.id;
+    engine.label = contrib.label;
+    engine.path = contrib.path;
     engine.acode = acode;
     engine.tmpDir = tmpDir;
     engine.pwDir = path.join(engine.tmpDir, "extension", engine._path);
+    engine.author = author;
+    engine.version = version;
     routine = engine[opt];
     engine[opt]();
 }
