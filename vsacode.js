@@ -44,18 +44,18 @@ process.on("exit", (code) => {
 const usage = () => {
     process.stdout.write(`vsa command is used to convert a vs code plugin to acode plugin
 
-Usage: vsa <command> [option] <filename>
+Usage: vsa <command> [command] <filename>
 
   parameters:
     command     name of command you want to run.
-    option      option of the command.
+    command      command of the command.
     filename    vs code plugin (vsix file)
 
   commands:
     icon        convert an icon theme.
     
-  icon options:
-    main        the default option. this is the same as running without an option. convert the plugin.
+  icon commands:
+    main        the default command. this is the same as running without an command. convert the plugin.
     list        list the available icon themes in the plugin.
 `);
 };
@@ -67,25 +67,25 @@ let args = process.argv.slice(2);
 let _toml = fs.readFileSync(path.join(__dirname, "config.toml"));
 let __toml = _toml.toString();
 let config = toml.load(__toml);
-let options = config.options;
-if (options == undefined)
+let commands = config.commands;
+if (commands == undefined)
     process.exit(1);
-let option = options[args[0]];
+let command = commands[args[0]];
 args.shift();
-if (option == undefined) {
+if (command == undefined) {
     console.log("Error: valid command is required\n");
     usage();
     process.exit(1);
 }
-let opt = args[0];
-if (!option.routines.includes(opt))
-    opt = "main";
+let option = args[0];
+if (!command.options.includes(option))
+    option = "main";
 else
     args.shift();
-if (option.engine == undefined) {
+if (command.engine == undefined) {
     process.exit(1);
 }
-const engine = require(option.engine);
+const engine = require(command.engine);
 
 // vsix file
 /** @constant {string} */
@@ -122,20 +122,22 @@ __json = __json.replace(/\s\/\/(.)+/g, "");
 let packageJson = JSON.parse(__json);
 let author = packageJson.author;
 let version = packageJson.version;
-let contributes = packageJson.contributes[option.contrib];
+let contributes = packageJson.contributes[command.contrib];
 if (contributes == undefined)
+    console.log(`Error: ${vsix} ${command.errorMessage}\n`);
+    usage();
     process.exit(1);
 
-// process each icon Theme
+// process each contrib
 for (let contrib of contributes) {
     engine.id = contrib.id;
     engine.label = contrib.label;
     engine.path = contrib.path;
     engine.acode = acode;
     engine.tmpDir = tmpDir;
-    engine.pwDir = path.join(engine.tmpDir, "extension", engine._path);
+    engine.pwDir = path.join(engine.tmpDir, "extension", engine.path);
     engine.author = author;
     engine.version = version;
-    routine = engine[opt];
-    engine[opt]();
+    routine = engine[option];
+    engine[option]();
 }

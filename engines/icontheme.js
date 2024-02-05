@@ -20,7 +20,7 @@ const { distBuild, pluginJsonGen } = require('../lib/libdist');
 
 exports.main = () => {
     if(exports.id == undefined && exports.label == undefined && exports.path == undefined)
-        return 1;
+        return;
     
     let _json = fs.readFileSync(exports.pwDir);
     let __json = _json.toString();

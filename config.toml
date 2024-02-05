@@ -1,5 +1,6 @@
-[options]
-    [options.icon]
+[commands]
+    [commands.icon]
     engine = "icontheme"
     contrib = "iconThemes"
-    routines = ["main", "list"]
+    options = ["main", "list"]
+    errorMessage = "is not an icon theme plugin"
