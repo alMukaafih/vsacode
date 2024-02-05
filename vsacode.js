@@ -7,9 +7,8 @@
  * @requires node:fs
  * @requires node:os
  * @requires node:path
- * @requires AdmZip
- * @requires libgen
- * @requires libdist
+ * @requires adm-zip
+ * @requires js-toml
  */
 // imports
 const fs = require("fs");
@@ -37,9 +36,29 @@ const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix));
 
 // cleanup task
 process.on("exit", (code) => {
-    console.log("Exiting vsacode.js process with code:", code);
+    //console.log("Exiting vsacode.js process with code:", code);
+        //console.log(usage);
     fs.rmSync(tmpDir, { recursive: true });
 });
+
+const usage = () => {
+    process.stdout.write(`vsa command is used to convert a vs code plugin to acode plugin
+
+Usage: vsa <command> [option] <filename>
+
+  parameters:
+    command     name of command you want to run.
+    option      option of the command.
+    filename    vs code plugin (vsix file)
+
+  commands:
+    icon        convert an icon theme.
+    
+  icon options:
+    main        the default option. this is the same as running without an option. convert the plugin.
+    list        list the available icon themes in the plugin.
+`);
+};
 
 // cli arguments
 let args = process.argv.slice(2);
@@ -53,29 +72,42 @@ if (options == undefined)
     process.exit(1);
 let option = options[args[0]];
 args.shift();
-if (option == undefined)
+if (option == undefined) {
+    console.log("Error: valid command is required\n");
+    usage();
     process.exit(1);
+}
 let opt = args[0];
 if (!option.routines.includes(opt))
     opt = "main";
 else
     args.shift();
-if (option.engine == undefined)
+if (option.engine == undefined) {
     process.exit(1);
+}
 const engine = require(option.engine);
 
 // vsix file
 /** @constant {string} */
 const vsix = args[0];
-if (vsix == undefined)
+if (vsix == undefined) {
+    console.log("Error: filename is required\n");
+    usage();
     process.exit(1);
-
+}
 /** New AdmZip Instance
  * @constant {object}
  */
-const zip = new AdmZip(vsix);
-zip.extractAllTo(tmpDir);
-
+try {
+    const zip = new AdmZip(vsix);
+    zip.extractAllTo(tmpDir);
+}
+catch(error) {
+    //console.log(error);
+    console.log(`Error: ${vsix} is not a valid vsix file\n`);
+    usage();
+    process.exit(1);
+}
 /** Path to acode directory in temp directory
  *  @constant {string}
  */
