@@ -131,3 +131,4 @@ dist
 *.vsix
 js-docs/
 view
+src/styles.ts
