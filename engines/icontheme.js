@@ -15,8 +15,8 @@
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-const { stylesGen } = require('../lib/libgen');
-const { distBuild, pluginJsonGen } = require('../lib/libdist');
+const { stylesGen, pluginJsonGen } = require('../lib/libgen');
+const { distBuild } = require('../lib/libdist');
 
 exports.main = () => {
     if(exports.id == undefined && exports.label == undefined && exports.path == undefined)
@@ -30,7 +30,7 @@ exports.main = () => {
     fs.mkdirSync(outDir, { recursive: true });
     stylesGen(exports.pwDir, outDir, icon_json);
     pluginJsonGen(exports.author, exports.id, exports.label, exports.version, exports.acode);
-    distBuild(exports.label, exports.id, exports.acode);
+    distBuild(exports.label, exports.id, exports.acode, exports.icon, exports.readme);
 };
 
 exports.list = () => {

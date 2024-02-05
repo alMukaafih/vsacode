@@ -122,11 +122,14 @@ __json = __json.replace(/\s\/\/(.)+/g, "");
 let packageJson = JSON.parse(__json);
 let author = packageJson.author;
 let version = packageJson.version;
+let icon = path.join(tmpDir, "extension", packageJson.icon);
+let readme = path.join(tmpDir, "extension", "README.md");
 let contributes = packageJson.contributes[command.contrib];
-if (contributes == undefined)
+if (contributes == undefined) {
     console.log(`Error: ${vsix} ${command.errorMessage}\n`);
     usage();
     process.exit(1);
+}
 
 // process each contrib
 for (let contrib of contributes) {
@@ -138,6 +141,8 @@ for (let contrib of contributes) {
     engine.pwDir = path.join(engine.tmpDir, "extension", engine.path);
     engine.author = author;
     engine.version = version;
+    engine.icon = icon;
+    engine.readme = readme;
     routine = engine[option];
     engine[option]();
 }

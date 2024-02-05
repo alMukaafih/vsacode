@@ -8,7 +8,7 @@
     "vsa": "vsacode.js"
   },
   "scripts": {
-    "clean": "shx rm -rf dist",
+    "clean": "shx rm -rf dist plugin.json icon.png readme.md",
     "build": "webpack",
     "build-doc": "jsdoc -c ./jsdoc.json",
     "build-release": "webpack --mode production"
