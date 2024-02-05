@@ -36,7 +36,6 @@ exports.main = () => {
 exports.list = () => {
     console.log(
         `id    => ${exports._id}\n` +
-        `label => ${exports._label}\n` + 
-        `path  => ${exports._path}`
+        `label => ${exports._label}\n`
     );
 };
