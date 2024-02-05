@@ -2,7 +2,7 @@
   "name": "vsacode",
   "version": "0.2.2",
   "description": "VSCode to Acode",
-  "author": "alMukaafih",
+  "author": "alMukaafih <almukaafih@gmail.com>",
   "license": "MIT",
   "bin": {
     "vsa": "vsacode.js"
@@ -11,7 +11,8 @@
     "clean": "shx rm -rf dist plugin.json icon.png readme.md",
     "build": "webpack",
     "build-doc": "jsdoc -c ./jsdoc.json",
-    "build-release": "webpack --mode production"
+    "build-release": "webpack --mode production",
+    "postinstall": "npm install"
   },
   "dependencies": {
     "adm-zip": "^0.5.10",
@@ -19,7 +20,7 @@
     "nunjucks": "^3.2.4",
     "sass-embedded": "^1.70.0",
     "shelljs": "^0.8.5"
-    },
+  },
   "devDependencies": {
     "css-loader": "^6.8.1",
     "file-loader": "^6.2.0",
@@ -43,7 +44,8 @@
     "url": "git+https://github.com/alMukaafihuun/vsacode.git"
   },
   "bugs": {
-    "url": "https://github.com/alMukaafihuun/vsacode/issues"
+    "url": "https://github.com/alMukaafihuun/vsacode/issues",
+    "email": "almukaafih@gmail.com"
   },
   "homepage": "https://github.com/alMukaafihuun/vsacode#readme",
   "main": "vsacode.js",

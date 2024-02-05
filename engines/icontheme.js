@@ -28,9 +28,25 @@ exports.main = () => {
     let icon_json = JSON.parse(__json);
     let outDir = path.join(exports.acode, "src");
     fs.mkdirSync(outDir, { recursive: true });
-    stylesGen(exports.pwDir, outDir, icon_json);
-    pluginJsonGen(exports.author, exports.id, exports.label, exports.version, exports.acode);
-    distBuild(exports.label, exports.id, exports.acode, exports.icon, exports.readme);
+    stylesGen(
+        exports.pwDir,
+        outDir,
+        icon_json
+    );
+    pluginJsonGen(
+        exports.author, 
+        exports.id, exports.label, 
+        exports.version,
+        exports.tmpDir
+    );
+    distBuild(
+        exports.label,
+        exports.id,
+        exports.acode,
+        exports.icon,
+        exports.readme,
+        exports.plugin
+    );
 };
 
 exports.list = () => {

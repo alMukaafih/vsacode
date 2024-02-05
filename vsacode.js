@@ -38,7 +38,7 @@ const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix));
 process.on("exit", (code) => {
     //console.log("Exiting vsacode.js process with code:", code);
         //console.log(usage);
-    fs.rmSync(tmpDir, { recursive: true });
+    //fs.rmSync(tmpDir, { recursive: true });
 });
 
 const usage = () => {
@@ -124,6 +124,7 @@ let author = packageJson.author;
 let version = packageJson.version;
 let icon = path.join(tmpDir, "extension", packageJson.icon);
 let readme = path.join(tmpDir, "extension", "README.md");
+let plugin = path.join(tmpDir, "extension", "plugin.json");
 let contributes = packageJson.contributes[command.contrib];
 if (contributes == undefined) {
     console.log(`Error: ${vsix} ${command.errorMessage}\n`);
@@ -143,6 +144,7 @@ for (let contrib of contributes) {
     engine.version = version;
     engine.icon = icon;
     engine.readme = readme;
+    engine.plugin = plugin;
     routine = engine[option];
     engine[option]();
 }
