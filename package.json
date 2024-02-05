@@ -1,6 +1,6 @@
 {
   "name": "vsacode",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "VSCode to Acode",
   "author": "alMukaafih",
   "license": "MIT",
@@ -21,9 +21,7 @@
     "nunjucks": "^3.2.4",
     "pythonia": "^1.1.2",
     "sass-embedded": "^1.70.0",
-    "shelljs": "^0.8.5"
-  },
-  "devDependencies": {
+    "shelljs": "^0.8.5",
     "@babel/cli": "^7.18.10",
     "@babel/core": "^7.18.13",
     "@babel/plugin-transform-runtime": "^7.19.6",
