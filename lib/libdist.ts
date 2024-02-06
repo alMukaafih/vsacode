@@ -9,11 +9,9 @@
  */
 import { StringMap } from "./libutils.js"
 // imports
-const fs = require("fs");
-const path = require("path");
-const child_process = require("child_process");
-const { promisify } = require('util');
-const sleep = promisify(setTimeout);
+import * as fs from "node:fs";
+import * as path from "node:path";
+import * as child_process from "node:child_process";
 
 /** @constant {string} */
 const includes: string = path.join("/data/data/com.termux/pj/vsacode", "includes");
@@ -77,7 +75,7 @@ function include(id: string, fallback: StringMap): void {
  * @param {string} acode - Build folder
  * @returns {void}
  */
-function distBuild(
+export function distBuild(
     label: string,
     id: string, 
     acode: string, 
@@ -110,6 +108,3 @@ function distBuild(
     fs.renameSync(path.join(acode, "dist.zip"), outZip);
     console.log(`output: ${outZip}\n`);
 }
-
-// exports
-module.exports = { distBuild };

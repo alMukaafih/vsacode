@@ -21,16 +21,16 @@ export type ObjectMap = {
 export type StringMap = {
     [name: string]: string
 }
-
-const fs = require("fs");
-const path = require("path");
+import { IfileIconTheme, DefsMap, IconsMap, LangsMap } from "../typings/fileIconTheme.js";
+import * as fs from "node:fs";
+import * as path from "node:path";
 
 /**
  * Converts Map to CSS string
  * @param {Map} map0 - Map to parse
  * @returns {string} CSS style
  */
-function parse(map0: ArrayMap): string {
+export function parse(map0: ArrayMap): string {
     let css: string = "";
     let classes: string;
     let style: string;
@@ -56,7 +56,7 @@ function parse(map0: ArrayMap): string {
  * @param {string} dir - Parent directory of Icon Theme json file
  * @returns {string} Require directives
  */
-function _require(map: ObjectMap, dir: string): string {
+export function _require(map: DefsMap, dir: string): string {
     let x: string = "";
     for(let [key, value] of Object.entries(map)) {
        key = key.replace(/-/g, "_");
@@ -70,7 +70,7 @@ function _require(map: ObjectMap, dir: string): string {
  * @param {object} name
  * @returns {object}
  */
-function test(name: string): string | object {
+export function test(name: IconsMap| LangsMap): object {
     if (name)
         return name;
     else
@@ -83,7 +83,7 @@ function test(name: string): string | object {
  * @param {string} [def] - Default return value
  * @returns {string} Property
  */
-function _test(map: ObjectMap, name: string, def: string=""): string {
+export function _test(map: DefsMap, name: string, def: string=""): string {
     if ( !(name) )
         return def;
     if (map[name] == undefined)
@@ -96,7 +96,7 @@ function _test(map: ObjectMap, name: string, def: string=""): string {
  * @param {string} [kind=.file_type_] - Prefix to the CSS class name
  * @returns {string} CSS style
  */
-function _css(name: string, exe: string="default", kind: string=".file_type_") {
+export function _css(name: string, exe: string="default", kind: string=".file_type_") {
     if (name == "")
         return "";
     let font: string = "";
@@ -115,7 +115,7 @@ function _css(name: string, exe: string="default", kind: string=".file_type_") {
  * @param {string} _dir - Parent directory of Icon Theme json file
  * @returns {Map}
  */
-function validate(map0: ObjectMap, _dir: string): ObjectMap {
+export function validate(map0: DefsMap, _dir: string): DefsMap {
     for(let [key, value] of Object.entries(map0)) {
         // console.log(value);
         if ( !(fs.existsSync(path.join(_dir, value.iconPath))) )
@@ -128,7 +128,7 @@ function validate(map0: ObjectMap, _dir: string): ObjectMap {
  * @param {Map} map0 - Map
  * @returns {Map}
  */
-function rehash(map0: ObjectMap): ObjectMap {
+export function rehash(map0: DefsMap): DefsMap {
     let map = {};
     for(let [key, value] of Object.entries(map0)) {
         key = key.replace(/-/g, "_");
@@ -143,13 +143,10 @@ function rehash(map0: ObjectMap): ObjectMap {
  * @param {Map} map2 - Map2
  * @returns {Map}
  */
-function verify(map1: ObjectMap, map2: ObjectMap): ObjectMap {
+export function verify(map1: ObjectMap, map2: DefsMap): ObjectMap {
     for(let [key, value] of Object.entries(map1)) {
         if (map2[key] == undefined)
             delete map1[key];
     }
     return map1;
 }
-
-// exports
-module.exports = { parse, _require, test, _test, _css, validate, rehash, verify };

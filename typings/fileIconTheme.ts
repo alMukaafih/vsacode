@@ -65,3 +65,7 @@ export interface IfileIconTheme {
     highContrast?: {}
 }
 
+export type DefsMap = IfileIconTheme["iconDefinitions"]
+export type IconsMap = IfileIconTheme["folderNames"]
+export type LangsMap = IfileIconTheme["languageIds"]
+

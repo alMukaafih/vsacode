@@ -10,10 +10,10 @@
  
 import { IfileIconTheme } from "../typings/fileIconTheme.js"
 // imports
-const fs = require("fs");
-const path = require("path");
-const { MapFileIcons } = require('./libmap');
-const { parse, _require, test, _test, _css, validate, rehash, verify } = require('./libutils');
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { MapFileIcons } from "./libmap";
+import { parse, _require, test, _test, _css, validate, rehash, verify } from "./libutils";
 
 /** Generates styles.ts file from Icon Theme's json file
  * @function
@@ -23,7 +23,7 @@ const { parse, _require, test, _test, _css, validate, rehash, verify } = require
  * @param {object} iconJson - Icon Theme json file
  * @returns {void}
  */
-function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconTheme) {
+export function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconTheme) {
     let end: string = "`\n";
     let folders: string = "export let folders: string = `";
     let files: string = "export let files: string = `";
@@ -55,13 +55,13 @@ function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconTheme) {
     let foldersMap = {};
     let filesMap = {};
     //foldersMap
-    let folderNamesMap: IfileIconTheme["folderNames"] = test(iconJson.folderNames);
-    let folderNamesExp: IfileIconTheme["folderNamesExpanded"] = test(iconJson.folderNamesExpanded);
+    let folderNamesMap = test(iconJson.folderNames);
+    let folderNamesExp = test(iconJson.folderNamesExpanded);
     // filesMap
-    let fileExtMap: IfileIconTheme["fileExtensions"] = test(iconJson.fileExtensions);
-    let fileNamesMap: IfileIconTheme["fileNames"] = test(iconJson.fileNames);
+    let fileExtMap = test(iconJson.fileExtensions);
+    let fileNamesMap = test(iconJson.fileNames);
  //   if (iconJson.languageIds != undefined)
-    let langIdsMap: IfileIconTheme["languageIds"] = test(iconJson.languageIds);
+    let langIdsMap = test(iconJson.languageIds);
     
     let sheetA = new MapFileIcons(".file_type_");
     filesMap = sheetA.map(fileExtMap, filesMap, iconDefs);
@@ -115,7 +115,7 @@ function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconTheme) {
  * @param {string} acode - Build folder
  * @returns {void}
  */
-function pluginJsonGen(author: object | string, id: string, label: string, version: string, tmpDir: string) {
+export function pluginJsonGen(author: object | string, id: string, label: string, version: string, tmpDir: string) {
     let json = {
         id: id,
         name: label,
@@ -129,5 +129,3 @@ function pluginJsonGen(author: object | string, id: string, label: string, versi
     };
     fs.writeFileSync(path.join(tmpDir, "extension", "plugin.json"), JSON.stringify(json));
 }
-
-module.exports = { stylesGen, pluginJsonGen };

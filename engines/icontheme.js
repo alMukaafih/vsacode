@@ -1,57 +1,24 @@
 #!/usr/bin/env node
-/**
- * @file Manages the convertion of VSCode plugin to Acode Plugin
- * @name main
- * @author alMukaafih <alMukaafih@example.com>
- * @license MIT
- * @requires node:fs
- * @requires node:os
- * @requires node:path
- * @requires AdmZip
- * @requires libgen
- * @requires libdist
- */
-// imports
-const fs = require("fs");
-const os = require("os");
-const path = require("path");
-const { stylesGen, pluginJsonGen } = require('../lib/libgen');
-const { distBuild } = require('../lib/libdist');
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const fs = require("node:fs");
+const path = require("node:path");
+const libgen_1 = require("../lib/libgen");
+const libdist_1 = require("../lib/libdist");
 exports.main = () => {
-    if(exports.id == undefined && exports.label == undefined && exports.path == undefined)
+    if (exports.id == undefined && exports.label == undefined && exports.path == undefined)
         return;
-    
     let _json = fs.readFileSync(exports.pwDir);
     let __json = _json.toString();
     __json = __json.replace(/\s\/\/(.)+/g, "");
     let icon_json = JSON.parse(__json);
     let outDir = path.join(exports.acode, "src");
     fs.mkdirSync(outDir, { recursive: true });
-    stylesGen(
-        exports.pwDir,
-        outDir,
-        icon_json
-    );
-    pluginJsonGen(
-        exports.author, 
-        exports.id, exports.label, 
-        exports.version,
-        exports.tmpDir
-    );
-    distBuild(
-        exports.label,
-        exports.id,
-        exports.acode,
-        exports.icon,
-        exports.readme,
-        exports.plugin
-    );
+    (0, libgen_1.stylesGen)(exports.pwDir, outDir, icon_json);
+    (0, libgen_1.pluginJsonGen)(exports.author, exports.id, exports.label, exports.version, exports.tmpDir);
+    (0, libdist_1.distBuild)(exports.label, exports.id, exports.acode, exports.icon, exports.readme, exports.plugin);
 };
-
 exports.list = () => {
-    console.log(
-        `id    => ${exports.id}\n` +
-        `label => ${exports.label}\n`
-    );
+    console.log(`id    => ${exports.id}\n` +
+        `label => ${exports.label}\n`);
 };

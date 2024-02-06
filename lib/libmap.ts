@@ -9,12 +9,12 @@
 import { ArrayMap, ObjectMap, StringMap } from "./libutils.js"
 /**
  * Creates a new Map Blueprint
- * @class MapIcons
+ * @class MapFileIcons
  * @param {string} txt_1 - CSS class name prefix
  * @param {string} [txt_2] - CSS class name suffix
  * @param {string} [isFile=true] - it is a File and not a Folder
  */
-class MapIcons {
+export class MapFileIcons {
     x: string;
     y: string;
     z: string;
@@ -61,6 +61,3 @@ class MapIcons {
         return this.map2;
     }
 }
-
-// export MapIcons
-module.exports = { MapIcons };

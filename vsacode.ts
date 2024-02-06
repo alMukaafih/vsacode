@@ -10,29 +10,32 @@
  * @requires adm-zip
  * @requires js-toml
  */
+import { IconfigToml } from "./typings/configToml.js";
 // imports
-const fs = require("fs");
-const os = require("os");
-const path = require("path");
+import * as fs from "node:fs";
+import * as os from "node:os";
+import * as path from "node:path";
 
 module.paths = [
     path.join(module.path, "lib"),
     path.join(module.path, "engines"),
     path.join(module.path, "node_modules")
 ];
-const AdmZip = require("adm-zip");
-const toml = require("js-toml");
+import * as AdmZip from "adm-zip";
+// @ts-ignore
+import * as toml from "smol-toml";
+
 
 /** Temporary directory prefix
  * @constant {string}
  * @default
  */
-const appPrefix = "vsacode-";
+const appPrefix: string = "vsacode-";
 
 /** Temporary directory fullpath
  * @constant {string}
  */
-const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix));
+const tmpDir: string = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix));
 
 // cleanup task
 process.on("exit", (code) => {
@@ -61,12 +64,12 @@ Usage: vsa <command> [command] <filename>
 };
 
 // cli arguments
-let args = process.argv.slice(2);
+let args: string[] = process.argv.slice(2);
 
 // load and parse toml file
-let _toml = fs.readFileSync(path.join(__dirname, "config.toml"));
-let __toml = _toml.toString();
-let config = toml.load(__toml);
+let _toml: Buffer = fs.readFileSync(path.join(__dirname, "config.toml"));
+let __toml: string = _toml.toString();
+let config: IconfigToml = toml.parse(__toml);
 let commands = config.commands;
 if (commands == undefined)
     process.exit(1);
@@ -77,7 +80,7 @@ if (command == undefined) {
     usage();
     process.exit(1);
 }
-let option = args[0];
+let option: string = args[0];
 if (!command.options.includes(option))
     option = "main";
 else
@@ -89,7 +92,7 @@ const engine = require(command.engine);
 
 // vsix file
 /** @constant {string} */
-const vsix = args[0];
+const vsix: string = args[0];
 if (vsix == undefined) {
     console.log("Error: filename is required\n");
     usage();
@@ -111,20 +114,20 @@ catch(error) {
 /** Path to acode directory in temp directory
  *  @constant {string}
  */
-const acode = path.join(tmpDir, "acode");
+const acode: string = path.join(tmpDir, "acode");
 fs.symlinkSync(__dirname, acode);
 
 
 // read extension/package.json file
-let _json = fs.readFileSync(path.join(tmpDir, "extension", "package.json"));
-let __json = _json.toString();
+let _json: Buffer = fs.readFileSync(path.join(tmpDir, "extension", "package.json"));
+let __json: string = _json.toString();
 __json = __json.replace(/\s\/\/(.)+/g, "");
 let packageJson = JSON.parse(__json);
 let author = packageJson.author;
-let version = packageJson.version;
-let icon = path.join(tmpDir, "extension", packageJson.icon);
-let readme = path.join(tmpDir, "extension", "README.md");
-let plugin = path.join(tmpDir, "extension", "plugin.json");
+let version: string = packageJson.version;
+let icon: string = path.join(tmpDir, "extension", packageJson.icon);
+let readme: string = path.join(tmpDir, "extension", "README.md");
+let plugin: string = path.join(tmpDir, "extension", "plugin.json");
 let contributes = packageJson.contributes[command.contrib];
 if (contributes == undefined) {
     console.log(`Error: ${vsix} ${command.errorMessage}\n`);
@@ -145,6 +148,5 @@ for (let contrib of contributes) {
     engine.icon = icon;
     engine.readme = readme;
     engine.plugin = plugin;
-    routine = engine[option];
     engine[option]();
 }

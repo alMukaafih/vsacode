@@ -8,7 +8,7 @@
     "vsa": "vsacode.js"
   },
   "scripts": {
-    "clean": "shx rm -rf dist plugin.json icon.png readme.md",
+    "clean": "shx rm -rf dist plugin.json icon.png readme.md ./lib/*.js ./typings/*.js",
     "build": "webpack",
     "build-doc": "jsdoc -c ./jsdoc.json",
     "build-release": "webpack --mode production",
@@ -19,7 +19,8 @@
     "js-toml": "^1.0.0",
     "nunjucks": "^3.2.4",
     "sass-embedded": "^1.70.0",
-    "shelljs": "^0.8.5"
+    "shelljs": "^0.8.5",
+    "smol-toml": "^1.1.4"
   },
   "devDependencies": {
     "css-loader": "^6.8.1",
