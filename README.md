@@ -19,7 +19,7 @@ vsa <command> [option] <filename>
 
 ## How to use
 1. Install this package from `npm`.
-2. Download the plugin you want to convert from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items) e.g. [JetBrains Icon Theme](https://marketplace.visualstudio.com/items?itemName=chadalen.vscode-jetbrains-icon-theme).
+2. Download the plugin you want to convert from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items) e.g. [JetBrains File Icon Theme](https://marketplace.visualstudio.com/items?itemName=chadalen.vscode-jetbrains-icon-theme).
 3. Note the filename in this case `chadalen.vscode-jetbrains-icon-theme.vsix` you will need it when running the command.
 3. Run `vsa icon filename` to convert the plugin. In place of filename input the filename of the plugin you noted.
 4. You will see output like this on the command line
@@ -44,10 +44,10 @@ vsa <command> [option] <filename>
     ```
 5. The ouput `zip` file(s) will be created in the current folder.
 6. Launch Acode app .
-7. Uninstall any Icon Theme you have installed.
-7. Navigate to `Settings > Plugins > + > Local` then navigate to the folder where the zip file(s) is/are located, then Select the Icon Theme to install it.
+7. Uninstall any File Icon Theme you have installed.
+7. Navigate to `Settings > Plugins > + > Local` then navigate to the folder where the zip file(s) is/are located, then Select the File Icon Theme to install it.
 > [!Note]
-> Currenty only one Icon Theme can be installed i.e. to change the Icon Theme you need to uninstall the currently installed Icon Theme.
+> Currenty only one File Icon Theme can be installed i.e. to change the File Icon Theme you need to uninstall the currently installed File Icon Theme.
 
 
 ## Available Commands
@@ -55,7 +55,7 @@ vsa <command> [option] <filename>
 > Currently only conversion of icon themes are supported. Future versions may or may not include support for more types.
 
 ### icon
-> Convert an Icon Theme.
+> Convert a File Icon Theme.
 
 It generates an Acode plugin for each icon theme in the VS Code plugin. Currently only VS Code icon themes that use SVG icons are supported.
 
