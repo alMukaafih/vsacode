@@ -132,3 +132,4 @@ dist
 js-docs/
 view
 src/styles.ts
+lib/*.js

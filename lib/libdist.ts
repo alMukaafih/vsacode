@@ -7,6 +7,7 @@
  * @requires node:child_process
  * @requires node:util
  */
+import { StringMap } from "./libutils.js"
 // imports
 const fs = require("fs");
 const path = require("path");
@@ -14,24 +15,16 @@ const child_process = require("child_process");
 const { promisify } = require('util');
 const sleep = promisify(setTimeout);
 
-// cleanup task
-process.on("exit", (code) => {
-    // console.log("Exiting Node.js process with code:", code);
-    //fs.unlinkSync("plugin.json");
-    //fs.unlinkSync("readme.md");
-    //fs.unlinkSync("icon.png");
-});
-
 /** @constant {string} */
-const includes = path.join("/data/data/com.termux/pj/vsacode", "includes");
+const includes: string = path.join("/data/data/com.termux/pj/vsacode", "includes");
 /** Checks if required File exits
  * @param {string} id - Icon Theme id
  * @param {string} req - Name of required File
  * @returns {boolean}
  */
-function reqExists(id, req) {
+function reqExists(id: string, req: string) {
     let file;
-    let _path = path.join(includes, id);
+    let _path: string = path.join(includes, id);
     if ( !(fs.existsSync(_path)) )
         return false;
     file = fs.statSync(_path);
@@ -49,7 +42,7 @@ function reqExists(id, req) {
  * @param {object} fallback - Fallback to default to
  * @returns {string} Path of required File
  */
-function check(id, req, fallback) {
+function check(id: string, req: string, fallback: StringMap): string {
     if (!reqExists(id, req))
         return path.join(fallback[req]);
     return path.join(includes, id, req);
@@ -60,7 +53,7 @@ function check(id, req, fallback) {
  * @param {string} to - Destination
  * @returns {void}
  */
-function link(from, to) {
+function link(from: string, to: string): void {
     fs.copyFileSync(from, to);
 }
 
@@ -69,10 +62,10 @@ function link(from, to) {
  * @param {object} fallback - Fallback to default to
  * @returns {void}
  */
-function include(id, fallback) {
-    let plugin_json = check(id, "plugin.json", fallback);
-    let readme_md = check(id, "readme.md", fallback);
-    let icon_png = check(id, "icon.png", fallback);
+function include(id: string, fallback: StringMap): void {
+    let plugin_json: string = check(id, "plugin.json", fallback);
+    let readme_md: string = check(id, "readme.md", fallback);
+    let icon_png: string = check(id, "icon.png", fallback);
     link(plugin_json, "plugin.json");
     link(readme_md, "readme.md");
     link(icon_png, "icon.png");
@@ -84,8 +77,15 @@ function include(id, fallback) {
  * @param {string} acode - Build folder
  * @returns {void}
  */
-function distBuild(label, id, acode, icon, readme, plugin) {
-    let owd = process.cwd();
+function distBuild(
+    label: string,
+    id: string, 
+    acode: string, 
+    icon: string, 
+    readme: string, 
+    plugin: string
+) {
+    let owd: string = process.cwd();
     process.chdir(acode);
     
     // open plugin.json
@@ -104,7 +104,7 @@ function distBuild(label, id, acode, icon, readme, plugin) {
     child_process.execSync(`npm run build-release`, { stdio: 'inherit' });
     child_process.execSync(`npm run clean`, { stdio: 'inherit' });
 
-    let outZip = path.join(owd, `${id}.zip`);
+    let outZip: string = path.join(owd, `${id}.zip`);
     if (fs.existsSync(outZip))
         fs.unlinkSync(outZip);
     fs.renameSync(path.join(acode, "dist.zip"), outZip);

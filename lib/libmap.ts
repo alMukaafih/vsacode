@@ -6,6 +6,7 @@
 /**
  * @typedef {object} Map
  */
+import { ArrayMap, ObjectMap, StringMap } from "./libutils.js"
 /**
  * Creates a new Map Blueprint
  * @class MapIcons
@@ -14,6 +15,15 @@
  * @param {string} [isFile=true] - it is a File and not a Folder
  */
 class MapIcons {
+    x: string;
+    y: string;
+    z: string;
+    switch: boolean;
+    map0: ObjectMap;
+    map1: StringMap
+    map2: ArrayMap;
+    key: string;
+    value: string;
     constructor(txt_1, txt_2="", isFile=true) {
         /** Prefix */
         this.x = txt_1;

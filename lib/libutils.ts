@@ -9,6 +9,19 @@
  * @typedef {object} Map
  */
 // imports
+export type ArrayMap = {
+    [name: string]: string[]
+}
+export type ObjectMap = {
+    [name: string]: {
+        [property: string]: string
+    }
+}
+
+export type StringMap = {
+    [name: string]: string
+}
+
 const fs = require("fs");
 const path = require("path");
 
@@ -17,11 +30,11 @@ const path = require("path");
  * @param {Map} map0 - Map to parse
  * @returns {string} CSS style
  */
-function parse(map0) {
-    let css = "";
-    let classes;
-    let style;
-    let font = "";
+function parse(map0: ArrayMap): string {
+    let css: string = "";
+    let classes: string;
+    let style: string;
+    let font: string = "";
     for(let [key, value] of Object.entries(map0)) {
         if (key == "")
             continue;
@@ -43,12 +56,12 @@ function parse(map0) {
  * @param {string} dir - Parent directory of Icon Theme json file
  * @returns {string} Require directives
  */
-function _require(map, dir) {
-    let x = "";
+function _require(map: ObjectMap, dir: string): string {
+    let x: string = "";
     for(let [key, value] of Object.entries(map)) {
        key = key.replace(/-/g, "_");
        key = key.replace(/\./g, "_");
-       let y = `let ${key} = require(\"${path.join(dir, value.iconPath)}\");\n`;
+       let y: string = `let ${key} = require(\"${path.join(dir, value.iconPath)}\");\n`;
        x += y;
     }
     return x;
@@ -57,7 +70,7 @@ function _require(map, dir) {
  * @param {object} name
  * @returns {object}
  */
-function test(name) {
+function test(name: string): string | object {
     if (name)
         return name;
     else
@@ -70,7 +83,7 @@ function test(name) {
  * @param {string} [def] - Default return value
  * @returns {string} Property
  */
-function _test(map, name, def="") {
+function _test(map: ObjectMap, name: string, def: string=""): string {
     if ( !(name) )
         return def;
     if (map[name] == undefined)
@@ -83,10 +96,10 @@ function _test(map, name, def="") {
  * @param {string} [kind=.file_type_] - Prefix to the CSS class name
  * @returns {string} CSS style
  */
-function _css(name, exe = "default", kind = ".file_type_") {
+function _css(name: string, exe: string="default", kind: string=".file_type_") {
     if (name == "")
         return "";
-    let font = "";
+    let font: string = "";
     return kind + exe +  "::before {\n"
     + "display: inline-block;\n"
     + `content: '${font}';\n`
@@ -102,7 +115,7 @@ function _css(name, exe = "default", kind = ".file_type_") {
  * @param {string} _dir - Parent directory of Icon Theme json file
  * @returns {Map}
  */
-function validate(map0, _dir) {
+function validate(map0: ObjectMap, _dir: string): ObjectMap {
     for(let [key, value] of Object.entries(map0)) {
         // console.log(value);
         if ( !(fs.existsSync(path.join(_dir, value.iconPath))) )
@@ -115,7 +128,7 @@ function validate(map0, _dir) {
  * @param {Map} map0 - Map
  * @returns {Map}
  */
-function rehash(map0) {
+function rehash(map0: ObjectMap): ObjectMap {
     let map = {};
     for(let [key, value] of Object.entries(map0)) {
         key = key.replace(/-/g, "_");
@@ -130,7 +143,7 @@ function rehash(map0) {
  * @param {Map} map2 - Map2
  * @returns {Map}
  */
-function verify(map1, map2) {
+function verify(map1: ObjectMap, map2: ObjectMap): ObjectMap {
     for(let [key, value] of Object.entries(map1)) {
         if (map2[key] == undefined)
             delete map1[key];
