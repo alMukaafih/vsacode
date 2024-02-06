@@ -52,11 +52,11 @@ Usage: vsa <command> [command] <filename>
     filename    vs code plugin (vsix file)
 
   commands:
-    icon        convert an icon theme.
     
+    icon        convert a file icon theme.
   icon commands:
     main        the default command. this is the same as running without an command. convert the plugin.
-    list        list the available icon themes in the plugin.
+    list        list the available file icon themes in the plugin.
 `);
 };
 
