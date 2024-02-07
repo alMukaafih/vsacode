@@ -18,7 +18,7 @@ export class MapFileIcons {
     x: string;
     y: string;
     z: string;
-    switch: boolean;
+    isFile: boolean;
     map0: ObjectMap;
     map1: StringMap
     map2: ArrayMap;
@@ -32,7 +32,7 @@ export class MapFileIcons {
         /** ::before string */
         this.z = "::before";
         /** Switch */
-        this.switch = isFile;
+        this.isFile = isFile;
     }
     /** Maps Map1 to Map2
      * @param {Map} map1 - MapX
@@ -47,14 +47,14 @@ export class MapFileIcons {
         for([this.key, this.value] of Object.entries(this.map1)) {
             if (this.map0[this.value] == undefined)
                 continue;
-            if (this.value.includes("-"))
-                this.value = this.value.replace(/-/g, '_');
-            if (this.value.includes("."))
-                this.value = this.value.replace(/\./g, '_');
             if (this.map2[this.value] == undefined)
                 this.map2[this.value] = [];
-            if (this.switch == true && this.key.includes("."))
+            if (this.isFile == true && this.key.includes("."))
                 this.key = this.key.replace(/\./g, '_');
+            if (this.isFile == true && this.key.includes(" "))
+                this.key = this.key.replace(/ /g, '-_');
+            if (this.isFile == true)
+                this.key = "f_" + this.key;
             this.key = this.x + this.key + this.y + this.z;
             this.map2[this.value].push(this.key);
         }

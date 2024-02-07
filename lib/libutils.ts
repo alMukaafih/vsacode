@@ -21,58 +21,79 @@ export type ObjectMap = {
 export type StringMap = {
     [name: string]: string
 }
-import { IfileIconTheme, DefsMap, IconsMap, LangsMap } from "../typings/fileIconTheme.js";
+import { IfileIconTheme, DefsMap, IconsMap, FontsMap } from "../typings/fileIconTheme.js";
 import * as fs from "node:fs";
 import * as path from "node:path";
+//import * as sass from "sass-embedded";
 
 /**
  * Converts Map to CSS string
  * @param {Map} map0 - Map to parse
  * @returns {string} CSS style
  */
-export function parse(map0: ArrayMap): string {
+export function parse(map0: ArrayMap, ref: DefsMap, dir: string): string {
     let css: string = "";
     let classes: string;
     let style: string;
-    let font: string = "";
+    let fontChar: string = "";
+    let fontColor: string = "";
+    let fontId: string = "";
+    let fontSize: string = "";
+    let iconPath: string = "";
     for(let [key, value] of Object.entries(map0)) {
         if (key == "")
-            continue;
+            continue
+        fontChar = ref[key].fontCharacter || "";
+        if (ref[key].fontColor)
+            fontColor = `    color: ${ref[key].fontColor};\n`;
+
+        if (ref[key].fontId)
+            fontId = `    font-family: "${ref[key].fontId}" !important;\n`;
+
+        if (ref[key].fontSize)
+            fontSize = `    font-size: ${ref[key].fontSize};\n`;
+
+        if (ref[key].iconPath)
+            iconPath = `    background-image: url("${path.join(dir, ref[key].iconPath)}");\n`;
+
         classes = value.join(",");
-        style = classes + "{\n"
-        + "display: inline-block;\n"
-        + `content: '${font}';\n`
-        + "background-image: url(${" + key +".default});\n"
-        + "background-size: contain;\n"
-        + "background-repeat: no-repeat;\n"
-        + "height: 1em;\n"
-        + "width: 1em;}\n";
+        style = classes + `{\n    content: "${fontChar}";\n`
+        + fontColor + fontId + fontSize + iconPath
+        + `    background-size: contain;\n`
+        + `    background-repeat: no-repeat;\n}\n`;
         css += style;
     }
     return css;
 }
-/** Generate require directive for each key: value in Map
- * @param {Map} map - Map to parse
- * @param {string} dir - Parent directory of Icon Theme json file
- * @returns {string} Require directives
- */
-export function _require(map: DefsMap, dir: string): string {
-    let x: string = "";
-    for(let [key, value] of Object.entries(map)) {
-       key = key.replace(/-/g, "_");
-       key = key.replace(/\./g, "_");
-       let y: string = `let ${key} = require(\"${path.join(dir, value.iconPath)}\");\n`;
-       x += y;
+
+export function parseFont(map: FontsMap, ref: DefsMap, dir: string): string {
+    if (map == undefined)
+        return ""
+    let css: string = "";
+    let srcs: string[] = [];
+    let style: string = "";
+    for (let font of map) {
+        for (let src of font.src) {
+            srcs.push(`url("${path.join(dir, src.path)}") format("${src.format}")`)
+        }
+        style = `@font-face {\n`
+        + `    font-family: "${font.id}";\n`
+        + `    src: ${srcs.join(",\n    ")};\n`
+        + `    font-weight: ${font.weight};\n`
+        + `    font-style: ${font.style};\n`
+        + `    font-size: ${font.size};\n}\n`
+        css += style
     }
-    return x;
+    return css
 }
+
 /** Test if the object exists
- * @param {object} name
+ * @param {IconsMap} name
  * @returns {object}
  */
-export function test(name: IconsMap| LangsMap): object {
-    if (name)
-        return name;
+export function test(map: IconsMap): object {
+    if (map)
+        return map;
     else
         return {"": ""};
 }
@@ -96,18 +117,32 @@ export function _test(map: DefsMap, name: string, def: string=""): string {
  * @param {string} [kind=.file_type_] - Prefix to the CSS class name
  * @returns {string} CSS style
  */
-export function _css(name: string, exe: string="default", kind: string=".file_type_") {
+export function _css(name: string, exe: string="default", kind: string=".file_type_", ref: DefsMap, dir: string) {
     if (name == "")
         return "";
-    let font: string = "";
-    return kind + exe +  "::before {\n"
-    + "display: inline-block;\n"
-    + `content: '${font}';\n`
-    + "background-image: url(${" + name +".default});\n"
-    + "background-size: contain;\n"
-    + "background-repeat: no-repeat;\n"
-    + "height: 1em;\n"
-    + "width: 1em;}\n";
+    let fontChar: string = "";
+    let fontColor: string = "";
+    let fontId: string = "";
+    let fontSize: string = "";
+    let iconPath: string = "";
+    
+    fontChar = ref[name].fontCharacter || "";
+    if (ref[name].fontColor)
+        fontColor = `    color: ${ref[name].fontColor};\n`;
+
+    if (ref[name].fontId)
+        fontId = `    font-family: "${ref[name].fontId}" !important;\n`;
+
+    if (ref[name].fontSize)
+        fontSize = `    font-size: ${ref[name].fontSize};\n`;
+
+    if (ref[name].iconPath)
+        iconPath = `    background-image: url("${path.join(dir, ref[name].iconPath)}");\n`;
+    
+    return kind + exe +  `::before {\n    content: "${fontChar}";\n`
+    + fontColor + fontId + fontSize + iconPath
+    + `    background-size: contain;\n`
+    + `    background-repeat: no-repeat;\n}\n`;
 }
 
 /** Check if Icon exists at mapped location
@@ -118,24 +153,12 @@ export function _css(name: string, exe: string="default", kind: string=".file_ty
 export function validate(map0: DefsMap, _dir: string): DefsMap {
     for(let [key, value] of Object.entries(map0)) {
         // console.log(value);
+        if (!value.iconPath)
+            continue
         if ( !(fs.existsSync(path.join(_dir, value.iconPath))) )
             delete map0[key];
     }
     return map0;
-}
-
-/** Replaces invalid entries in Map key name
- * @param {Map} map0 - Map
- * @returns {Map}
- */
-export function rehash(map0: DefsMap): DefsMap {
-    let map = {};
-    for(let [key, value] of Object.entries(map0)) {
-        key = key.replace(/-/g, "_");
-        key = key.replace(/\./g, "_");
-        map[key] = value;
-    }
-    return map;
 }
 
 /** Check that Map1 correctly maps Map2

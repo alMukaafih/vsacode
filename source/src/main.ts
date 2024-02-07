@@ -1,8 +1,7 @@
-import { folders } from './styles';
-import { files } from './styles';
+import folders from './folders.css';
+import files from './files.css';
 import plugin from "../plugin.json";
 //import ext from './icons.json';
-import tag from "html-tag-js";
 //const zip = require("./icons/zip.svg");
 //const python = require("./icons/python.svg");
 
@@ -13,7 +12,10 @@ const helpers = acode.require('helpers');
 //const file_ext: Ext = {};
 
 function get_type_file(filename: string): string {
-    let nam = filename.replace("-", "_")
+    let nam = filename.replace(/ /g, "");
+    nam = nam.replace(/#/g, "");
+    nam = nam.replace(/!/g, "");
+    nam = "f_" + nam;
     let names = nam.split('.');
     let li = [];
     while (names.length > 0) {
@@ -41,7 +43,7 @@ helpers.getIconForFile = filename => {
 
     const icon_mode = `file_type_${name}`;
 
-      return `icon file file_type_default ${icon_mode} ${type}`;
+      return `file file_type_default ${icon_mode} ${type}`;
 };
 
 class IconAcode {

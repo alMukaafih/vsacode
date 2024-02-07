@@ -23,7 +23,7 @@ module.paths = [
 ];
 import * as AdmZip from "adm-zip";
 // @ts-ignore
-import * as toml from "smol-toml";
+import * as toml from "js-toml";
 
 
 /** Temporary directory prefix
@@ -69,7 +69,7 @@ let args: string[] = process.argv.slice(2);
 // load and parse toml file
 let _toml: Buffer = fs.readFileSync(path.join(__dirname, "config.toml"));
 let __toml: string = _toml.toString();
-let config: IconfigToml = toml.parse(__toml);
+let config: IconfigToml = toml.load(__toml);
 let commands = config.commands;
 if (commands == undefined)
     process.exit(1);

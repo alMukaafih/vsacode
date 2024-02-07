@@ -31,7 +31,7 @@ interface IlanguageProperties {
 
 export interface IfileIconTheme {
     hidesExplorerArrows: boolean
-    fonts: [IfontProperties]
+    fonts?: [IfontProperties]
     iconDefinitions: { 
         [name: string]: IdefinitionProperties
     }
@@ -53,8 +53,9 @@ export interface IfileIconTheme {
         [name: string]: string
     }
     languageIds?: {
-        [name: string]: IlanguageProperties
+        [name: string]: string
     }
+
     fileExtensions?: {
         [name: string]: string
     }
@@ -67,5 +68,5 @@ export interface IfileIconTheme {
 
 export type DefsMap = IfileIconTheme["iconDefinitions"]
 export type IconsMap = IfileIconTheme["folderNames"]
-export type LangsMap = IfileIconTheme["languageIds"]
+export type FontsMap = IfileIconTheme["fonts"]
 

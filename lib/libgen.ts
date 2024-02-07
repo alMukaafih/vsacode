@@ -13,7 +13,7 @@ import { IfileIconTheme } from "../typings/fileIconTheme.js"
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { MapFileIcons } from "./libmap";
-import { parse, _require, test, _test, _css, validate, rehash, verify } from "./libutils";
+import { parse, parseFont, test, _test, _css, validate, verify } from "./libutils";
 
 /** Generates styles.ts file from Icon Theme's json file
  * @function
@@ -24,9 +24,10 @@ import { parse, _require, test, _test, _css, validate, rehash, verify } from "./
  * @returns {void}
  */
 export function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconTheme) {
-    let end: string = "`\n";
-    let folders: string = "export let folders: string = `";
-    let files: string = "export let files: string = `";
+    let _dir: string = path.dirname(pwDir);
+    let fonts: string = "";
+    let folders: string = "";
+    let files: string = "";
     let iconDefs: IfileIconTheme["iconDefinitions"] = iconJson.iconDefinitions;
 
     let file: string = _test(iconDefs, iconJson.file);
@@ -35,23 +36,21 @@ export function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconThem
     let rootFolder: string = _test(iconDefs, iconJson.rootFolder, folder);
     let rootFolderExp: string = _test(iconDefs, iconJson.rootFolderExpanded, rootFolder);
     
-    files += _css(file);
+    files += _css(file, "default", ".file_type_", iconDefs, _dir);
     folders += `.list.collapsible.hidden > .tile > .folder::before {
         content: "" !important;
         }\n`;
-    folders += _css(folder, "", `.list.collapsible.hidden > div.tile[data-name][data-type="dir"] > .icon.folder`);
+    folders += _css(folder, "", `.list.collapsible.hidden > div.tile[data-name][data-type="dir"] > .icon.folder`, iconDefs, _dir);
 
-    folders += _css(folder, "", `#file-browser > ul > li.tile[type="dir"]  > .icon.folder`);
+    folders += _css(folder, "", `#file-browser > ul > li.tile[type="dir"]  > .icon.folder`, iconDefs, _dir);
     
-    folders += _css(folder, "", `#file-browser > ul > li.tile[type="directory"]  > .icon.folder`);
+    folders += _css(folder, "", `#file-browser > ul > li.tile[type="directory"]  > .icon.folder`, iconDefs, _dir);
     
-    folders += _css(folderExp,"", `.list.collapsible > div.tile[data-name][data-type="dir"] > .icon.folder`);
+    folders += _css(folderExp,"", `.list.collapsible > div.tile[data-name][data-type="dir"] > .icon.folder`, iconDefs, _dir);
     
-    folders += _css(rootFolder, "", `.list.collapsible.hidden > div[data-type="root"] > .icon.folder`);
+    folders += _css(rootFolder, "", `.list.collapsible.hidden > div[data-type="root"] > .icon.folder`, iconDefs, _dir);
     
-    folders += _css(rootFolderExp, "",`.list.collapsible > div[data-type="root"] > .icon.folder`);
-
-    let _dir: string = path.dirname(pwDir);
+    folders += _css(rootFolderExp, "",`.list.collapsible > div[data-type="root"] > .icon.folder`, iconDefs, _dir);
     let foldersMap = {};
     let filesMap = {};
     //foldersMap
@@ -85,24 +84,19 @@ export function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconThem
     foldersMap = sheetE.map(folderNamesExp, foldersMap, iconDefs);
     
     // validate
-    iconDefs = rehash(iconDefs);
+    //iconDefs = rehash(iconDefs);
     iconDefs = validate(iconDefs, _dir);
     foldersMap = verify(foldersMap, iconDefs);
     filesMap = verify(filesMap, iconDefs);
     
-    folders += parse(foldersMap);
-    files += parse(filesMap);
+    folders += parse(foldersMap, iconDefs, _dir);
+    files += parse(filesMap, iconDefs, _dir);
     
-    let req: string = _require(iconDefs, _dir);
-    let _req: string[] = req.split("\n");
-    _req = [...new Set(_req)];
-    req = _req.join("\n");
-    req += "\n";
-    let css: string = req
-        + folders + end
-        + files + end;
+    fonts += parseFont(iconJson.fonts, iconDefs, _dir)
 
-    fs.writeFileSync(path.join(outDir, "styles.ts"), css );
+    let css: string = fonts + folders + files;
+
+    fs.writeFileSync(path.join(outDir, "styles.css"), css );
 }
 
 /** Generates plugin.json file required by acode plugin

@@ -1,5 +1,5 @@
-import "smol-toml"
+import "js-toml"
 import { IconfigToml } from "./configToml.js"
-declare module "smol-toml" {
-    export function parse(toml: string): IconfigToml
+declare module "js-toml" {
+    export const load: (toml: string) => IconfigToml;
 }
