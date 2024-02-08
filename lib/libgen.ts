@@ -25,6 +25,7 @@ import { parse, parseFont, test, _test, _css, validate, verify } from "./libutil
  */
 export function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconTheme) {
     let _dir: string = path.dirname(pwDir);
+    let assets: string = path.join(outDir, "assets")
     let fonts: string = "";
     let folders: string = "";
     let files: string = "";
@@ -36,21 +37,21 @@ export function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconThem
     let rootFolder: string = _test(iconDefs, iconJson.rootFolder, folder);
     let rootFolderExp: string = _test(iconDefs, iconJson.rootFolderExpanded, rootFolder);
     
-    files += _css(file, "default", ".file_type_", iconDefs, _dir);
+    files += _css(file, "default", ".file_type_", iconDefs, _dir, assets);
     folders += `.list.collapsible.hidden > .tile > .folder::before {
         content: "" !important;
         }\n`;
-    folders += _css(folder, "", `.list.collapsible.hidden > div.tile[data-name][data-type="dir"] > .icon.folder`, iconDefs, _dir);
+    folders += _css(folder, "", `.list.collapsible.hidden > div.tile[data-name][data-type="dir"] > .icon.folder`, iconDefs, _dir, assets);
 
-    folders += _css(folder, "", `#file-browser > ul > li.tile[type="dir"]  > .icon.folder`, iconDefs, _dir);
+    folders += _css(folder, "", `#file-browser > ul > li.tile[type="dir"]  > .icon.folder`, iconDefs, _dir, assets);
     
-    folders += _css(folder, "", `#file-browser > ul > li.tile[type="directory"]  > .icon.folder`, iconDefs, _dir);
+    folders += _css(folder, "", `#file-browser > ul > li.tile[type="directory"]  > .icon.folder`, iconDefs, _dir, assets);
     
-    folders += _css(folderExp,"", `.list.collapsible > div.tile[data-name][data-type="dir"] > .icon.folder`, iconDefs, _dir);
+    folders += _css(folderExp,"", `.list.collapsible > div.tile[data-name][data-type="dir"] > .icon.folder`, iconDefs, _dir, assets);
     
-    folders += _css(rootFolder, "", `.list.collapsible.hidden > div[data-type="root"] > .icon.folder`, iconDefs, _dir);
+    folders += _css(rootFolder, "", `.list.collapsible.hidden > div[data-type="root"] > .icon.folder`, iconDefs, _dir, assets);
     
-    folders += _css(rootFolderExp, "",`.list.collapsible > div[data-type="root"] > .icon.folder`, iconDefs, _dir);
+    folders += _css(rootFolderExp, "",`.list.collapsible > div[data-type="root"] > .icon.folder`, iconDefs, _dir, assets);
     let foldersMap = {};
     let filesMap = {};
     //foldersMap
@@ -60,12 +61,12 @@ export function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconThem
     let fileExtMap = test(iconJson.fileExtensions);
     let fileNamesMap = test(iconJson.fileNames);
  //   if (iconJson.languageIds != undefined)
-    let langIdsMap = test(iconJson.languageIds);
+    //let langIdsMap = test(iconJson.languageIds);
     
     let sheetA = new MapFileIcons(".file_type_");
     filesMap = sheetA.map(fileExtMap, filesMap, iconDefs);
     filesMap = sheetA.map(fileNamesMap, filesMap, iconDefs);
-    filesMap = sheetA.map(langIdsMap, filesMap, iconDefs);
+    //filesMap = sheetA.map(langIdsMap, filesMap, iconDefs);
     
     let txtB_1: string = "#file-browser > ul > li.tile[type='directory'][name='", txtB_2 = "'] > .icon.folder";
     let sheetB = new MapFileIcons(txtB_1, txtB_2, false);
@@ -89,14 +90,16 @@ export function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconThem
     foldersMap = verify(foldersMap, iconDefs);
     filesMap = verify(filesMap, iconDefs);
     
-    folders += parse(foldersMap, iconDefs, _dir);
-    files += parse(filesMap, iconDefs, _dir);
+    folders += parse(foldersMap, iconDefs, _dir, assets);
+    files += parse(filesMap, iconDefs, _dir, assets);
     
-    fonts += parseFont(iconJson.fonts, iconDefs, _dir)
+    fonts += parseFont(iconJson.fonts, iconDefs, _dir, assets)
 
-    let css: string = fonts + folders + files;
-
-    fs.writeFileSync(path.join(outDir, "styles.css"), css );
+    let css: string = fonts + folders;
+    if (!fs.existsSync(outDir)) 
+        fs.mkdirSync(outDir);
+    fs.writeFileSync(path.join(outDir, "files.css"), files );
+    fs.writeFileSync(path.join(outDir, "folders.css"), css );
 }
 
 /** Generates plugin.json file required by acode plugin

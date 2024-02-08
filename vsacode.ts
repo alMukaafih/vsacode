@@ -22,8 +22,7 @@ module.paths = [
     path.join(module.path, "node_modules")
 ];
 import * as AdmZip from "adm-zip";
-// @ts-ignore
-import * as toml from "js-toml";
+import * as toml from "#toml";
 
 
 /** Temporary directory prefix
@@ -47,7 +46,7 @@ process.on("exit", (code) => {
 const usage = () => {
     process.stdout.write(`vsa command is used to convert a vs code plugin to acode plugin
 
-Usage: vsa <command> [command] <filename>
+Usage: vsa <command> [option] <filename>
 
   parameters:
     command     name of command you want to run.
@@ -57,8 +56,8 @@ Usage: vsa <command> [command] <filename>
   commands:
     
     icon        convert a file icon theme.
-  icon commands:
-    main        the default command. this is the same as running without an command. convert the plugin.
+  icon options:
+    main        the default option. this is the same as running without an option. convert the plugin.
     list        list the available file icon themes in the plugin.
 `);
 };
@@ -69,7 +68,7 @@ let args: string[] = process.argv.slice(2);
 // load and parse toml file
 let _toml: Buffer = fs.readFileSync(path.join(__dirname, "config.toml"));
 let __toml: string = _toml.toString();
-let config: IconfigToml = toml.load(__toml);
+let config: IconfigToml = toml.decode(__toml);
 let commands = config.commands;
 if (commands == undefined)
     process.exit(1);
@@ -115,9 +114,9 @@ catch(error) {
  *  @constant {string}
  */
 const acode: string = path.join(tmpDir, "acode");
-fs.symlinkSync(__dirname, acode);
+fs.symlinkSync(path.join(__dirname, "source"), acode);
 
-
+let outDir: string = process.cwd();
 // read extension/package.json file
 let _json: Buffer = fs.readFileSync(path.join(tmpDir, "extension", "package.json"));
 let __json: string = _json.toString();
@@ -143,6 +142,7 @@ for (let contrib of contributes) {
     engine.acode = acode;
     engine.tmpDir = tmpDir;
     engine.pwDir = path.join(engine.tmpDir, "extension", engine.path);
+    engine.outDir = outDir;
     engine.author = author;
     engine.version = version;
     engine.icon = icon;

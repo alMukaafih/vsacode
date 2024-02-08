@@ -1,9 +1,4 @@
-import folders from './folders.css';
-import files from './files.css';
 import plugin from "../plugin.json";
-//import ext from './icons.json';
-//const zip = require("./icons/zip.svg");
-//const python = require("./icons/python.svg");
 
 // acode
 const helpers = acode.require('helpers');
@@ -11,15 +6,34 @@ const helpers = acode.require('helpers');
 //let file_ext: Ext = ext
 //const file_ext: Ext = {};
 
+function encode(text: string): string {
+    let match: RegExpMatchArray | null = text.match(/[^a-zA-Z0-9_\.-]/g);
+    if (match == null)
+        return text
+    let pattern: RegExp;
+    let u: string = "u";
+    let encoded: string;
+    let unicode: string;
+    for (let char of match) {
+        encoded = char.charCodeAt(0).toString(16);
+        unicode = `\\u{${encoded}}`;
+        if (encoded.length == 4) {
+            unicode = "\\u" + encoded;
+            u = "";
+        }
+        pattern = new RegExp(unicode, `g${u}`);
+        text = text.replace(pattern, `0x${encoded}`)
+    }
+    return text
+}
+
 function get_type_file(filename: string): string {
-    let nam = filename.replace(/ /g, "");
-    nam = nam.replace(/#/g, "");
-    nam = nam.replace(/!/g, "");
+    let nam = encode(filename);
     nam = "f_" + nam;
     let names = nam.split('.');
     let li = [];
     while (names.length > 0) {
-        li.push(names.join("_"));
+        li.push(names.join("0x2e"));
         names.shift();
 }
         li.reverse();
@@ -58,8 +72,8 @@ class IconAcode {
     //    textContent: style,
     //});
     // Appending style element with head
-    document.head.insertAdjacentHTML("beforeend",`<style id=${plugin.id}>\n${folders}\n</style>`);
-    document.head.insertAdjacentHTML("beforeend",`<style id=${plugin.id}>\n${files}\n</style>`);
+    document.head.insertAdjacentHTML("beforeend",`<link id="vsacode" rel="stylesheet" href="https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/files.css"></link>`);
+    document.head.insertAdjacentHTML("beforeend",`<link id="vsacode" rel="stylesheet" href="https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/folders.css"></link>`);
     }
 
     public async destroy(): Promise<void> {

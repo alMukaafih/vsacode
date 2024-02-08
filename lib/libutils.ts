@@ -22,6 +22,7 @@ export type StringMap = {
     [name: string]: string
 }
 import { IfileIconTheme, DefsMap, IconsMap, FontsMap } from "../typings/fileIconTheme.js";
+import * as crypto from "node:crypto";
 import * as fs from "node:fs";
 import * as path from "node:path";
 //import * as sass from "sass-embedded";
@@ -31,7 +32,21 @@ import * as path from "node:path";
  * @param {Map} map0 - Map to parse
  * @returns {string} CSS style
  */
-export function parse(map0: ArrayMap, ref: DefsMap, dir: string): string {
+
+function bundleAsset(asset: string, outDir: string): string {
+    if (!fs.existsSync(outDir)) 
+        fs.mkdirSync(outDir);
+    let ext: string = asset.split('.').pop();
+    const hash = crypto.createHash('sha256');
+    hash.update(asset);
+    let dest: string = hash.digest('hex').substring(0, 22);
+    let dest1 = `${outDir}/${dest}.${ext}`
+    fs.renameSync(asset, dest1);
+    console.log(`    asset \x1b[1m\x1b[32m${dest}.${ext} [emitted] [immutable]\x1b[0m [from ${asset}]`)
+    return `assets/${dest}.${ext}`
+}
+
+export function parse(map0: ArrayMap, ref: DefsMap, dir: string, outDir: string): string {
     let css: string = "";
     let classes: string;
     let style: string;
@@ -40,6 +55,7 @@ export function parse(map0: ArrayMap, ref: DefsMap, dir: string): string {
     let fontId: string = "";
     let fontSize: string = "";
     let iconPath: string = "";
+    
     for(let [key, value] of Object.entries(map0)) {
         if (key == "")
             continue
@@ -54,7 +70,7 @@ export function parse(map0: ArrayMap, ref: DefsMap, dir: string): string {
             fontSize = `    font-size: ${ref[key].fontSize};\n`;
 
         if (ref[key].iconPath)
-            iconPath = `    background-image: url("${path.join(dir, ref[key].iconPath)}");\n`;
+            iconPath = `    background-image: url("${bundleAsset(path.join(dir, ref[key].iconPath), outDir)}");\n`;
 
         classes = value.join(",");
         style = classes + `{\n    content: "${fontChar}";\n`
@@ -66,7 +82,7 @@ export function parse(map0: ArrayMap, ref: DefsMap, dir: string): string {
     return css;
 }
 
-export function parseFont(map: FontsMap, ref: DefsMap, dir: string): string {
+export function parseFont(map: FontsMap, ref: DefsMap, dir: string, outDir: string): string {
     if (map == undefined)
         return ""
     let css: string = "";
@@ -74,7 +90,7 @@ export function parseFont(map: FontsMap, ref: DefsMap, dir: string): string {
     let style: string = "";
     for (let font of map) {
         for (let src of font.src) {
-            srcs.push(`url("${path.join(dir, src.path)}") format("${src.format}")`)
+            srcs.push(`url("${bundleAsset(path.join(dir, src.path), outDir)}") format("${src.format}")`)
         }
         style = `@font-face {\n`
         + `    font-family: "${font.id}";\n`
@@ -117,7 +133,7 @@ export function _test(map: DefsMap, name: string, def: string=""): string {
  * @param {string} [kind=.file_type_] - Prefix to the CSS class name
  * @returns {string} CSS style
  */
-export function _css(name: string, exe: string="default", kind: string=".file_type_", ref: DefsMap, dir: string) {
+export function _css(name: string, exe: string="default", kind: string=".file_type_", ref: DefsMap, dir: string, outDir: string) {
     if (name == "")
         return "";
     let fontChar: string = "";
@@ -137,7 +153,7 @@ export function _css(name: string, exe: string="default", kind: string=".file_ty
         fontSize = `    font-size: ${ref[name].fontSize};\n`;
 
     if (ref[name].iconPath)
-        iconPath = `    background-image: url("${path.join(dir, ref[name].iconPath)}");\n`;
+        iconPath = `    background-image: url("${bundleAsset(path.join(dir, ref[name].iconPath), outDir)}");\n`;
     
     return kind + exe +  `::before {\n    content: "${fontChar}";\n`
     + fontColor + fontId + fontSize + iconPath

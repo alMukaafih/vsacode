@@ -26,7 +26,7 @@ exports.main = () => {
     let __json = _json.toString();
     __json = __json.replace(/\s\/\/(.)+/g, "");
     let icon_json = JSON.parse(__json);
-    let outDir = path.join(exports.acode, "src");
+    let outDir = path.join(exports.acode, "dist");
     fs.mkdirSync(outDir, { recursive: true });
     stylesGen(
         exports.pwDir,
@@ -35,7 +35,8 @@ exports.main = () => {
     );
     pluginJsonGen(
         exports.author, 
-        exports.id, exports.label, 
+        exports.id,
+        exports.label, 
         exports.version,
         exports.tmpDir
     );
@@ -45,7 +46,8 @@ exports.main = () => {
         exports.acode,
         exports.icon,
         exports.readme,
-        exports.plugin
+        exports.plugin,
+        exports.outDir
     );
 };
 

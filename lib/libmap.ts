@@ -14,17 +14,38 @@ import { ArrayMap, ObjectMap, StringMap } from "./libutils.js"
  * @param {string} [txt_2] - CSS class name suffix
  * @param {string} [isFile=true] - it is a File and not a Folder
  */
+function encode(text: string): string {
+    let match: RegExpMatchArray | null = text.match(/[^a-zA-Z0-9_-]/g);
+    if (match == null)
+        return text
+    let pattern: RegExp;
+    let u: string = "u";
+    let encoded: string;
+    let unicode: string;
+    for (let char of match) {
+        encoded = char.charCodeAt(0).toString(16);
+        unicode = `\\u{${encoded}}`;
+        if (encoded.length == 4) {
+            unicode = "\\u" + encoded;
+            u = "";
+        }
+        pattern = new RegExp(unicode, `g${u}`);
+        text = text.replace(pattern, `0x${encoded}`)
+    }
+    return text
+}
 export class MapFileIcons {
     x: string;
     y: string;
     z: string;
     isFile: boolean;
+    isFullFile: boolean;
     map0: ObjectMap;
     map1: StringMap
     map2: ArrayMap;
     key: string;
     value: string;
-    constructor(txt_1, txt_2="", isFile=true) {
+    constructor(txt_1: string, txt_2: string="", isFile: boolean=true, isFullFile: boolean=false) {
         /** Prefix */
         this.x = txt_1;
         /** Suffix */
@@ -33,6 +54,7 @@ export class MapFileIcons {
         this.z = "::before";
         /** Switch */
         this.isFile = isFile;
+        this.isFullFile = isFullFile;
     }
     /** Maps Map1 to Map2
      * @param {Map} map1 - MapX
@@ -49,11 +71,10 @@ export class MapFileIcons {
                 continue;
             if (this.map2[this.value] == undefined)
                 this.map2[this.value] = [];
-            if (this.isFile == true && this.key.includes("."))
-                this.key = this.key.replace(/\./g, '_');
-            if (this.isFile == true && this.key.includes(" "))
-                this.key = this.key.replace(/ /g, '-_');
             if (this.isFile == true)
+                this.key = encode(this.key);
+            
+            if (this.isFile == true && this.isFullFile == true)
                 this.key = "f_" + this.key;
             this.key = this.x + this.key + this.y + this.z;
             this.map2[this.value].push(this.key);

@@ -81,9 +81,9 @@ export function distBuild(
     acode: string, 
     icon: string, 
     readme: string, 
-    plugin: string
+    plugin: string,
+    outDir: string
 ) {
-    let owd: string = process.cwd();
     process.chdir(acode);
     
     // open plugin.json
@@ -102,7 +102,7 @@ export function distBuild(
     child_process.execSync(`npm run build-release`, { stdio: 'inherit' });
     child_process.execSync(`npm run clean`, { stdio: 'inherit' });
 
-    let outZip: string = path.join(owd, `${id}.zip`);
+    let outZip: string = path.join(outDir, `${id}.zip`);
     if (fs.existsSync(outZip))
         fs.unlinkSync(outZip);
     fs.renameSync(path.join(acode, "dist.zip"), outZip);

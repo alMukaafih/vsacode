@@ -131,6 +131,14 @@ dist
 *.vsix
 js-docs/
 view
-src/styles.ts
 lib/*.js
 vsacode.js
+*.zip
+source/icon.png
+source/node_modules
+source/plugin.json
+source/readme.md
+source/src/folders.css
+source/src/files.css
+engines/*.js
+typings/*.js
