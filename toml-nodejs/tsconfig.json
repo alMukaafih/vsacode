@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "resolveJsonModule": true,
+        "allowJs": false,
+        "removeComments": true,
+        "esModuleInterop": false,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitAny": false,
+        "downlevelIteration": true,
+        "strict": false,
+        "declaration": true,
+    },
+    "exclude": [
+        "./dist/**/*",
+        "./source/",
+        "./js-docs/",
+        "./docs/",
+        "./webpack.config.js",
+        "./tests/"
+    ]
+}
