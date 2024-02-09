@@ -28,25 +28,22 @@ exports.main = () => {
     let icon_json = JSON.parse(__json);
     let outDir = path.join(exports.acode, "dist");
     fs.mkdirSync(outDir, { recursive: true });
+    pluginJsonGen(
+        exports.packageJson,
+        exports.id,
+        exports.label, 
+        exports.tmpDir,
+        exports.acode
+    );
     stylesGen(
         exports.pwDir,
         outDir,
         icon_json
     );
-    pluginJsonGen(
-        exports.author, 
-        exports.id,
-        exports.label, 
-        exports.version,
-        exports.tmpDir
-    );
     distBuild(
         exports.label,
         exports.id,
         exports.acode,
-        exports.icon,
-        exports.readme,
-        exports.plugin,
         exports.outDir
     );
 };

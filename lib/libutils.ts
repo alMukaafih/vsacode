@@ -32,10 +32,15 @@ import * as path from "node:path";
  * @param {Map} map0 - Map to parse
  * @returns {string} CSS style
  */
-
+let bundled = {}
 function bundleAsset(asset: string, outDir: string): string {
+    const _plugin: Buffer = fs.readFileSync(path.join(path.dirname(path.dirname(outDir)), "plugin.json"));
+    let __plugin: string = _plugin.toString();
+    let plugin = JSON.parse(__plugin);
     if (!fs.existsSync(outDir)) 
         fs.mkdirSync(outDir);
+    if (bundled[asset])
+        return bundled[asset];
     let ext: string = asset.split('.').pop();
     const hash = crypto.createHash('sha256');
     hash.update(asset);
@@ -43,7 +48,8 @@ function bundleAsset(asset: string, outDir: string): string {
     let dest1 = `${outDir}/${dest}.${ext}`
     fs.renameSync(asset, dest1);
     console.log(`    asset \x1b[1m\x1b[32m${dest}.${ext} [emitted] [immutable]\x1b[0m [from ${asset}]`)
-    return `assets/${dest}.${ext}`
+    bundled[asset] = `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}.${ext}`
+    return `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}.${ext}`
 }
 
 export function parse(map0: ArrayMap, ref: DefsMap, dir: string, outDir: string): string {
@@ -70,16 +76,19 @@ export function parse(map0: ArrayMap, ref: DefsMap, dir: string, outDir: string)
             fontSize = `    font-size: ${ref[key].fontSize};\n`;
 
         if (ref[key].iconPath)
-            iconPath = `    background-image: url("${bundleAsset(path.join(dir, ref[key].iconPath), outDir)}");\n`;
+            iconPath = `    background-image: url(${bundleAsset(path.join(dir, ref[key].iconPath), outDir)});\n`;
 
         classes = value.join(",");
-        style = classes + `{\n    content: "${fontChar}";\n`
+        style = classes + `{\n    content: "${fontChar}" !important;\n`
         + fontColor + fontId + fontSize + iconPath
         + `    background-size: contain;\n`
-        + `    background-repeat: no-repeat;\n}\n`;
+        + `    background-repeat: no-repeat;\n`
+        + `    display: inline-block;\n`
+        + `    height: 1em;\n`
+        + `    width: 1em;\n}\n`;
         css += style;
     }
-    return css;
+    return css.replace(/\s/g, "");
 }
 
 export function parseFont(map: FontsMap, ref: DefsMap, dir: string, outDir: string): string {
@@ -90,7 +99,7 @@ export function parseFont(map: FontsMap, ref: DefsMap, dir: string, outDir: stri
     let style: string = "";
     for (let font of map) {
         for (let src of font.src) {
-            srcs.push(`url("${bundleAsset(path.join(dir, src.path), outDir)}") format("${src.format}")`)
+            srcs.push(`url(${bundleAsset(path.join(dir, src.path), outDir)}) format("${src.format}")`)
         }
         style = `@font-face {\n`
         + `    font-family: "${font.id}";\n`
@@ -98,9 +107,10 @@ export function parseFont(map: FontsMap, ref: DefsMap, dir: string, outDir: stri
         + `    font-weight: ${font.weight};\n`
         + `    font-style: ${font.style};\n`
         + `    font-size: ${font.size};\n}\n`
+        srcs = []
         css += style
     }
-    return css
+    return css.replace(/\s/g, "")
 }
 
 /** Test if the object exists
@@ -153,12 +163,16 @@ export function _css(name: string, exe: string="default", kind: string=".file_ty
         fontSize = `    font-size: ${ref[name].fontSize};\n`;
 
     if (ref[name].iconPath)
-        iconPath = `    background-image: url("${bundleAsset(path.join(dir, ref[name].iconPath), outDir)}");\n`;
+        iconPath = `    background-image: url(${bundleAsset(path.join(dir, ref[name].iconPath), outDir)});\n`;
     
-    return kind + exe +  `::before {\n    content: "${fontChar}";\n`
+    let css = kind + exe +  `::before {\n    content: "${fontChar}" !important;\n`
     + fontColor + fontId + fontSize + iconPath
     + `    background-size: contain;\n`
-    + `    background-repeat: no-repeat;\n}\n`;
+    + `    background-repeat: no-repeat;\n`
+    + `    display: inline-block;\n`
+    + `    height: 1em;\n`
+    + `    width: 1em;\n}\n`;
+    return css.replace(/\s/g, "")
 }
 
 /** Check if Icon exists at mapped location

@@ -124,9 +124,7 @@ __json = __json.replace(/\s\/\/(.)+/g, "");
 let packageJson = JSON.parse(__json);
 let author = packageJson.author;
 let version: string = packageJson.version;
-let icon: string = path.join(tmpDir, "extension", packageJson.icon);
-let readme: string = path.join(tmpDir, "extension", "README.md");
-let plugin: string = path.join(tmpDir, "extension", "plugin.json");
+
 let contributes = packageJson.contributes[command.contrib];
 if (contributes == undefined) {
     console.log(`Error: ${vsix} ${command.errorMessage}\n`);
@@ -136,6 +134,7 @@ if (contributes == undefined) {
 
 // process each contrib
 for (let contrib of contributes) {
+    engine.packageJson = packageJson;
     engine.id = contrib.id;
     engine.label = contrib.label;
     engine.path = contrib.path;
@@ -143,10 +142,5 @@ for (let contrib of contributes) {
     engine.tmpDir = tmpDir;
     engine.pwDir = path.join(engine.tmpDir, "extension", engine.path);
     engine.outDir = outDir;
-    engine.author = author;
-    engine.version = version;
-    engine.icon = icon;
-    engine.readme = readme;
-    engine.plugin = plugin;
     engine[option]();
 }

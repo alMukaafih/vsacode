@@ -72,12 +72,15 @@ class IconAcode {
     //    textContent: style,
     //});
     // Appending style element with head
-    document.head.insertAdjacentHTML("beforeend",`<link id="vsacode" rel="stylesheet" href="https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/files.css"></link>`);
-    document.head.insertAdjacentHTML("beforeend",`<link id="vsacode" rel="stylesheet" href="https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/folders.css"></link>`);
+    document.head.insertAdjacentHTML("beforeend",`<link id="${plugin.id}" rel="stylesheet" href="https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/files.css"></link>`);
+    document.head.insertAdjacentHTML("beforeend",`<link id="${plugin.id}" rel="stylesheet" href="https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/folders.css"></link>`);
     }
 
     public async destroy(): Promise<void> {
-    //
+        let links = document.querySelectorAll(`#${plugin.id}`)
+        for (let link of links) {
+            link.remove();
+        }
     }
 }
 

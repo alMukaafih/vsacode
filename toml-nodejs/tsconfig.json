@@ -11,6 +11,7 @@
         "downlevelIteration": true,
         "strict": false,
         "declaration": true,
+        "outDir": "./code"
     },
     "exclude": [
         "./dist/**/*",

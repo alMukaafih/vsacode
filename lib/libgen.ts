@@ -9,6 +9,7 @@
  */
  
 import { IfileIconTheme } from "../typings/fileIconTheme.js"
+import { StringMap } from "./libutils.js"
 // imports
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -64,8 +65,9 @@ export function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconThem
     //let langIdsMap = test(iconJson.languageIds);
     
     let sheetA = new MapFileIcons(".file_type_");
+    let sheetM = new MapFileIcons(".file_type_", "", true, true);
     filesMap = sheetA.map(fileExtMap, filesMap, iconDefs);
-    filesMap = sheetA.map(fileNamesMap, filesMap, iconDefs);
+    filesMap = sheetM.map(fileNamesMap, filesMap, iconDefs);
     //filesMap = sheetA.map(langIdsMap, filesMap, iconDefs);
     
     let txtB_1: string = "#file-browser > ul > li.tile[type='directory'][name='", txtB_2 = "'] > .icon.folder";
@@ -102,6 +104,62 @@ export function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconThem
     fs.writeFileSync(path.join(outDir, "folders.css"), css );
 }
 
+/** @constant {string} */
+const includes: string = path.join("/data/data/com.termux/pj/vsacode", "includes");
+/** Checks if required File exits
+ * @param {string} id - Icon Theme id
+ * @param {string} req - Name of required File
+ * @returns {boolean}
+ */
+function reqExists(id: string, req: string) {
+    let file;
+    let _path: string = path.join(includes, id);
+    if ( !(fs.existsSync(_path)) )
+        return false;
+    file = fs.statSync(_path);
+    if ( !(file.isDirectory()) )
+        return false;
+    let _file = path.join(_path, req);
+    if ( !(fs.existsSync(_file)) )
+        return false;
+    return true;
+}
+
+/** Check for required File
+ * @param {string} id - Icon Theme id
+ * @param {string} req - Name of required File
+ * @param {object} fallback - Fallback to default to
+ * @returns {string} Path of required File
+ */
+function check(id: string, req: string, fallback: StringMap): string {
+    if (!reqExists(id, req))
+        return path.join(fallback[req]);
+    return path.join(includes, id, req);
+}
+
+/** Link the required files
+ * @param {string} from - Origin
+ * @param {string} to - Destination
+ * @returns {void}
+ */
+function link(from: string, to: string): void {
+    fs.copyFileSync(from, to);
+}
+
+/** Include the required files
+ * @param {string} id - Icon Theme id
+ * @param {object} fallback - Fallback to default to
+ * @returns {void}
+ */
+function include(id: string, fallback: StringMap): void {
+    let plugin_json: string = check(id, "plugin.json", fallback);
+    let readme_md: string = check(id, "readme.md", fallback);
+    let icon_png: string = check(id, "icon.png", fallback);
+    link(plugin_json, "plugin.json");
+    link(readme_md, "readme.md");
+    link(icon_png, "icon.png");
+}
+
 /** Generates plugin.json file required by acode plugin
  * @function
  * @name pluginJsonGen
@@ -112,17 +170,26 @@ export function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconThem
  * @param {string} acode - Build folder
  * @returns {void}
  */
-export function pluginJsonGen(author: object | string, id: string, label: string, version: string, tmpDir: string) {
+export function pluginJsonGen(packageJson, id: string, label: string, tmpDir: string, acode: string) {
     let json = {
         id: id,
         name: label,
         main: "dist/main.js",
-        version: version,
-        readme: "README.md",
+        version: packageJson.version,
+        readme: "readme.md",
         icon: "icon.png",
         files: [],
         minVersionCode: 292,
-        author: author
+        author: packageJson.author
     };
-    fs.writeFileSync(path.join(tmpDir, "extension", "plugin.json"), JSON.stringify(json));
+    let assets = path.join(tmpDir, "extension")
+    fs.writeFileSync(path.join(assets, "plugin.json"), JSON.stringify(json));
+        let fallback = {
+        "plugin.json": path.join(assets, "plugin.json"),
+        "icon.png": path.join(assets, packageJson.icon),
+        "readme.md": path.join(assets, "README.md"),
+    };
+    
+    process.chdir(acode);
+    include(id, fallback);
 }
