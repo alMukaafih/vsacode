@@ -10,10 +10,26 @@
   "imports": {
     "#toml": "./toml-nodejs/src/index.js"
   },
+  "files": [
+    "vsacode.js",
+    "vsacode.d.ts",
+    "README.md",
+    "LICENSE",
+    "lib/*.js",
+    "lib/*.d.ts",
+    "engines/*.js",
+    "engines/*.d.ts",
+    "templates",
+    "source",
+    "toml-nodejs",
+    "config.toml",
+    "typings"
+  ],
   "scripts": {
     "clean": "shx rm -rf dist plugin.json icon.png readme.md ./lib/*.js ./typings/*.js",
     "build": "tsc; shx chmod +x vsacode.js",
     "build-doc": "jsdoc -c ./jsdoc.json",
+    "prepublish": "npm run build",
     "postinstall": "npm install"
   },
   "dependencies": {
@@ -29,7 +45,8 @@
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3",
     "webpack": "^5.90.1",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "ziyy": "^1.0.1"
   },
   "devDependencies": {
     "@types/node": "^20.11.16",

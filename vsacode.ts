@@ -15,13 +15,14 @@ import { IconfigToml } from "./typings/configToml.js";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
+import { style, Template } from "ziyy";
 
 module.paths = [
     path.join(module.path, "lib"),
     path.join(module.path, "engines"),
-    path.join(module.path, "node_modules")
+    path.join(module.path, "node_modules"),
 ];
-import * as AdmZip from "adm-zip";
+import * as Zip from "adm-zip";
 import * as toml from "#toml";
 
 
@@ -43,41 +44,45 @@ process.on("exit", (code) => {
     //fs.rmSync(tmpDir, { recursive: true });
 });
 
-const usage = () => {
-    process.stdout.write(`vsa command is used to convert a vs code plugin to acode plugin
-
-Usage: vsa <command> [option] <filename>
-
-  parameters:
-    command     name of command you want to run.
-    command      command of the command.
-    filename    vs code plugin (vsix file)
-
-  commands:
-    
-    icon        convert a file icon theme.
-  icon options:
-    main        the default option. this is the same as running without an option. convert the plugin.
-    list        list the available file icon themes in the plugin.
-`);
-};
-
 // cli arguments
 let args: string[] = process.argv.slice(2);
+let flags: string[] = [];
+for (let arg of args) {
+    if (arg.startsWith("-")) {
+        var i = args.indexOf(arg);
+        args.splice(i, 1);
+        flags.push(arg);
+    }
+}
+for (let flag of flags) {
+    if (flag == "--version" || flag == "-V") {
+        let _json = fs.readFileSync(path.join(__dirname, "package.json"));
+        let __json = _json.toString();
+        __json = __json.replace(/\s\/\/(.)+/g, "");
+        let packageJson = JSON.parse(__json);
+        process.stdout.write(`${packageJson.name} ${packageJson.version}\n`)
+        process.exit(0)
+    }
+    if (flag == "--help" || flag == "-h") {
+        args = ["help"]
+    }
+}
 
 // load and parse toml file
 let _toml: Buffer = fs.readFileSync(path.join(__dirname, "config.toml"));
 let __toml: string = _toml.toString();
 let config: IconfigToml = toml.decode(__toml);
 let commands = config.commands;
+const help = require("help");
 if (commands == undefined)
     process.exit(1);
-let command = commands[args[0]];
+let cmd: string = args[0]
+let command = commands[cmd];
+let usage = help[cmd];
 args.shift();
 if (command == undefined) {
-    console.log("Error: valid command is required\n");
-    usage();
-    process.exit(1);
+    console.log(style("[b][c:red]Error: valid command is required\n"));
+    help["main"]();
 }
 let option: string = args[0];
 if (!command.options.includes(option))
@@ -88,27 +93,27 @@ if (command.engine == undefined) {
     process.exit(1);
 }
 const engine = require(command.engine);
+if (cmd == "help")
+    engine[option](1);
 
 // vsix file
 /** @constant {string} */
 const vsix: string = args[0];
 if (vsix == undefined) {
     console.log("Error: filename is required\n");
-    usage();
-    process.exit(1);
+    usage(1);
 }
-/** New AdmZip Instance
+/** New Zip Instance
  * @constant {object}
  */
 try {
-    const zip = new AdmZip(vsix);
+    const zip = new Zip(vsix);
     zip.extractAllTo(tmpDir);
 }
 catch(error) {
     //console.log(error);
     console.log(`Error: ${vsix} is not a valid vsix file\n`);
-    usage();
-    process.exit(1);
+    usage(1);
 }
 /** Path to acode directory in temp directory
  *  @constant {string}

@@ -4,3 +4,7 @@
     contrib = "iconThemes"
     options = ["main", "list"]
     errorMessage = "is not an icon theme plugin"
+
+    [commands.help]
+    engine = "help"
+    options = ["main", "icon", "help"]
