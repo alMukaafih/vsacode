@@ -70,19 +70,19 @@ export function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconThem
     filesMap = sheetM.map(fileNamesMap, filesMap, iconDefs);
     //filesMap = sheetA.map(langIdsMap, filesMap, iconDefs);
     
-    let txtB_1: string = "#file-browser > ul > li.tile[type='directory'][name='", txtB_2 = "'] > .icon.folder";
+    let txtB_1: string = "#file-browser > ul > li.tile[type='directory'][name='", txtB_2: string = "' i] > .icon.folder";
     let sheetB = new MapFileIcons(txtB_1, txtB_2, false);
     foldersMap = sheetB.map(folderNamesMap, foldersMap, iconDefs);
     
-    let txtC_1: string = "#file-browser > ul > li.tile[type='dir'][name='", txtC_2 = "'] > .icon.folder";
+    let txtC_1: string = "#file-browser > ul > li.tile[type='dir'][name='", txtC_2: string = "' i] > .icon.folder";
     const sheetC = new MapFileIcons(txtC_1, txtC_2, false);
     foldersMap = sheetC.map(folderNamesMap, foldersMap, iconDefs);
     
-    let txtD_1: string = ".list.collapsible.hidden > div.tile[data-name='", txtD_2 = "'][data-type='dir'] > .icon.folder";
+    let txtD_1: string = ".list.collapsible.hidden > div.tile[data-name='", txtD_2: string = "' i][data-type='dir'] > .icon.folder";
     const sheetD = new MapFileIcons(txtD_1, txtD_2, false);
     foldersMap = sheetD.map(folderNamesMap, foldersMap, iconDefs);
     
-    let txtE_1: string = ".list.collapsible > div.tile[data-name='", txtE_2 = "'][data-type='dir'] > span.icon.folder";
+    let txtE_1: string = ".list.collapsible > div.tile[data-name='", txtE_2: string = "' i][data-type='dir'] > span.icon.folder";
     let sheetE = new MapFileIcons(txtE_1, txtE_2, false);
     foldersMap = sheetE.map(folderNamesExp, foldersMap, iconDefs);
     

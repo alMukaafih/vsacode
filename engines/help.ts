@@ -1,54 +1,87 @@
 import { style } from "ziyy";
 exports.main = ( err = 0) => {
-    process.stdout.write(style(`vsa command is used to convert a vs code plugin to acode plugin
+    process.stdout.write(style(`Convert VS Code plugins to Acode plugins.
 
-usage: vsa <command> \[[u]option[/u]\] [<filename>]
+USAGE
+  vsa \[<command>\] \[[u]option[/u]\] \[<filename>\] \[flags\]
 
-parameters:
+PARAMETERS
+  command:     Command name
+  option:      Command option
+  filename:    VS Code plugin (vsix file)
+  flags:       Command flags
 
-  command     - name of command you want to run.
+CONVERSION COMMANDS
+  icon:       Convert File Icon Theme
 
-  [i]option[/i]      - option of the command.
+GENERAL CONVERSION OPTIONS
+  main:       Convert the plugin
+  list:       List the available entries for command in plugin
 
-  filename    - vs code plugin (vsix file).
+ADDITIONAL COMMANDS
+  help:       Show help for command
 
-commands:
+FLAGS
+  --help      Show help for command
+  --version   Show vsacode version
 
-  icon        - convert a file icon theme.
- 
-  help        - print this help message. run help <command> to get the help of the command.
+EXAMPLES
+  $ vsa icon plugin.vsix
+  $ vsa help icon 
+  $ vsa --version
 
-icon options:
-
-  main        - the default option. this is the same as running without an option. convert the plugin.
-
-  list        - list the available file icon themes in the plugin.
+LEARN MORE
+  Use \`vsa <command> --help\` for more information about a command.
 
 `));
     process.exit(err);
 };
 
 exports.icon = (err = 0) => {
-    process.stdout.write(style(`vsa icon command is used to convert a file icon vs code plugin to acode plugin
+    process.stdout.write(style(`Convert File Icon Theme plugins.
 
-usage: vsa icon \[[u]option[/u]\] <filename>
+USAGE
+  vsa icon \[[u]option[/u]\] <filename> \[flags\]
 
-options:
+PARAMETERS
+  option:      Option of the command
+  filename:    VS Code plugin (vsix file)
+  flags:       Command flags
 
-  main        - the default option. this is the same as running without an option. convert the plugin.
+COMMANDS
+  icon:       Convert File Icon Theme
+  help:       Show help for command
 
-  list        - list the available file icon themes in the plugin.
+OPTIONS
+  main:       Convert the plugin
+  list:       List the available File Icon Themes in plugin
+
+INHERITED FLAGS
+  --help      Show help for command
+
+EXAMPLES
+  $ vsa icon list plugin.vsix
+  $ vsa icon plugin.vsix
+  $ vsa icon --help
+
 `));
     process.exit(err);
 }
 
 exports.help = (err = 0) => {
-    process.stdout.write(style(`vsa help command is used to get the help of the specified command.
+    process.stdout.write(style(`Show help for command.
 
-usage: vsa help [command]
+USAGE
+  vsa icon <command>
 
-parameters:
-  command     - the command to get help about.
+PARAMETERS
+  command:    Command name
+
+EXAMPLES
+  $ vsa help icon
+  $ vsa help help
+  $ vsa help
+
 `));
     process.exit(err);
 }

@@ -1,6 +1,7 @@
 module.exports = {
+    mode: "production",
     entry: {
-        main: "./src/main.ts",
+        main: "",
     },
     output: {
         path: "",
@@ -20,7 +21,26 @@ module.exports = {
             {
                 test: /\.ts$/,
                 exclude: /node_modules/,
-                use: "ts-loader",
+                use: [
+                    {
+                        loader: "ts-loader",
+                        options: {
+                            compilerOptions: {
+                                target: "es2016",
+                                module: "commonjs",
+                                moduleResolution: "node",
+                                resolveJsonModule: true,
+                                allowJs: true,
+                                outDir: "./dist",
+                                removeComments: true,
+                                esModuleInterop: true,
+                                forceConsistentCasingInFileNames: true,
+                                noImplicitAny: false,
+                                strict: false
+    },
+                        }
+                    }
+                ],
             },
         ],
     },

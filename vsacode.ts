@@ -54,6 +54,7 @@ for (let arg of args) {
         flags.push(arg);
     }
 }
+// process flags
 for (let flag of flags) {
     if (flag == "--version" || flag == "-V") {
         let _json = fs.readFileSync(path.join(__dirname, "package.json"));
@@ -64,7 +65,7 @@ for (let flag of flags) {
         process.exit(0)
     }
     if (flag == "--help" || flag == "-h") {
-        args = ["help"]
+        args.unshift("help")
     }
 }
 
@@ -119,7 +120,7 @@ catch(error) {
  *  @constant {string}
  */
 const acode: string = path.join(tmpDir, "acode");
-fs.symlinkSync(path.join(__dirname, "source"), acode);
+fs.cpSync(path.join(__dirname, "source"), acode, { recursive: true });
 
 let outDir: string = process.cwd();
 // read extension/package.json file
@@ -133,8 +134,7 @@ let version: string = packageJson.version;
 let contributes = packageJson.contributes[command.contrib];
 if (contributes == undefined) {
     console.log(`Error: ${vsix} ${command.errorMessage}\n`);
-    usage();
-    process.exit(1);
+    usage(1);
 }
 
 // process each contrib
