@@ -43,8 +43,8 @@ export function distBuild(
         webpackObject,
         (err, stats) => {
             if (err) {
-            console.error(err);
-            return;
+                console.error(err);
+                return;
             }
             console.log(
             stats.toString({
@@ -52,23 +52,16 @@ export function distBuild(
                 colors: true, // Shows colors in the console
             })
             );
+            let distZip = new Zip();
+            distZip.addLocalFolder(path.join(acode, "dist"));
+            distZip.addLocalFile(path.join(acode, "plugin.json"));
+            distZip.addLocalFile(path.join(acode, "icon.png"));
+            distZip.addLocalFile(path.join(acode, "readme.md"));
+            let outZip: string = path.join(outDir, `${id}.zip`);
+            if (fs.existsSync(outZip))
+                fs.unlinkSync(outZip);
+            distZip.writeZip(outZip);
+            console.log(`output: ${id}.zip\n`);
         }
     );
-    let distZip = new Zip();
-    let dist = fs.readdirSync(path.join(acode, "dist"));
-    for (let entry of dist) {
-        entry = path.join(acode, "dist", entry);
-        var info = fs.statSync(entry);
-        if (info.isDirectory()) {
-            distZip.addLocalFolder(entry);
-        } else if (info.isFile()) {
-            distZip.addLocalFile(entry);
-        }
-    }
-    
-    let outZip: string = path.join(outDir, `${id}.zip`);
-    if (fs.existsSync(outZip))
-        fs.unlinkSync(outZip);
-    distZip.writeZip(outZip)
-    console.log(`output: ${id}.zip\n`);
 }

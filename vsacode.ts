@@ -119,8 +119,9 @@ catch(error) {
 /** Path to acode directory in temp directory
  *  @constant {string}
  */
-const acode: string = path.join(tmpDir, "acode");
-fs.cpSync(path.join(__dirname, "source"), acode, { recursive: true });
+const _acode: string = "./build";
+if (!fs.existsSync(_acode))
+    fs.mkdirSync(_acode)
 
 let outDir: string = process.cwd();
 // read extension/package.json file
@@ -138,7 +139,13 @@ if (contributes == undefined) {
 }
 
 // process each contrib
+let acode: string;
 for (let contrib of contributes) {
+    acode = path.resolve(_acode, contrib.id)
+    if (!fs.existsSync(acode))
+        fs.cpSync(path.join(__dirname, "source"), acode, { recursive: true });
+    if (fs.existsSync(path.join(acode, "dist"))) 
+        fs.unlinkSync(path.join(acode, "dist"));
     engine.packageJson = packageJson;
     engine.id = contrib.id;
     engine.label = contrib.label;

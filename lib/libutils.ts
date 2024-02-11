@@ -47,7 +47,7 @@ function bundleAsset(asset: string, outDir: string): string {
     let dest: string = hash.digest('hex').substring(0, 22);
     let dest1 = `${outDir}/${dest}.${ext}`
     fs.renameSync(asset, dest1);
-    console.log(`    asset \x1b[1m\x1b[32m${dest}.${ext} [emitted] [immutable]\x1b[0m [from ${asset}]`)
+    //console.log(`    asset \x1b[1m\x1b[32m${dest}.${ext} [emitted] [immutable]\x1b[0m [from ${asset}]`)
     bundled[asset] = `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}.${ext}`
     return `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}.${ext}`
 }
