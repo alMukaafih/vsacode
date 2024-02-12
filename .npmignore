@@ -1,0 +1,11 @@
+includes/
+js-docs/
+docs/
+tests/
+view
+vsacode.ts
+webpack.config.js
+lib/*.ts
+engines/*.ts
+typings/*.js
+typings/*.ts
