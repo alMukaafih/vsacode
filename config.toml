@@ -1,8 +1,9 @@
 [commands]
     [commands.icon]
-    engine = "icontheme"
+    engine = "iconTheme"
     contrib = "iconThemes"
     options = ["main", "list"]
+    template = "iconTheme"
     errorMessage = "is not an icon theme plugin"
 
     [commands.help]

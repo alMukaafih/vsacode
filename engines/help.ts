@@ -1,5 +1,5 @@
 import { style } from "ziyy";
-exports.main = ( err = 0) => {
+export function main(err: number = 0): void{
     process.stdout.write(style(`Convert VS Code plugins to Acode plugins.
 
 USAGE
@@ -37,7 +37,7 @@ LEARN MORE
     process.exit(err);
 };
 
-exports.icon = (err = 0) => {
+export function icon(err: number = 0): void {
     process.stdout.write(style(`Convert File Icon Theme plugins.
 
 USAGE
@@ -68,7 +68,7 @@ EXAMPLES
     process.exit(err);
 }
 
-exports.help = (err = 0) => {
+export function help(err: number = 0) {
     process.stdout.write(style(`Show help for command.
 
 USAGE
