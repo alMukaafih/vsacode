@@ -6,7 +6,7 @@
 /**
  * @typedef {object} Map
  */
-import { ArrayMap, ObjectMap, StringMap } from "./libutils.js"
+import { ArrayMap, ObjectMap, StringMap } from "../typings/map.js"
 /**
  * Creates a new Map Blueprint
  * @class MapFileIcons

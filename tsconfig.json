@@ -9,7 +9,8 @@
         "forceConsistentCasingInFileNames": true,
         "noImplicitAny": false,
         "downlevelIteration": true,
-        "strict": false
+        "strict": false,
+        "declaration": true
     },
     "exclude": [
         "./dist/**/*",

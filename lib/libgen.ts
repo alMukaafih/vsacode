@@ -9,7 +9,7 @@
  */
  
 import { IfileIconTheme } from "../typings/fileIconTheme.js"
-import { StringMap } from "./libutils.js"
+import { StringMap } from "../typings/map.js"
 // imports
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -62,13 +62,13 @@ export function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconThem
     let fileExtMap = test(iconJson.fileExtensions);
     let fileNamesMap = test(iconJson.fileNames);
  //   if (iconJson.languageIds != undefined)
-    //let langIdsMap = test(iconJson.languageIds);
+    let langIdsMap = test(iconJson.languageIds);
     
     let sheetA = new MapFileIcons(".file_type_");
     let sheetM = new MapFileIcons(".file_type_", "", true, true);
     filesMap = sheetA.map(fileExtMap, filesMap, iconDefs);
     filesMap = sheetM.map(fileNamesMap, filesMap, iconDefs);
-    //filesMap = sheetA.map(langIdsMap, filesMap, iconDefs);
+    filesMap = sheetA.map(langIdsMap, filesMap, iconDefs);
     
     let txtB_1: string = "#file-browser > ul > li.tile[type='directory'][name='", txtB_2: string = "' i] > .icon.folder";
     let sheetB = new MapFileIcons(txtB_1, txtB_2, false);
@@ -170,7 +170,7 @@ function include(id: string, fallback: StringMap): void {
  * @param {string} acode - Build folder
  * @returns {void}
  */
-export function pluginJsonGen(packageJson, id: string, label: string, tmpDir: string, acode: string) {
+export function pluginJsonGen(packageJson, id: string, label: string, tmpDir: string, acode: string): void {
     let json = {
         id: id,
         name: label,

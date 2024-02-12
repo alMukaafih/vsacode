@@ -9,23 +9,10 @@
  * @typedef {object} Map
  */
 // imports
-export type ArrayMap = {
-    [name: string]: string[]
-}
-export type ObjectMap = {
-    [name: string]: {
-        [property: string]: string
-    }
-}
-
-export type StringMap = {
-    [name: string]: string
-}
 import { IfileIconTheme, DefsMap, IconsMap, FontsMap } from "../typings/fileIconTheme.js";
-import * as crypto from "node:crypto";
+import { ArrayMap, ObjectMap, StringMap } from "../typings/map.js"
 import * as fs from "node:fs";
 import * as path from "node:path";
-//import * as sass from "sass-embedded";
 
 /**
  * Converts Map to CSS string
@@ -41,15 +28,14 @@ function bundleAsset(asset: string, outDir: string): string {
         fs.mkdirSync(outDir);
     if (bundled[asset])
         return bundled[asset];
-    let ext: string = asset.split('.').pop();
-    const hash = crypto.createHash('sha256');
-    hash.update(asset);
-    let dest: string = hash.digest('hex').substring(0, 22);
-    let dest1 = `${outDir}/${dest}.${ext}`
+    let dest = path.basename(asset)
+    let dest1 = `${outDir}/${dest}`
+    if (fs.existsSync(dest1))
+        dest1 = `${outDir}/1_${dest}`
     fs.renameSync(asset, dest1);
     //console.log(`    asset \x1b[1m\x1b[32m${dest}.${ext} [emitted] [immutable]\x1b[0m [from ${asset}]`)
-    bundled[asset] = `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}.${ext}`
-    return `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}.${ext}`
+    bundled[asset] = `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}`
+    return `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}`
 }
 
 export function parse(map0: ArrayMap, ref: DefsMap, dir: string, outDir: string): string {

@@ -145,7 +145,7 @@ for (let contrib of contributes) {
     if (!fs.existsSync(acode))
         fs.cpSync(path.join(__dirname, "source"), acode, { recursive: true });
     if (fs.existsSync(path.join(acode, "dist"))) 
-        fs.unlinkSync(path.join(acode, "dist"));
+        fs.rmSync(path.join(acode, "dist"), { recursive: true });
     engine.packageJson = packageJson;
     engine.id = contrib.id;
     engine.label = contrib.label;

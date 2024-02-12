@@ -10,49 +10,27 @@
   "imports": {
     "#toml": "./toml-nodejs/src/index.js"
   },
-  "files": [
-    "vsacode.js",
-    "vsacode.d.ts",
-    "README.md",
-    "LICENSE",
-    "lib/*.js",
-    "lib/*.d.ts",
-    "engines/*.js",
-    "engines/*.d.ts",
-    "templates",
-    "source",
-    "toml-nodejs",
-    "config.toml",
-    "typings"
-  ],
   "scripts": {
-    "clean": "shx rm -rf dist plugin.json icon.png readme.md ./lib/*.js ./typings/*.js",
-    "build": "tsc; shx chmod +x vsacode.js",
+    "clean": "scripts/clean.sh",
+    "build": "scripts/build.sh",
     "build-doc": "jsdoc -c ./jsdoc.json",
-    "prepublish": "npm run build",
-    "postinstall": "npm install"
+    "prepublish": "npm run build"
   },
   "dependencies": {
     "adm-zip": "^0.5.10",
-    "css-loader": "^6.10.0",
     "file-loader": "^6.2.0",
     "js-toml": "^1.0.0",
     "nunjucks": "^3.2.4",
-    "postcss": "^8.4.35",
-    "sass-embedded": "^1.70.0",
-    "shelljs": "^0.8.5",
     "smol-toml": "^1.1.4",
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3",
     "webpack": "^5.90.1",
-    "webpack-cli": "^5.1.4",
     "ziyy": "^1.0.1"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.5",
     "@types/node": "^20.11.16",
-    "jszip": "^3.10.1",
-    "shx": "^0.3.4",
-    "terser": "^5.27.0"
+    "shx": "^0.3.4"
   },
   "browserslist": [
     "> 0.25%, not dead"
