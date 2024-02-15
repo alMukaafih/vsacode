@@ -142,3 +142,8 @@ source/src/folders.css
 source/src/files.css
 engines/*.js
 typings/*.js
+engines/help.d.ts
+engines/*.d.ts
+lib/*.d.ts
+typings/*.d.ts
+vsacode.d.ts

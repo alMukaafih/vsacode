@@ -22,7 +22,7 @@ exports.main = () => {
     if(exports.id == undefined && exports.label == undefined && exports.path == undefined)
         return;
     
-    let _json = fs.readFileSync(exports.pwDir);
+    let _json = fs.readFileSync(exports.pwFile);
     let __json = _json.toString();
     __json = __json.replace(/\s\/\/(.)+/g, "");
     let icon_json = JSON.parse(__json);
@@ -36,7 +36,7 @@ exports.main = () => {
         exports.acode
     );
     stylesGen(
-        exports.pwDir,
+        exports.pwFile,
         outDir,
         icon_json
     );

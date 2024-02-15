@@ -19,22 +19,21 @@ import * as path from "node:path";
  * @param {Map} map0 - Map to parse
  * @returns {string} CSS style
  */
-let bundled = {}
 function bundleAsset(asset: string, outDir: string): string {
     const _plugin: Buffer = fs.readFileSync(path.join(path.dirname(path.dirname(outDir)), "plugin.json"));
     let __plugin: string = _plugin.toString();
     let plugin = JSON.parse(__plugin);
     if (!fs.existsSync(outDir)) 
         fs.mkdirSync(outDir);
-    if (bundled[asset])
-        return bundled[asset];
+    if (asset in bundleAsset)
+        return bundleAsset[asset];
     let dest = path.basename(asset)
     let dest1 = `${outDir}/${dest}`
     if (fs.existsSync(dest1))
         dest1 = `${outDir}/1_${dest}`
     fs.renameSync(asset, dest1);
     //console.log(`    asset \x1b[1m\x1b[32m${dest}.${ext} [emitted] [immutable]\x1b[0m [from ${asset}]`)
-    bundled[asset] = `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}`
+    bundleAsset[asset] = `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}`
     return `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}`
 }
 

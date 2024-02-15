@@ -152,7 +152,7 @@ for (let contrib of contributes) {
     engine.path = contrib.path;
     engine.acode = acode;
     engine.tmpDir = tmpDir;
-    engine.pwDir = path.join(engine.tmpDir, "extension", engine.path);
+    engine.pwFile = path.join(engine.tmpDir, "extension", engine.path);
     engine.outDir = outDir;
     engine[option]();
 }

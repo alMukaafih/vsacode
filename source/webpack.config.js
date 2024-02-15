@@ -26,7 +26,7 @@ module.exports = {
                         loader: "ts-loader",
                         options: {
                             compilerOptions: {
-                                target: "es2016",
+                                target: "es2015",
                                 module: "commonjs",
                                 moduleResolution: "node",
                                 resolveJsonModule: true,

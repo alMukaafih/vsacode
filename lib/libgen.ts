@@ -19,13 +19,13 @@ import { parse, parseFont, test, _test, _css, validate, verify } from "./libutil
 /** Generates styles.ts file from Icon Theme's json file
  * @function
  * @name stylesGen
- * @param {string} pwDir - Relative path to Icon Theme json file
+ * @param {string} pwFile - Relative path to Icon Theme json file
  * @param {string} outDir - Output Directory of styles.ts
  * @param {object} iconJson - Icon Theme json file
  * @returns {void}
  */
-export function stylesGen(pwDir: string, outDir: string, iconJson: IfileIconTheme) {
-    let _dir: string = path.dirname(pwDir);
+export function stylesGen(pwFile: string, outDir: string, iconJson: IfileIconTheme) {
+    let _dir: string = path.dirname(pwFile);
     let assets: string = path.join(outDir, "assets")
     let fonts: string = "";
     let folders: string = "";
