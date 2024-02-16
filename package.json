@@ -29,8 +29,7 @@
   },
   "devDependencies": {
     "@types/adm-zip": "^0.5.5",
-    "@types/node": "^20.11.16",
-    "shx": "^0.3.4"
+    "@types/node": "^20.11.16"
   },
   "browserslist": [
     "> 0.25%, not dead"

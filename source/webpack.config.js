@@ -10,6 +10,7 @@ module.exports = {
     },
     resolve: {
         extensions: [".ts", ".js"],
+        modules: ["node_modules"],
     },
     module: {
         rules: [
@@ -21,26 +22,7 @@ module.exports = {
             {
                 test: /\.ts$/,
                 exclude: /node_modules/,
-                use: [
-                    {
-                        loader: "ts-loader",
-                        options: {
-                            compilerOptions: {
-                                target: "es2015",
-                                module: "commonjs",
-                                moduleResolution: "node",
-                                resolveJsonModule: true,
-                                allowJs: true,
-                                outDir: "./dist",
-                                removeComments: true,
-                                esModuleInterop: true,
-                                forceConsistentCasingInFileNames: true,
-                                noImplicitAny: false,
-                                strict: false
-    },
-                        }
-                    }
-                ],
+                use: "ts-loader",
             },
         ],
     },

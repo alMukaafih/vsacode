@@ -41,7 +41,7 @@ const tmpDir: string = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix));
 process.on("exit", (code) => {
     //console.log("Exiting vsacode.js process with code:", code);
         //console.log(usage);
-    //fs.rmSync(tmpDir, { recursive: true });
+    fs.rmSync(tmpDir, { recursive: true });
 });
 
 // cli arguments
@@ -141,6 +141,7 @@ if (contributes == undefined) {
 // process each contrib
 let acode: string;
 for (let contrib of contributes) {
+    process.chdir(outDir)
     acode = path.resolve(_acode, contrib.id)
     if (!fs.existsSync(acode))
         fs.cpSync(path.join(__dirname, "source"), acode, { recursive: true });

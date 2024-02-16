@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "es2016",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "allowJs": true,
+        "outDir": "./dist",
+        "removeComments": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitAny": false,
+        "strict": false
+    },
+    "exclude": [
+        "./dist/**/*",
+        "./postcss.config.js",
+        "./node_modules/*",
+        "../node_modules/*"
+    ]
+}

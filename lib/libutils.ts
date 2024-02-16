@@ -48,9 +48,10 @@ export function parse(map0: ArrayMap, ref: DefsMap, dir: string, outDir: string)
     let iconPath: string = "";
     
     for(let [key, value] of Object.entries(map0)) {
-        if (key == "")
+        if (!ref[key])
             continue
-        fontChar = ref[key].fontCharacter || "";
+        if (ref[key].fontCharacter)
+            fontChar = ref[key].fontCharacter;
         if (ref[key].fontColor)
             fontColor = `    color: ${ref[key].fontColor};\n`;
 
@@ -129,15 +130,15 @@ export function _test(map: DefsMap, name: string, def: string=""): string {
  * @returns {string} CSS style
  */
 export function _css(name: string, exe: string="default", kind: string=".file_type_", ref: DefsMap, dir: string, outDir: string) {
-    if (name == "")
+    if (!ref[name])
         return "";
     let fontChar: string = "";
     let fontColor: string = "";
     let fontId: string = "";
     let fontSize: string = "";
     let iconPath: string = "";
-    
-    fontChar = ref[name].fontCharacter || "";
+    if (ref[name].fontCharacter)
+        fontChar = ref[name].fontCharacter;
     if (ref[name].fontColor)
         fontColor = `    color: ${ref[name].fontColor};\n`;
 
