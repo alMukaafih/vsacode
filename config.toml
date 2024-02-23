@@ -1,11 +1,20 @@
 [commands]
-    [commands.icon]
-    engine = "iconTheme"
-    contrib = "iconThemes"
-    options = ["main", "list"]
-    template = "iconTheme"
-    errorMessage = "is not an icon theme plugin"
+    [commands.make]
+    name = "make"
+    options = ["main"]
+    flags = ["--single"]
+
+    [commands.list]
+    name = "list"
+    options = ["main"]
+    flags = ["-a"]
 
     [commands.help]
-    engine = "help"
-    options = ["main", "icon", "help"]
+    name = "help"
+    options = ["main", "make", "help"]
+
+[contributes]
+    [contributes.iconThemes]
+    engine = "iconTheme"
+    options = ["main", "list"]
+    template = "iconTheme"

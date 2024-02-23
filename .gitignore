@@ -131,8 +131,6 @@ dist
 *.vsix
 js-docs/
 view
-lib/*.js
-vsacode.js
 *.zip
 source/icon.png
 source/node_modules
@@ -141,9 +139,12 @@ source/readme.md
 source/src/folders.css
 source/src/files.css
 engines/*.js
-typings/*.js
-engines/help.d.ts
 engines/*.d.ts
-lib/*.d.ts
+typings/*.js
 typings/*.d.ts
+commands/*.js
+commands/*.d.ts
+lib/*.d.ts
+lib/*.js
+vsacode.js
 vsacode.d.ts

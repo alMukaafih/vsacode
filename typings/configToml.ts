@@ -1,10 +1,16 @@
 export interface IconfigToml {
     commands: {
         [command: string]: {
-            engine: string
-            contrib: string
+            name: string
             options: string[]
-            errorMessage: string
+            flags: string[]
+        }
+    }
+    contributes: {
+        [contribute: string]: {
+            name: string
+            options: string[]
+            template: string
         }
     }
 }

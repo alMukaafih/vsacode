@@ -18,39 +18,44 @@ import * as path from "node:path";
 import { stylesGen, pluginJsonGen } from "../lib/libgen";
 import { distBuild } from "../lib/libdist";
 
-exports.main = () => {
-    if(exports.id == undefined && exports.label == undefined && exports.path == undefined)
-        return;
-    
-    let _json = fs.readFileSync(exports.pwFile);
+module.paths = [
+    path.join(module.path, "commands")
+]
+
+export function main(env) {
+    if(env.id == undefined && env.label == undefined && env.path == undefined)
+        return 1;
+
+    let _json = fs.readFileSync(env.pwFile);
     let __json = _json.toString();
     __json = __json.replace(/\s\/\/(.)+/g, "");
     let icon_json = JSON.parse(__json);
-    let outDir = path.join(exports.acode, "dist");
+    let outDir = path.join(env.acode, "dist");
     fs.mkdirSync(outDir, { recursive: true });
     pluginJsonGen(
-        exports.packageJson,
-        exports.id,
-        exports.label, 
-        exports.tmpDir,
-        exports.acode
+        env.packageJson,
+        env.id,
+        env.label, 
+        env.tmpDir,
+        env.acode
     );
     stylesGen(
-        exports.pwFile,
+        env.pwFile,
         outDir,
         icon_json
     );
     distBuild(
-        exports.label,
-        exports.id,
-        exports.acode,
-        exports.outDir
+        env.label,
+        env.id,
+        env.acode,
+        env.outDir
     );
+    return 0
 };
 
-exports.list = () => {
+export function list(env) {
     console.log(
-        `id    => ${exports.id}\n` +
-        `label => ${exports.label}\n`
+        `id    => ${env.id}\n` +
+        `label => ${env.label}\n`
     );
 };
