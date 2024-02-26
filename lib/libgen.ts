@@ -19,18 +19,25 @@ import { parse, parseFont, test, _test, _css, validate, verify } from "./libutil
 /** Generates styles.ts file from Icon Theme's json file
  * @function
  * @name stylesGen
- * @param {string} pwFile - Relative path to Icon Theme json file
- * @param {string} outDir - Output Directory of styles.ts
+ * @param {string} icons - Relative path to Icon Theme json file
+ * @param {string} dist - Output Directory of styles.ts
  * @param {object} iconJson - Icon Theme json file
  * @returns {void}
  */
-export function stylesGen(pwFile: string, outDir: string, iconJson: IfileIconTheme) {
-    let _dir: string = path.dirname(pwFile);
-    let assets: string = path.join(outDir, "assets")
+export function stylesGen(env) {
+    let icons: string = env.icons
+    let dist: string = env.dist
+    let iconJson: IfileIconTheme = env.iconJson
+    let root: string = env.root
+
+    let assets: string = path.join(dist, "assets")
+    env.assets = assets
+
     let fonts: string = "";
     let folders: string = "";
     let files: string = "";
     let iconDefs: IfileIconTheme["iconDefinitions"] = iconJson.iconDefinitions;
+    env.iconDefs = iconDefs
 
     let file: string = _test(iconDefs, iconJson.file);
     let folder: string = _test(iconDefs, iconJson.folder);
@@ -38,21 +45,21 @@ export function stylesGen(pwFile: string, outDir: string, iconJson: IfileIconThe
     let rootFolder: string = _test(iconDefs, iconJson.rootFolder, folder);
     let rootFolderExp: string = _test(iconDefs, iconJson.rootFolderExpanded, rootFolder);
     
-    files += _css(file, "default", ".file_type_", iconDefs, _dir, assets);
+    files += _css(file, "default", ".file_type_", env);
     folders += `.list.collapsible.hidden > .tile > .folder::before {
         content: "" !important;
         }\n`;
-    folders += _css(folder, "", `.list.collapsible.hidden > div.tile[data-name][data-type="dir"] > .icon.folder`, iconDefs, _dir, assets);
+    folders += _css(folder, "", `.list.collapsible.hidden > div.tile[data-name][data-type="dir"] > .icon.folder`, env);
 
-    folders += _css(folder, "", `#file-browser > ul > li.tile[type="dir"]  > .icon.folder`, iconDefs, _dir, assets);
+    folders += _css(folder, "", `#file-browser > ul > li.tile[type="dir"]  > .icon.folder`, env);
     
-    folders += _css(folder, "", `#file-browser > ul > li.tile[type="directory"]  > .icon.folder`, iconDefs, _dir, assets);
+    folders += _css(folder, "", `#file-browser > ul > li.tile[type="directory"]  > .icon.folder`, env);
     
-    folders += _css(folderExp,"", `.list.collapsible > div.tile[data-name][data-type="dir"] > .icon.folder`, iconDefs, _dir, assets);
+    folders += _css(folderExp,"", `.list.collapsible > div.tile[data-name][data-type="dir"] > .icon.folder`, env);
     
-    folders += _css(rootFolder, "", `.list.collapsible.hidden > div[data-type="root"] > .icon.folder`, iconDefs, _dir, assets);
+    folders += _css(rootFolder, "", `.list.collapsible.hidden > div[data-type="root"] > .icon.folder`, env);
     
-    folders += _css(rootFolderExp, "",`.list.collapsible > div[data-type="root"] > .icon.folder`, iconDefs, _dir, assets);
+    folders += _css(rootFolderExp, "",`.list.collapsible > div[data-type="root"] > .icon.folder`, env);
     let foldersMap = {};
     let filesMap = {};
     //foldersMap
@@ -88,24 +95,22 @@ export function stylesGen(pwFile: string, outDir: string, iconJson: IfileIconThe
     
     // validate
     //iconDefs = rehash(iconDefs);
-    iconDefs = validate(iconDefs, _dir);
+    iconDefs = validate(env);
     foldersMap = verify(foldersMap, iconDefs);
     filesMap = verify(filesMap, iconDefs);
     
-    folders += parse(foldersMap, iconDefs, _dir, assets);
-    files += parse(filesMap, iconDefs, _dir, assets);
+    folders += parse(foldersMap, env);
+    files += parse(filesMap, env);
     
-    fonts += parseFont(iconJson.fonts, iconDefs, _dir, assets)
+    fonts += parseFont(env)
 
     let css: string = fonts + folders;
-    if (!fs.existsSync(outDir)) 
-        fs.mkdirSync(outDir);
-    fs.writeFileSync(path.join(outDir, "files.css"), files );
-    fs.writeFileSync(path.join(outDir, "folders.css"), css );
+    fs.writeFileSync(path.join(dist, "files.css"), files );
+    fs.writeFileSync(path.join(dist, "folders.css"), css );
 }
 
 /** @constant {string} */
-const includes: string = path.join("/data/data/com.termux/pj/vsacode", "includes");
+const includes: string = path.join("/data/data/com.termux/pj/vsbase", "includes");
 /** Checks if required File exits
  * @param {string} id - Icon Theme id
  * @param {string} req - Name of required File
@@ -152,25 +157,31 @@ function link(from: string, to: string): void {
  * @returns {void}
  */
 function include(id: string, fallback: StringMap): void {
-    let plugin_json: string = check(id, "plugin.json", fallback);
-    let readme_md: string = check(id, "readme.md", fallback);
-    let icon_png: string = check(id, "icon.png", fallback);
-    link(plugin_json, "plugin.json");
-    link(readme_md, "readme.md");
-    link(icon_png, "icon.png");
+    let pluginJson: string = check(id, "plugin.json", fallback);
+    let readmeMd: string = check(id, "readme.md", fallback);
+    let iconPng: string = check(id, "icon.png", fallback);
+    link(pluginJson, "plugin.json");
+    link(readmeMd, "readme.md");
+    link(iconPng, "icon.png");
 }
 
-/** Generates plugin.json file required by acode plugin
+/** Generates plugin.json file required by base plugin
  * @function
  * @name pluginJsonGen
  * @param {object} author - Author credentials
  * @param {string} id - The id of the Icon Theme
  * @param {string} label - The Label of the Icon Theme
  * @param {string} version - The Version of the Plugin
- * @param {string} acode - Build folder
+ * @param {string} base - Build folder
  * @returns {void}
  */
-export function pluginJsonGen(packageJson, id: string, label: string, tmpDir: string, acode: string): void {
+export function pluginJsonGen(env): void {
+    let packageJson = env.packageJson
+    let id: string = env.id
+    let label: string = env.label
+    let tmpDir: string = env.tmpDir
+    let base: string = env.base
+
     let json = {
         id: id,
         name: label,
@@ -190,6 +201,6 @@ export function pluginJsonGen(packageJson, id: string, label: string, tmpDir: st
         "readme.md": path.join(assets, "README.md"),
     };
     
-    process.chdir(acode);
+    process.chdir(base);
     include(id, fallback);
 }

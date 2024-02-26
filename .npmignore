@@ -7,5 +7,7 @@ vsacode.ts
 webpack.config.js
 lib/*.ts
 engines/*.ts
+commands/*.ts
 typings/*.js
 typings/*.ts
+.github/

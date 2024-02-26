@@ -8,10 +8,10 @@ module.exports = {
         filename: "[name].js",
         chunkFilename: "[name].js",
     },
-    resolve: {
-        extensions: [".ts", ".js"],
-        modules: ["node_modules"],
-    },
+//     resolve: {
+//         extensions: [".ts", ".js"],
+//         modules: ["node_modules"],
+//     },
     module: {
         rules: [
             {

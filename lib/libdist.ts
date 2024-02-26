@@ -21,13 +21,13 @@ import * as Zip from "adm-zip";
  * @returns {void}
  */
 
-export function distBuild(
-    label: string,
-    id: string, 
-    acode: string,
-    outDir: string
-) {
-    process.chdir(acode);
+export function distBuild(env) {
+    let label: string = env.label
+    let id: string = env.id
+    let base: string = env.base
+    let outDir: string = env.outDir
+
+    process.chdir(base);
     
     // open plugin.json
     console.log(`building: ${label}`);
@@ -35,10 +35,10 @@ export function distBuild(
     // child_process.execSync(`nano ${plugin_json}`, { stdio: 'inherit' });
     // child_process.execSync(`nano ${readme_md}`, { stdio: 'inherit' });
     //child_process.execSync(`npm run build-release`, { stdio: 'inherit' });
-    //child_process.execSync(`npm run clean`, { stdio: 'inherit' });
-    const webpackObject = require(path.join(acode, "webpack.config.js"));
-    webpackObject.entry.main = path.join(acode, "src/main.ts")
-    webpackObject.output.path = path.join(acode, "dist")
+    //child_process.execSync(`npx tsc`, { stdio: 'inherit' });
+    const webpackObject = require(path.join(base, "webpack.config.js"));
+    webpackObject.entry.main = path.join(base, "src/main.js")
+    webpackObject.output.path = path.join(base, "dist")
     webpack(
         webpackObject,
         (err, stats) => {
@@ -53,10 +53,10 @@ export function distBuild(
             })
             );
             let distZip = new Zip();
-            distZip.addLocalFolder(path.join(acode, "dist"));
-            distZip.addLocalFile(path.join(acode, "plugin.json"));
-            distZip.addLocalFile(path.join(acode, "icon.png"));
-            distZip.addLocalFile(path.join(acode, "readme.md"));
+            distZip.addLocalFolder(path.join(base, "dist"));
+            distZip.addLocalFile(path.join(base, "plugin.json"));
+            distZip.addLocalFile(path.join(base, "icon.png"));
+            distZip.addLocalFile(path.join(base, "readme.md"));
             let outZip: string = path.join(outDir, `${id}.zip`);
             if (fs.existsSync(outZip))
                 fs.unlinkSync(outZip);

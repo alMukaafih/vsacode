@@ -4,41 +4,30 @@ import * as path from "node:path";
 import { StringMap } from "../typings/map.js"
 
 export function main(env: any) {
-    let contributes = env.contributes
-
+    let contributes = env.packageJson.contributes
     /** Path to acode directory in temp directory
      *  @constant {string}
      */
-    const _acode: string = "./build";
-    if (!fs.existsSync(_acode))
-        fs.mkdirSync(_acode)
+    env.buildDir = "./build";
+    if (!fs.existsSync(env.buildDir))
+        fs.mkdirSync(env.buildDir)
 
-    let outDir: string = process.cwd();
+    let outDir = process.cwd();
+    env.outDir = outDir
     
     let engine
     let contribute
     let runs = 0
-    for (let [k, v] of Object.entries(env.packageJson.contributes)) {
-        contribute = contributes[k]
+    for (let k in contributes) {
+        contribute = env.contributes[k]
         if (contribute == undefined)
             continue
         engine = require(`../engines/${contribute.engine}.js`);
 
         // process each contrib
-        let acode: string;
-        for (let contrib of v) {
+        for (let contrib of contributes[k]) {
             process.chdir(outDir)
-            acode = path.resolve(_acode, contrib.id)
-            if (!fs.existsSync(acode))
-                fs.cpSync(path.join(__dirname, "source"), acode, { recursive: true });
-            if (fs.existsSync(path.join(acode, "dist"))) 
-                fs.rmSync(path.join(acode, "dist"), { recursive: true });
-            env.id = contrib.id;
-            env.label = contrib.label;
-            env.path = contrib.path;
-            env.acode = acode;
-            env.pwFile = path.join(env.tmpDir, "extension", env.path);
-            env.outDir = outDir;
+            env.contrib = contrib
             engine.main(env);
         }
     runs++

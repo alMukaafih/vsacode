@@ -27,7 +27,8 @@ interface Env {
 
 let err = template("[b][c:red]")
 let env: Env = {
-    err: err
+    err: err,
+    home: __dirname
 }
 
 /** Temporary directory prefix
@@ -79,7 +80,7 @@ let _toml: Buffer = fs.readFileSync(path.join(__dirname, "config.toml"));
 let __toml: string = _toml.toString();
 let config: IconfigToml = toml.decode(__toml);
 let commands = config.commands;
-let contributes = config.contributes;
+env.contributes = config.contributes;
 
 let cmd: string = args[0]
 let command = commands[cmd];
@@ -98,19 +99,18 @@ else
 // vsix file
 /** @constant {string} */
 const vsix: string = args[0];
-if (vsix == undefined && command.name != "help") {
+env.vsix = vsix
+if (env.vsix == undefined && command.name != "help") {
     console.log(err("Error: filename is required\n"));
     usage(1);
 }
-env.vsix = vsix
 /** New Zip Instance
  * @constant {object}
  */
-let packageJson
 if (command.name != "help") {
     try {
         const zip = new Zip(env.vsix);
-        zip.extractAllTo(tmpDir);
+        zip.extractAllTo(env.tmpDir);
     }
     catch(error) {
         //console.log(error);
@@ -121,9 +121,9 @@ if (command.name != "help") {
     let _json: Buffer = fs.readFileSync(path.join(env.tmpDir, "extension", "package.json"));
     let __json: string = _json.toString();
     __json = __json.replace(/\s\/\/(.)+/g, "");
-    packageJson = JSON.parse(__json);
+    // package.json file object
+    let packageJson = JSON.parse(__json);
+    env.packageJson = packageJson
 }
 const exec = require(`./commands/${command.name}.js`)
-env.contributes = contributes
-env.packageJson = packageJson
 exec[option](env)

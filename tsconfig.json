@@ -20,6 +20,6 @@
         "./docs/",
         "./webpack.config.js",
         "./tests/",
-        "toml-nodejs/"
+        "./toml-nodejs/"
     ]
 }
