@@ -25,7 +25,7 @@ interface Env {
     [name: string]: any
 }
 
-let err = template("[b][c:red]")
+let err = template("[b][c:red]error[c:white]: [/0]")
 let env: Env = {
     err: err,
     home: __dirname
@@ -87,13 +87,20 @@ env.contributes = config.contributes;
 
 let cmd: string = args[0]
 let command = commands[cmd];
-let usage = help[cmd];
 args.shift();
 if (command == undefined) {
-    console.log(err("Error: valid command is required\n"));
-    help.main();
+    console.error(err(`no such command: \`${cmd}\`\n`));
+    process.exit(1);
+    //help.main();
 }
 let option: string = args[0];
+if (command.name == "help") {
+    if (command.options.includes(option)) {
+        help[commands[option].name]();
+    }
+}
+let usage = help[command.name];
+let short_usage = help[`short_${command.name}`];
 if (!command.options.includes(option))
     option = "main";
 else
@@ -104,8 +111,8 @@ else
 const vsix: string = args[0];
 env.vsix = vsix
 if (env.vsix == undefined && command.name != "help") {
-    console.log(err("Error: filename is required\n"));
-    usage(1);
+    console.log(err("the following required arguments were not provided:\n  [c:cyan][b]<PATH>[/0]\n"));
+    short_usage(1);
 }
 /** New Zip Instance
  * @constant {object}

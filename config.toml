@@ -4,6 +4,11 @@
     options = ["main"]
     flags = ["--single"]
 
+    [commands.b]
+    name = "build"
+    options = ["main"]
+    flags = ["--single"]
+
     [commands.list]
     name = "list"
     options = ["main"]
@@ -11,7 +16,7 @@
 
     [commands.help]
     name = "help"
-    options = ["main", "build", "help"]
+    options = ["main", "build", "b", "help"]
 
 [contributes]
     [contributes.iconThemes]

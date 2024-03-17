@@ -21,23 +21,25 @@ See '[c:cyan][b]vsa help[/0] [c:cyan]<command>[/0]' for more information on a sp
 };
 
 export function build(err: number = 0): void {
-    process.stdout.write(style(`Convert File Icon Theme plugins.
+    process.stdout.write(style(`Convert the plugin at <path>
 
-[b]USAGE[/0]
-  vsa make <filename> \[flags\]
+[b][c:green]Usage:[/0] [c:cyan][b]vsa build[/0] [c:cyan][OPTIONS] <PATH>
 
-[b]PARAMETERS[/0]
-  filename:    VS Code plugin (vsix file)
-  flags:       Command flags
+[b][c:green]Arguments:[/0]
+  [c:cyan]<PATH>
 
-[b]INHERITED FLAGS[/0]
-  --help      Show help for command
+[b][c:green]Options:
+      [c:cyan]--single[/0]
+          Produce a single output
 
-[b]EXAMPLES[/0]
-  $ vsa make filename.vsix
-  $ vsa make plugin.vsix
-  $ vsa make --help
+Run \`[c:cyan][b]vsa help build[/0]\` for more detailed information.
+`));
+    process.exit(err);
+}
 
+export function short_build(err: number = 0): void {
+    process.stdout.write(style(`[c:green][b]Usage: [c:cyan]vsa build[/0] [c:cyan]<PATH>[/0]
+For more information, try '[c:cyan][b]--help[/0]'.
 `));
     process.exit(err);
 }
