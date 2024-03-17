@@ -52,6 +52,9 @@ process.on("exit", (code) => {
 
 // cli arguments
 let args: string[] = process.argv.slice(2);
+if (args.length == 0) {
+    help.main();
+}
 let flags: string[] = [];
 for (let arg of args) {
     if (arg.startsWith("-")) {
@@ -67,7 +70,7 @@ for (let flag of flags) {
         let __json = _json.toString();
         __json = __json.replace(/\s\/\/(.)+/g, "");
         let packageJson = JSON.parse(__json);
-        process.stdout.write(`${packageJson.name} ${packageJson.version}\n`)
+        process.stdout.write(`vsa ${packageJson.version}\n`)
         process.exit(0)
     }
     if (flag == "--help" || flag == "-h") {

@@ -1,6 +1,6 @@
 [commands]
-    [commands.make]
-    name = "make"
+    [commands.build]
+    name = "build"
     options = ["main"]
     flags = ["--single"]
 
@@ -11,7 +11,7 @@
 
     [commands.help]
     name = "help"
-    options = ["main", "make", "help"]
+    options = ["main", "build", "help"]
 
 [contributes]
     [contributes.iconThemes]

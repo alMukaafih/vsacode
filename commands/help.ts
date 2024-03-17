@@ -1,37 +1,26 @@
 import { style } from "ziyy";
 export function main(err: number = 0): void{
-    process.stdout.write(style(`Convert VS Code plugin to Acode plugin.
+    process.stdout.write(style(`VS Code plugin to Acode plugin converter
 
-[b]USAGE[/0]
-  vsa <command> \[<filename>\] \[flags\]
+[b][c:green]Usage:[/0] [c:cyan][b]vsa[/0] [c:cyan]\[OPTIONS\] \[COMMAND\]
 
-[b]PARAMETERS[/0]
-  command:    Command name
-  filename:   VS Code plugin (vsix file)
-  flags:      Command flags
+[b][c:green]Options:
+  [c:cyan]-V[c:white][/0], [c:cyan][b]--version[/0]
+          Print version info and exit[b]
+  [c:cyan]-h[c:white][/0], [c:cyan][b]--help[/0]
+          Print help
 
-[b]COMMANDS[/0]
-  make:       Convert the plugin
-  list:       List the available entries in plugin
-  help:       Show help for command
+[b][c:green]Commands:
+    [c:cyan]build[/0], [c:cyan][b]b[/0]    Convert the plugin[b]
+    [c:cyan]list[/0]        List the available entries in plugin[b]
+    [c:cyan]help[/0]        Displays help for a vsa subcommand
 
-[b]FLAGS[/0]
-  --help      Show help for command
-  --version   Show vsacode version
-
-[b]EXAMPLES[/0]
-  $ vsa make plugin.vsix
-  $ vsa help make 
-  $ vsa --version
-
-[b]LEARN MORE[/0]
-  Use \`vsa <command> --help\` for more information about a command.
-
+See '[c:cyan][b]vsa help[/0] [c:cyan]<command>[/0]' for more information on a specific command.
 `));
     process.exit(err);
 };
 
-export function make(err: number = 0): void {
+export function build(err: number = 0): void {
     process.stdout.write(style(`Convert File Icon Theme plugins.
 
 [b]USAGE[/0]
