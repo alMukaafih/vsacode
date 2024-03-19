@@ -10,16 +10,17 @@
         "noImplicitAny": false,
         "downlevelIteration": true,
         "strict": false,
-        "declaration": true
+        "declaration": true,
+        "outDir": "./dist",
+        "rootDir": "./src"
     },
     "exclude": [
         "./dist/**/*",
-        "./source/",
-        "./src",
+        "./src/source/",
         "./js-docs/",
         "./docs/",
         "./webpack.config.js",
         "./tests/",
-        "./toml-nodejs/"
+        "./toml-nodejs/src/*"
     ]
 }

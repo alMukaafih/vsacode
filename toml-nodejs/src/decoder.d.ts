@@ -1,2 +1,2 @@
-import { IconfigToml } from '../../typings/configToml.js';
+import { IconfigToml } from '../../dist/typings/configToml.js';
 export declare const decode: (input: string) => IconfigToml;
