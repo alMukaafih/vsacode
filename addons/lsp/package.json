@@ -1,0 +1,14 @@
+{
+  "name": "@vsacode/lsp",
+  "version": "0.3.0",
+  "description": "Lsp addon for vsacode",
+  "main": "./dist/addon.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "lsp"
+  ],
+  "author": "alMukaafih",
+  "license": "MIT"
+}
