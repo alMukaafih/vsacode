@@ -8,11 +8,11 @@
     "vsa": "./dist/vsacode.js"
   },
   "imports": {
-    "#toml": "./toml-nodejs/src/index.js"
+    "#toml": "./smol-toml/dist/index.js"
   },
   "scripts": {
     "clean": "scripts/clean.sh",
-    "build": "scripts/build.sh",
+    "build": "scripts/build.js",
     "build-doc": "jsdoc -c ./jsdoc.json",
     "prepublish": "npm run build"
   },
@@ -48,7 +48,6 @@
     "email": "almukaafih@gmail.com"
   },
   "homepage": "https://github.com/alMukaafihuun/vsacode#readme",
-  "main": "vsacode.js",
   "directories": {
     "doc": "docs",
     "lib": "lib",

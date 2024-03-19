@@ -1,0 +1,4 @@
+[[commands]]
+name = "lsp"
+options = ["main"]
+help = "lsp_help"

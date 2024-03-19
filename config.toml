@@ -1,25 +1,16 @@
-[commands]
-    [commands.build]
-    name = "build"
-    options = ["main"]
-    flags = ["--single"]
+[[commands]]
+name = "build"
+flags = ["--single"]
 
-    [commands.b]
-    name = "build"
-    options = ["main"]
-    flags = ["--single"]
+[[commands]]
+name = "b"
+alias = "build"
 
-    [commands.list]
-    name = "list"
-    options = ["main"]
-    flags = ["-a"]
+[[commands]]
+name = "list"
+flags = ["-a"]
 
-    [commands.help]
-    name = "help"
-    options = ["main", "build", "b", "help"]
-
-[contributes]
-    [contributes.iconThemes]
-    engine = "iconTheme"
-    options = ["main", "list"]
-    template = "iconTheme"
+[[contributes]]
+engine = "iconTheme"
+options = ["list"]
+template = "iconTheme"

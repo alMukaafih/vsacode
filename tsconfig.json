@@ -19,6 +19,7 @@
         "./src/source/",
         "./js-docs/",
         "./docs/",
+        "./addons",
         "./webpack.config.js",
         "./tests/",
         "./toml-nodejs/src/*"

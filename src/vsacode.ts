@@ -81,7 +81,8 @@ for (let flag of flags) {
 // load and parse toml file
 let _toml: Buffer = fs.readFileSync(path.join(__dirname, "config.toml"));
 let __toml: string = _toml.toString();
-let config: IconfigToml = toml.decode(__toml);
+let config: IconfigToml = toml.parse(__toml);
+//console.log(toml.stringify(config));
 let commands = config.commands;
 env.contributes = config.contributes;
 
@@ -124,7 +125,7 @@ if (command.name != "help") {
     }
     catch(error) {
         //console.log(error);
-        console.log(err(`Error: ${env.vsix} is not a valid VS Code plugin\n`));
+        console.log(err(`${env.vsix} is not a valid VS Code plugin\n`));
         usage(1);
     }
     // read extension/package.json file
