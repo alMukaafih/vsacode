@@ -84,7 +84,7 @@ let __toml: string = _toml.toString();
 let config: IconfigToml = toml.parse(__toml);
 //console.log(toml.stringify(config));
 let commands = config.commands;
-env.contributes = config.contributes;
+env.engines = config.engines;
 
 let cmd: string = args[0]
 let command = commands[cmd];
@@ -94,16 +94,16 @@ if (command == undefined) {
     process.exit(1);
     //help.main();
 }
-let option: string = args[0];
+let subcommand: string = args[0];
 if (command.name == "help") {
-    if (command.options.includes(option)) {
-        help[commands[option].name]();
+    if (command.subcommands.includes(subcommand)) {
+        help[commands[subcommand].name]();
     }
 }
 let usage = help[command.name];
 let short_usage = help[`short_${command.name}`];
-if (!command.options.includes(option))
-    option = "main";
+if (!command.subcommands.includes(subcommand))
+    subcommand = "main";
 else
     args.shift();
 
@@ -137,4 +137,4 @@ if (command.name != "help") {
     env.packageJson = packageJson
 }
 const exec = require(`./commands/${command.name}.js`)
-exec[option](env)
+exec[subcommand](env)

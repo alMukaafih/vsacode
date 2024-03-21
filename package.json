@@ -11,26 +11,24 @@
     "#toml": "./smol-toml/dist/index.js"
   },
   "scripts": {
-    "clean": "scripts/clean.sh",
+    "clean": "scripts/clean.js",
     "build": "scripts/build.js",
     "build-doc": "jsdoc -c ./jsdoc.json",
     "prepublish": "npm run build"
   },
   "dependencies": {
     "adm-zip": "^0.5.10",
-    "better-sqlite3": "^9.4.3",
-    "file-loader": "^6.2.0",
-    "js-toml": "^1.0.0",
     "nunjucks": "^3.2.4",
-    "smol-toml": "^1.1.4",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.3.3",
-    "webpack": "^5.90.1",
     "ziyy": "^1.0.1"
   },
   "devDependencies": {
     "@types/adm-zip": "^0.5.5",
-    "@types/node": "^20.11.16"
+    "@types/node": "^20.11.16",
+    "better-sqlite3": "^9.4.3",
+    "file-loader": "^6.2.0",
+    "webpack": "^5.90.1",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3"
   },
   "browserslist": [
     "> 0.25%, not dead"

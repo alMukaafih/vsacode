@@ -128,23 +128,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# personal
 *.vsix
 js-docs/
 view
 *.zip
-source/icon.png
-source/node_modules
-source/plugin.json
-source/readme.md
-source/src/folders.css
-source/src/files.css
-engines/*.js
-engines/*.d.ts
-typings/*.js
-typings/*.d.ts
-commands/*.js
-commands/*.d.ts
-lib/*.d.ts
-lib/*.js
-vsacode.js
-vsacode.d.ts

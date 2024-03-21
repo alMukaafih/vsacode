@@ -16,13 +16,14 @@ export function main(env: any) {
     env.outDir = outDir
     
     let engine
-    let contribute
+    let _engine
     let runs = 0
     for (let k in contributes) {
-        contribute = env.contributes[k]
-        if (contribute == undefined)
+        _engine = env.engines[k]
+        if (_engine == undefined)
             continue
-        engine = require(`../engines/${contribute.engine}.js`);
+        env.engine = _engine.name
+        engine = require(`../engines/${_engine.name}.js`);
 
         // process each contrib
         for (let contrib of contributes[k]) {

@@ -110,7 +110,7 @@ export function stylesGen(env) {
 }
 
 /** @constant {string} */
-const includes: string = path.join("/data/data/com.termux/pj/vsbase", "includes");
+const includes: string = path.join("/data/data/com.termux/pj/vsacode", "includes");
 /** Checks if required File exits
  * @param {string} id - Icon Theme id
  * @param {string} req - Name of required File

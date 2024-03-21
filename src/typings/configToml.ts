@@ -2,14 +2,14 @@ export interface IconfigToml {
     commands: {
         [command: string]: {
             name: string
+            subcommands: string[]
             options: string[]
-            flags: string[]
         }
     }
-    contributes: {
-        [contribute: string]: {
+    engines: {
+        [engine: string]: {
             name: string
-            options: string[]
+            modes: string[]
             template: string
         }
     }

@@ -1,6 +1,6 @@
 [[commands]]
 name = "build"
-flags = ["--single"]
+options = ["--single"]
 
 [[commands]]
 name = "b"
@@ -8,9 +8,8 @@ alias = "build"
 
 [[commands]]
 name = "list"
-flags = ["-a"]
+options = ["-a"]
 
-[[contributes]]
-engine = "iconTheme"
-options = ["list"]
+[[engines]]
+name = "iconTheme"
 template = "iconTheme"
