@@ -1,10 +1,11 @@
 {
     "id": "almukaafih.icons",
     "name": "Icons",
-    "main": "dist/main.js",
-    "version": "3.8.0",
+    "main": "main.js",
+    "version": "3.8.1",
     "readme": "readme.md",
     "icon": "icon.png",
+    "price": 50,
     "files": [],
     "minVersionCode": 292,
     "author": {

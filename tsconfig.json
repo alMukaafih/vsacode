@@ -14,14 +14,11 @@
         "outDir": "./dist",
         "rootDir": "./src"
     },
-    "exclude": [
-        "./dist/**/*",
-        "./src/source/",
-        "./js-docs/",
-        "./docs/",
-        "./addons",
-        "./webpack.config.js",
-        "./tests/",
-        "./toml-nodejs/src/*"
-    ]
+    "include": [
+        "./src"
+    ],
+    "typedocOptions": {
+        "entryPoints": ["src/vsacode.ts", "src/**/*"],
+        "out": "docs"
+    }
 }

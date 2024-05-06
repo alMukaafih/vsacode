@@ -1,14 +1,7 @@
 #!/usr/bin/env node
 /**
- * @file The entry point of the program
- * @name vsacode
- * @author alMukaafih <alMukaafih@example.com>
- * @license MIT
- * @requires node:fs
- * @requires node:os
- * @requires node:path
- * @requires adm-zip
- * @requires js-toml
+ * This is the main file for vsacode
+ * @packageDocumentation
  */
 import { IconfigToml } from "./typings/configToml.js";
 // imports
@@ -28,7 +21,7 @@ interface Env {
 let err = template("[b][c:red]error[c:white]: [/0]")
 let env: Env = {
     err: err,
-    home: __dirname
+    home: path.dirname(__dirname)
 }
 
 /** Temporary directory prefix
@@ -66,7 +59,7 @@ for (let arg of args) {
 // process flags
 for (let flag of flags) {
     if (flag == "--version" || flag == "-V") {
-        let _json = fs.readFileSync(path.join(__dirname, "package.json"));
+        let _json = fs.readFileSync(path.join(env.home, "package.json"));
         let __json = _json.toString();
         __json = __json.replace(/\s\/\/(.)+/g, "");
         let packageJson = JSON.parse(__json);
@@ -115,9 +108,6 @@ if (env.vsix == undefined && command.name != "help") {
     console.log(err("the following required arguments were not provided:\n  [c:cyan][b]<PATH>[/0]\n"));
     short_usage(1);
 }
-/** New Zip Instance
- * @constant {object}
- */
 if (command.name != "help") {
     try {
         const zip = new Zip(env.vsix);

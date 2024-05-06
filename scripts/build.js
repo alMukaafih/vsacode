@@ -62,5 +62,3 @@ let config = toml.parse(__toml);
 let newConfig = normalize(config);
 
 fs.writeFileSync(path.join("dist", "config.toml"), toml.stringify(newConfig));
-fs.cpSync(path.join("src", "source"), path.join("dist", "source"), { recursive: true });
-fs.cpSync(path.join("src", "templates"), path.join("dist", "templates"), { recursive: true });

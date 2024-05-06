@@ -8,12 +8,12 @@
     "vsa": "./dist/vsacode.js"
   },
   "imports": {
-    "#toml": "./smol-toml/dist/index.js"
+    "#toml": "./smol-toml/cjs/index.js"
   },
   "scripts": {
     "clean": "scripts/clean.js",
     "build": "scripts/build.js",
-    "build-doc": "jsdoc -c ./jsdoc.json",
+    "build-doc": "npx typedoc",
     "prepublish": "npm run build"
   },
   "dependencies": {
@@ -26,9 +26,10 @@
     "@types/node": "^20.11.16",
     "better-sqlite3": "^9.4.3",
     "file-loader": "^6.2.0",
-    "webpack": "^5.90.1",
     "ts-loader": "^9.5.1",
-    "typescript": "^5.3.3"
+    "typedoc": "^0.25.12",
+    "typescript": "^5.3.3",
+    "webpack": "^5.90.1"
   },
   "browserslist": [
     "> 0.25%, not dead"

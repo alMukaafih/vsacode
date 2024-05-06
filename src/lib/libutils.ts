@@ -27,15 +27,15 @@ function bundleAsset(asset: string, env): string {
     let plugin = JSON.parse(__plugin);
     if (!fs.existsSync(assets)) 
         fs.mkdirSync(assets);
-    if (asset in bundleAsset)
-        return bundleAsset[asset];
+    if (asset in env.assetList)
+        return env.assetList[asset];
     let dest = path.basename(asset)
     let dest1 = `${assets}/${dest}`
     if (fs.existsSync(dest1))
         dest1 = `${assets}/1_${dest}`
-    fs.renameSync(asset, dest1);
+    fs.copyFileSync(asset, dest1);
     //console.log(`    asset \x1b[1m\x1b[32m${dest}.${ext} [emitted] [immutable]\x1b[0m [from ${asset}]`)
-    bundleAsset[asset] = `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}`
+    env.assetList[asset] = `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}`
     return `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}`
 }
 

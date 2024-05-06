@@ -12,6 +12,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import * as Zip from "adm-zip";
 import * as nunjucks from "nunjucks";
+import { style } from "ziyy";
 
 /** Build acode plugin
  * @param {string} label - Icon Theme label
@@ -28,11 +29,12 @@ export function distBuild(env) {
     let engine: string = env.engine
 
     process.chdir(base);
-    
-    console.log(`building: ${label}`);
+    if (env.runtime) 
+        console.log("")
+    console.log(style(`    [c:cyan][b]Building[/0] ${label}`));
     let _pluginJson = fs.readFileSync(path.join(base, "plugin.json"));
     let __pluginJson = _pluginJson.toString();
-    let pluginJson = __pluginJson.replace(/ /g, "")
+    let pluginJson = __pluginJson.replace(/\s/g, "")
     nunjucks.configure(path.join(env.home, "templates"), { autoescape: false });
     let mainJs = nunjucks.render(`${engine}.njk`, { pluginJson })
     fs.writeFileSync(path.join(base, "dist", "main.js"), mainJs);
@@ -46,5 +48,7 @@ export function distBuild(env) {
     if (fs.existsSync(outZip))
         fs.unlinkSync(outZip);
     distZip.writeZip(outZip);
-    console.log(`output: ${id}.zip\n`);
+    console.log(style(`    [c:green][b]Finished[/0] build`));
+    console.log(style(`   [c:green][b]Generated[/0] ${path.resolve(outZip)}`));
+    env.assetList = {};
 }

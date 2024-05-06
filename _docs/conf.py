@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'VSAcode'
+project = 'VS Acode'
 copyright = '2024, alMukaafih'
 author = 'alMukaafih'
 release = '1.0.0'
@@ -24,8 +24,10 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+html_theme = 'furo'
 html_static_path = ['_static']
 
-js_source_path = '../lib'
+js_source_path = '../src'
+js_language = 'typescript'
 primary_domain = 'js'
+jsdoc_config_path = '../tsconfig.json'

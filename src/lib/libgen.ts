@@ -17,14 +17,11 @@ import { MapFileIcons } from "./libmap";
 import { parse, parseFont, test, _test, _css, validate, verify } from "./libutils";
 
 /** Generates styles.ts file from Icon Theme's json file
- * @function
  * @name stylesGen
- * @param {string} icons - Relative path to Icon Theme json file
- * @param {string} dist - Output Directory of styles.ts
- * @param {object} iconJson - Icon Theme json file
+ * @param {object} env - Runtime Variables
  * @returns {void}
  */
-export function stylesGen(env) {
+export function stylesGen(env): void {
     let icons: string = env.icons
     let dist: string = env.dist
     let iconJson: IfileIconTheme = env.iconJson
@@ -109,62 +106,6 @@ export function stylesGen(env) {
     fs.writeFileSync(path.join(dist, "folders.css"), css );
 }
 
-/** @constant {string} */
-const includes: string = path.join("/data/data/com.termux/pj/vsacode", "includes");
-/** Checks if required File exits
- * @param {string} id - Icon Theme id
- * @param {string} req - Name of required File
- * @returns {boolean}
- */
-function reqExists(id: string, req: string) {
-    let file;
-    let _path: string = path.join(includes, id);
-    if ( !(fs.existsSync(_path)) )
-        return false;
-    file = fs.statSync(_path);
-    if ( !(file.isDirectory()) )
-        return false;
-    let _file = path.join(_path, req);
-    if ( !(fs.existsSync(_file)) )
-        return false;
-    return true;
-}
-
-/** Check for required File
- * @param {string} id - Icon Theme id
- * @param {string} req - Name of required File
- * @param {object} fallback - Fallback to default to
- * @returns {string} Path of required File
- */
-function check(id: string, req: string, fallback: StringMap): string {
-    if (!reqExists(id, req))
-        return path.join(fallback[req]);
-    return path.join(includes, id, req);
-}
-
-/** Link the required files
- * @param {string} from - Origin
- * @param {string} to - Destination
- * @returns {void}
- */
-function link(from: string, to: string): void {
-    fs.copyFileSync(from, to);
-}
-
-/** Include the required files
- * @param {string} id - Icon Theme id
- * @param {object} fallback - Fallback to default to
- * @returns {void}
- */
-function include(id: string, fallback: StringMap): void {
-    let pluginJson: string = check(id, "plugin.json", fallback);
-    let readmeMd: string = check(id, "readme.md", fallback);
-    let iconPng: string = check(id, "icon.png", fallback);
-    link(pluginJson, "plugin.json");
-    link(readmeMd, "readme.md");
-    link(iconPng, "icon.png");
-}
-
 /** Generates plugin.json file required by base plugin
  * @function
  * @name pluginJsonGen
@@ -181,11 +122,12 @@ export function pluginJsonGen(env): void {
     let label: string = env.label
     let tmpDir: string = env.tmpDir
     let base: string = env.base
+    let home: string = env.home
 
     let json = {
         id: id,
         name: label,
-        main: "dist/main.js",
+        main: "main.js",
         version: packageJson.version,
         readme: "readme.md",
         icon: "icon.png",
@@ -194,13 +136,15 @@ export function pluginJsonGen(env): void {
         author: packageJson.author
     };
     let assets = path.join(tmpDir, "extension")
-    fs.writeFileSync(path.join(assets, "plugin.json"), JSON.stringify(json));
-        let fallback = {
-        "plugin.json": path.join(assets, "plugin.json"),
-        "icon.png": path.join(assets, packageJson.icon),
-        "readme.md": path.join(assets, "README.md"),
-    };
-    
     process.chdir(base);
-    include(id, fallback);
+    fs.writeFileSync(path.join("plugin.json"), JSON.stringify(json));
+    fs.copyFileSync(path.join(assets, packageJson.icon), "icon.png");
+    fs.copyFileSync(path.join(assets, "README.md"), "readme.md");
+    let _overrides = path.join(home, "overrides", id)
+    if (fs.existsSync(_overrides)) {
+        let overrides = fs.readdirSync(_overrides);
+        for (let override of overrides) {
+            fs.copyFileSync(path.join(_overrides, override), path.basename(override))
+        }
+    }
 }

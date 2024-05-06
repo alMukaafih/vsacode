@@ -48,6 +48,7 @@ export function main(env) {
     let iconJson = JSON.parse(__json);
     env.iconJson = iconJson
     fs.mkdirSync(outDir, { recursive: true });
+    env.assetList = {};
     pluginJsonGen(env);
     stylesGen(env);
     distBuild(env);
