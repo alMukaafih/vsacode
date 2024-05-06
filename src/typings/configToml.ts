@@ -1,4 +1,5 @@
 export interface IconfigToml {
+    version: string
     commands: {
         [command: string]: {
             name: string

@@ -19,6 +19,7 @@ function normalize(config) {
         }
         newConfig.commands[cmd.name] = {
             name: cmd.name,
+            path: `./commands/${cmd.name}.js`,
             subcommands: cmd.subcommands,
             options: cmd.options,
             alias: cmd.alias,
@@ -31,6 +32,7 @@ function normalize(config) {
         contrib.modes.unshift("main");
         newConfig.engines[`${contrib.name}s`] = {
             name: contrib.name,
+            path: `./engines/${contrib.name}.js`,
             modes: contrib.modes,
             template: contrib.template
         };
@@ -60,5 +62,11 @@ let __toml = _toml.toString();
 let config = toml.parse(__toml);
 
 let newConfig = normalize(config);
+
+let _json = fs.readFileSync("package.json");
+let __json = _json.toString();
+__json = __json.replace(/\s\/\/(.)+/g, "");
+let packageJson = JSON.parse(__json);
+newConfig.version = packageJson.version;
 
 fs.writeFileSync(path.join("dist", "config.toml"), toml.stringify(newConfig));

@@ -7,3 +7,5 @@ vsacode.ts
 webpack.config.js
 src/
 .github/
+./config.toml
+addons/

@@ -48,6 +48,12 @@ let args: string[] = process.argv.slice(2);
 if (args.length == 0) {
     help.main();
 }
+
+// load and parse toml file
+let _toml: Buffer = fs.readFileSync(path.join(__dirname, "config.toml"));
+let __toml: string = _toml.toString();
+let config: IconfigToml = toml.parse(__toml);
+
 let flags: string[] = [];
 for (let arg of args) {
     if (arg.startsWith("-")) {
@@ -59,11 +65,7 @@ for (let arg of args) {
 // process flags
 for (let flag of flags) {
     if (flag == "--version" || flag == "-V") {
-        let _json = fs.readFileSync(path.join(env.home, "package.json"));
-        let __json = _json.toString();
-        __json = __json.replace(/\s\/\/(.)+/g, "");
-        let packageJson = JSON.parse(__json);
-        process.stdout.write(`vsa ${packageJson.version}\n`)
+        process.stdout.write(`vsa ${config.version}\n`)
         process.exit(0)
     }
     if (flag == "--help" || flag == "-h") {
@@ -71,10 +73,7 @@ for (let flag of flags) {
     }
 }
 
-// load and parse toml file
-let _toml: Buffer = fs.readFileSync(path.join(__dirname, "config.toml"));
-let __toml: string = _toml.toString();
-let config: IconfigToml = toml.parse(__toml);
+
 //console.log(toml.stringify(config));
 let commands = config.commands;
 env.engines = config.engines;
