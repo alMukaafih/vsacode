@@ -9,8 +9,8 @@ import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 
-import * as Zip from "adm-zip";
-import * as toml from "#toml";
+import Zip from "adm-zip";
+import * as toml from "smol-toml";
 import { template } from "ziyy";
 import * as help from "./commands/help.js";
 
@@ -19,7 +19,7 @@ type Env = Record<string, any>;
 const err = template("[b][c:red]error[c:white]: [/0]")
 const env: Env = {
     err: err,
-    home: path.dirname(__dirname)
+    home: path.dirname(import.meta.dirname)
 }
 
 /** Temporary directory prefix
@@ -35,7 +35,7 @@ const tmpDir: string = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix));
 env.tmpDir = tmpDir
 
 // cleanup task
-process.on("exit", () => {
+process.on("exit", (code) => {
     //console.log("Exiting vsacode.js process with code:", code);
         //console.log(usage);
     fs.rmSync(tmpDir, { recursive: true });
@@ -48,9 +48,9 @@ if (args.length == 0) {
 }
 
 // load and parse toml file
-const _toml: Buffer = fs.readFileSync(path.join(__dirname, "config.toml"));
+const _toml: Buffer = fs.readFileSync(path.join(import.meta.dirname, "config.toml"));
 const __toml: string = _toml.toString();
-const config: IconfigToml = toml.parse(__toml);
+const config = toml.parse(__toml);
 
 const flags: string[] = [];
 for (const arg of args) {
@@ -125,5 +125,5 @@ if (command.name != "help") {
     const packageJson = JSON.parse(__json);
     env.packageJson = packageJson
 }
-const exec = require(`./commands/${command.name}.js`)
+const { default: exec } = await import(`./commands/${command.name}.js`)
 exec[subcommand](env)

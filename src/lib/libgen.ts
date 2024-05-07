@@ -12,8 +12,8 @@ import { IfileIconTheme } from "../typings/fileIconTheme.js"
 // imports
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { MapFileIcons } from "./libmap";
-import { parse, parseFont, test, _test, _css, validate, verify } from "./libutils";
+import { MapFileIcons } from "./libmap.js";
+import { parse, parseFont, test, _test, _css, validate, verify } from "./libutils.js";
 
 /** Generates styles.ts file from Icon Theme's json file
  * @name stylesGen

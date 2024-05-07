@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const fs = require("node:fs");
+import * as fs from "node:fs";
 if (fs.existsSync("dist"))
     fs.rmSync("dist", { recursive: true });
 if (fs.existsSync("js-doc"))

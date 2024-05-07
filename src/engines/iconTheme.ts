@@ -14,10 +14,10 @@
 // imports
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { stylesGen, pluginJsonGen } from "../lib/libgen";
-import { distBuild } from "../lib/libdist";
+import { stylesGen, pluginJsonGen } from "../lib/libgen.js";
+import { distBuild } from "../lib/libdist.js";
 
-export function main(env) {
+function main(env) {
     const buildDir: string = env.buildDir
     const contrib = env.contrib
     const outDir = env.outDir
@@ -54,9 +54,16 @@ export function main(env) {
     return 0
 };
 
-export function list(env) {
+function fmt(env) {
+    const contrib = env.contrib
+    env.id = contrib.id;
+    env.label = contrib.label;
     console.log(
         `id    => ${env.id}\n` +
         `label => ${env.label}\n`
     );
 };
+
+export default {
+    main, fmt
+}

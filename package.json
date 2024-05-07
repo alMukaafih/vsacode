@@ -7,9 +7,7 @@
   "bin": {
     "vsa": "./dist/vsacode.js"
   },
-  "imports": {
-    "#toml": "./smol-toml/cjs/index.js"
-  },
+  "type": "module",
   "scripts": {
     "clean": "scripts/clean.js",
     "build": "scripts/build.js",
@@ -19,7 +17,9 @@
   },
   "dependencies": {
     "adm-zip": "^0.5.10",
+    "file-type": "^19.0.0",
     "nunjucks": "^3.2.4",
+    "smol-toml": "^1.1.4",
     "ziyy": "^1.0.1"
   },
   "devDependencies": {
@@ -42,6 +42,7 @@
   "browserslist": [
     "> 0.25%, not dead"
   ],
+  "node": ">=16",
   "resolutions": {
     "terser": ">=5.14.2 ",
     "glob-parent": ">=5.1.2"

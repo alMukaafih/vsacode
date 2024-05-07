@@ -10,8 +10,8 @@
 // imports
 import * as fs from "node:fs";
 import * as path from "node:path";
-import * as Zip from "adm-zip";
-import * as nunjucks from "nunjucks";
+import Zip from "adm-zip";
+import nunjucks from "nunjucks";
 import { style } from "ziyy";
 
 /** Build acode plugin

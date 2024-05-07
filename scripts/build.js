@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-const child_process = require("node:child_process");
-const fs = require("node:fs");
-const path = require("node:path");
-const toml = require("#toml");
+import * as child_process from "node:child_process";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import * as toml from "smol-toml";
 
 function normalize(config) {
     let newConfig = {

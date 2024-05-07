@@ -1,6 +1,8 @@
 import * as fs from "node:fs";
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url)
 
-export function main(env: any) {
+async function main(env: any) {
     const contributes = env.packageJson.contributes
     /** Path to acode directory in temp directory
      *  @constant {string}
@@ -12,7 +14,6 @@ export function main(env: any) {
     const outDir = process.cwd();
     env.outDir = outDir
 
-    let engine
     let _engine
     env.runtime = 0
     for (const k in contributes) {
@@ -20,7 +21,7 @@ export function main(env: any) {
         if (_engine == undefined)
             continue
         env.engine = _engine.name
-        engine = require(`../engines/${_engine.name}.js`);
+        const { default: engine } = await import(`../engines/${_engine.name}.js`);
         // process each contrib
         for (const contrib of contributes[k]) {
             process.chdir(outDir)
@@ -53,4 +54,8 @@ export function short_help(): string {
     return `[c:green][b]Usage: [c:cyan]vsa build[/0] [c:cyan]<PATH>[/0]
 For more information, try '[c:cyan][b]--help[/0]'.
 `
+}
+
+export default {
+    main
 }
