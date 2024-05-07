@@ -9,8 +9,8 @@
  * @typedef {object} Map
  */
 // imports
-import { IfileIconTheme, DefsMap, IconsMap, FontsMap } from "../typings/fileIconTheme.js";
-import { ArrayMap, ObjectMap, StringMap } from "../typings/map.js"
+import { DefsMap, IconsMap, FontsMap } from "../typings/fileIconTheme.js";
+import { ArrayMap, ObjectMap } from "../typings/map.js"
 import * as fs from "node:fs";
 import * as path from "node:path";
 
@@ -20,16 +20,16 @@ import * as path from "node:path";
  * @returns {string} CSS style
  */
 function bundleAsset(asset: string, env): string {
-    let assets: string = env.assets
-    let base: string = env.base
+    const assets: string = env.assets
+    const base: string = env.base
     const _plugin: Buffer = fs.readFileSync(path.join(base,  "plugin.json"));
-    let __plugin: string = _plugin.toString();
-    let plugin = JSON.parse(__plugin);
+    const __plugin: string = _plugin.toString();
+    const plugin = JSON.parse(__plugin);
     if (!fs.existsSync(assets)) 
         fs.mkdirSync(assets);
     if (asset in env.assetList)
         return env.assetList[asset];
-    let dest = path.basename(asset)
+    const dest = path.basename(asset)
     let dest1 = `${assets}/${dest}`
     if (fs.existsSync(dest1))
         dest1 = `${assets}/1_${dest}`
@@ -40,19 +40,19 @@ function bundleAsset(asset: string, env): string {
 }
 
 export function parse(map0: ArrayMap, env): string {
-    let root: string = env.root
-    let ref: DefsMap = env.iconDefs
+    const root: string = env.root
+    const ref: DefsMap = env.iconDefs
     
-    let css: string = "";
+    let css = "";
     let classes: string;
     let style: string;
-    let fontChar: string = "";
-    let fontColor: string = "";
-    let fontId: string = "";
-    let fontSize: string = "";
-    let iconPath: string = "";
+    let fontChar: string | undefined = "";
+    let fontColor = "";
+    let fontId = "";
+    let fontSize = "";
+    let iconPath = "";
     
-    for(let [key, value] of Object.entries(map0)) {
+    for(const [key, value] of Object.entries(map0)) {
         if (!ref[key])
             continue
         if (ref[key].fontCharacter)
@@ -83,17 +83,16 @@ export function parse(map0: ArrayMap, env): string {
 }
 
 export function parseFont(env): string {
-    let map: FontsMap = env.iconJson.fonts
-    let root: string = env.root
-    let ref: DefsMap = env.iconDefs
+    const map: FontsMap = env.iconJson.fonts
+    const root: string = env.root
 
     if (map == undefined)
         return ""
-    let css: string = "";
+    let css = "";
     let srcs: string[] = [];
-    let style: string = "";
-    for (let font of map) {
-        for (let src of font.src) {
+    let style = "";
+    for (const font of map) {
+        for (const src of font.src) {
             srcs.push(`url(${bundleAsset(path.join(root, src.path), env)}) format("${src.format}")`)
         }
         style = `@font-face {\n`
@@ -114,17 +113,17 @@ export function parseFont(env): string {
  * @param {string} [kind=.file_type_] - Prefix to the CSS class name
  * @returns {string} CSS style
  */
-export function _css(name: string, exe: string="default", kind: string=".file_type_", env) {
-    let root: string = env.root
-    let ref: DefsMap = env.iconDefs
+export function _css(name: string, exe="default", kind=".file_type_", env) {
+    const root: string = env.root
+    const ref: DefsMap = env.iconDefs
 
     if (!ref[name])
         return "";
-    let fontChar: string = "";
-    let fontColor: string = "";
-    let fontId: string = "";
-    let fontSize: string = "";
-    let iconPath: string = "";
+    let fontChar: string | undefined = "";
+    let fontColor = "";
+    let fontId = "";
+    let fontSize = "";
+    let iconPath = "";
     if (ref[name].fontCharacter)
         fontChar = ref[name].fontCharacter;
     if (ref[name].fontColor)
@@ -139,7 +138,7 @@ export function _css(name: string, exe: string="default", kind: string=".file_ty
     if (ref[name].iconPath)
         iconPath = `    background-image: url(${bundleAsset(path.join(root, ref[name].iconPath), env)});\n`;
     
-    let css = kind + exe +  `::before {\n    content: "${fontChar}" !important;\n`
+    const css = kind + exe +  `::before {\n    content: "${fontChar}" !important;\n`
     + fontColor + fontId + fontSize + iconPath
     + `    background-size: contain;\n`
     + `    background-repeat: no-repeat;\n`
@@ -166,7 +165,7 @@ export function test(map: IconsMap): object {
  * @param {string} [def] - Default return value
  * @returns {string} Property
  */
-export function _test(map: DefsMap, name: string, def: string=""): string {
+export function _test(map: DefsMap, name: string | undefined, def=""): string {
     if (!name)
         return def;
     if (map[name] == undefined)
@@ -180,9 +179,9 @@ export function _test(map: DefsMap, name: string, def: string=""): string {
  * @returns {Map}
  */
 export function validate(env): DefsMap {
-    let map0: DefsMap = env.iconDefs
-    let root: string = env.root
-    for(let [key, value] of Object.entries(map0)) {
+    const map0: DefsMap = env.iconDefs
+    const root: string = env.root
+    for(const [key, value] of Object.entries(map0)) {
         // console.log(value);
         if (!value.iconPath)
             continue
@@ -198,7 +197,7 @@ export function validate(env): DefsMap {
  * @returns {Map}
  */
 export function verify(map1: ObjectMap, map2: DefsMap): ObjectMap {
-    for(let [key, value] of Object.entries(map1)) {
+    for(const [key] of Object.entries(map1)) {
         if (map2[key] == undefined)
             delete map1[key];
     }

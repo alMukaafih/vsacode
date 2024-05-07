@@ -13,20 +13,19 @@
  */
 // imports
 import * as fs from "node:fs";
-import * as os from "node:os";
 import * as path from "node:path";
 import { stylesGen, pluginJsonGen } from "../lib/libgen";
 import { distBuild } from "../lib/libdist";
 
 export function main(env) {
-    let buildDir: string = env.buildDir
-    let contrib = env.contrib
-    let outDir = env.outDir
-    let home: string = env.home
+    const buildDir: string = env.buildDir
+    const contrib = env.contrib
+    const outDir = env.outDir
+    const home: string = env.home
 
-    let base: string = path.resolve(buildDir, contrib.id)
+    const base: string = path.resolve(buildDir, contrib.id)
     env.base = base
-    let dist: string = path.join(base, "dist");
+    const dist: string = path.join(base, "dist");
     env.dist = dist
     if (!fs.existsSync(base))
         fs.cpSync(path.join(home, "source"), base, { recursive: true });
@@ -36,16 +35,16 @@ export function main(env) {
     env.id = contrib.id;
     env.label = contrib.label;
     env.path = contrib.path;
-    let icons: string = path.join(env.tmpDir, "extension", env.path);
-    let root: string = path.dirname(icons);
+    const icons: string = path.join(env.tmpDir, "extension", env.path);
+    const root: string = path.dirname(icons);
     env.root = root
     if(env.id == undefined && env.label == undefined && env.path == undefined)
         return 1;
 
-    let _json: Buffer = fs.readFileSync(icons);
+    const _json: Buffer = fs.readFileSync(icons);
     let __json: string = _json.toString();
     __json = __json.replace(/\s\/\/(.)+/g, "");
-    let iconJson = JSON.parse(__json);
+    const iconJson = JSON.parse(__json);
     env.iconJson = iconJson
     fs.mkdirSync(outDir, { recursive: true });
     env.assetList = {};

@@ -7,14 +7,14 @@ const helpers = acode.require('helpers');
 //const file_ext: Ext = {};
 
 function encode(text: string): string {
-    let match: RegExpMatchArray | null = text.match(/[^a-zA-Z0-9_\.-]/g);
+    const match: RegExpMatchArray | null = text.match(/[^a-zA-Z0-9_\.-]/g);
     if (match == null)
         return text
     let pattern: RegExp;
     let u: string = "u";
     let encoded: string;
     let unicode: string;
-    for (let char of match) {
+    for (const char of match) {
         encoded = char.charCodeAt(0).toString(16);
         unicode = `\\u{${encoded}}`;
         if (encoded.length == 4) {
@@ -30,15 +30,15 @@ function encode(text: string): string {
 function get_type_file(filename: string): string {
     let nam = encode(filename);
     nam = "f_" + nam;
-    let names = nam.split('.');
-    let li = [];
+    const names = nam.split('.');
+    const li = [];
     while (names.length > 0) {
         li.push(names.join("0x2e"));
         names.shift();
 }
         li.reverse();
         let _icon="";
-    for (let i of li)
+    for (const i of li)
         _icon = _icon + "file_type_" + i.toLowerCase() + " ";
     
     return _icon;
@@ -77,8 +77,8 @@ class IconAcode {
     }
 
     public async destroy(): Promise<void> {
-        let links = document.querySelectorAll(`#${plugin.id}`)
-        for (let link of links) {
+        const links = document.querySelectorAll(`#${plugin.id}`)
+        for (const link of links) {
             link.remove();
         }
     }

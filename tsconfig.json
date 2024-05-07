@@ -12,7 +12,8 @@
         "strict": false,
         "declaration": true,
         "outDir": "./dist",
-        "rootDir": "./src"
+        "rootDir": "./src",
+        "strictNullChecks": false
     },
     "include": [
         "./src"

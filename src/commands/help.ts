@@ -1,5 +1,5 @@
 import { style } from "ziyy";
-export function main(err: number = 0): void{
+export function main(err = 0): void{
     process.stdout.write(style(`VS Code plugin to Acode plugin converter
 
 [b][c:green]Usage:[/0] [c:cyan][b]vsa[/0] [c:cyan]\[OPTIONS\] \[COMMAND\]
@@ -20,7 +20,7 @@ See '[c:cyan][b]vsa help[/0] [c:cyan]<command>[/0]' for more information on a sp
     process.exit(err);
 };
 
-export function build(err: number = 0): void {
+export function build(err = 0): void {
     process.stdout.write(style(`Convert the plugin at <path>
 
 [b][c:green]Usage:[/0] [c:cyan][b]vsa build[/0] [c:cyan][OPTIONS] <PATH>
@@ -37,14 +37,14 @@ Run \`[c:cyan][b]vsa help build[/0]\` for more detailed information.
     process.exit(err);
 }
 
-export function short_build(err: number = 0): void {
+export function short_build(err = 0): void {
     process.stdout.write(style(`[c:green][b]Usage: [c:cyan]vsa build[/0] [c:cyan]<PATH>[/0]
 For more information, try '[c:cyan][b]--help[/0]'.
 `));
     process.exit(err);
 }
 
-export function help(err: number = 0) {
+export function help(err = 0) {
     process.stdout.write(style(`Show help for command.
 
 [b]USAGE[/0]
@@ -59,5 +59,15 @@ export function help(err: number = 0) {
   $ vsa help
 
 `));
+    process.exit(err);
+}
+
+export function print(err = 0, env) {
+    process.stdout.write(style(env.cmd.help));
+    process.exit(err);
+}
+
+export function print_short(err = 0, env) {
+    process.stdout.write(style(env.cmd.short_help));
     process.exit(err);
 }

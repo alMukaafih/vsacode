@@ -22,29 +22,29 @@ import { style } from "ziyy";
  */
 
 export function distBuild(env) {
-    let label: string = env.label
-    let id: string = env.id
-    let base: string = env.base
-    let outDir: string = env.outDir
-    let engine: string = env.engine
+    const label: string = env.label
+    const id: string = env.id
+    const base: string = env.base
+    const outDir: string = env.outDir
+    const engine: string = env.engine
 
     process.chdir(base);
     if (env.runtime) 
         console.log("")
     console.log(style(`    [c:cyan][b]Building[/0] ${label}`));
-    let _pluginJson = fs.readFileSync(path.join(base, "plugin.json"));
-    let __pluginJson = _pluginJson.toString();
-    let pluginJson = __pluginJson.replace(/\s/g, "")
+    const _pluginJson = fs.readFileSync(path.join(base, "plugin.json"));
+    const __pluginJson = _pluginJson.toString();
+    const pluginJson = __pluginJson.replace(/\s/g, "")
     nunjucks.configure(path.join(env.home, "templates"), { autoescape: false });
-    let mainJs = nunjucks.render(`${engine}.njk`, { pluginJson })
+    const mainJs = nunjucks.render(`${engine}.njk`, { pluginJson })
     fs.writeFileSync(path.join(base, "dist", "main.js"), mainJs);
     
-    let distZip = new Zip();
+    const distZip = new Zip();
     distZip.addLocalFolder(path.join(base, "dist"));
     distZip.addLocalFile(path.join(base, "plugin.json"));
     distZip.addLocalFile(path.join(base, "icon.png"));
     distZip.addLocalFile(path.join(base, "readme.md"));
-    let outZip: string = path.join(outDir, `${id}.zip`);
+    const outZip: string = path.join(outDir, `${id}.zip`);
     if (fs.existsSync(outZip))
         fs.unlinkSync(outZip);
     distZip.writeZip(outZip);

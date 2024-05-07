@@ -1,11 +1,3 @@
-export type ArrayMap = {
-    [name: string]: string[]
-}
-export type ObjectMap = {
-    [name: string]: {
-        [property: string]: string
-    }
-}
-export type StringMap = {
-    [name: string]: string
-}
+export type ArrayMap = Record<string, string[]>;
+export type ObjectMap = Record<string, Record<string, string>>;
+export type StringMap = Record<string, string>;

@@ -1,17 +1,13 @@
 export interface IconfigToml {
     version: string
-    commands: {
-        [command: string]: {
+    commands: Record<string, {
             name: string
             subcommands: string[]
             options: string[]
-        }
-    }
-    engines: {
-        [engine: string]: {
+        }>
+    engines: Record<string, {
             name: string
             modes: string[]
             template: string
-        }
-    }
+        }>
 }

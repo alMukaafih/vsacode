@@ -11,15 +11,13 @@ import * as path from "node:path";
 
 import * as Zip from "adm-zip";
 import * as toml from "#toml";
-import { style, template } from "ziyy";
+import { template } from "ziyy";
 import * as help from "./commands/help.js";
 
-interface Env {
-    [name: string]: any
-}
+type Env = Record<string, any>;
 
-let err = template("[b][c:red]error[c:white]: [/0]")
-let env: Env = {
+const err = template("[b][c:red]error[c:white]: [/0]")
+const env: Env = {
     err: err,
     home: path.dirname(__dirname)
 }
@@ -28,7 +26,7 @@ let env: Env = {
  * @constant {string}
  * @default
  */
-const appPrefix: string = "vsa-";
+const appPrefix = "vsa-";
 
 /** Temporary directory fullpath
  * @constant {string}
@@ -37,33 +35,33 @@ const tmpDir: string = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix));
 env.tmpDir = tmpDir
 
 // cleanup task
-process.on("exit", (code) => {
+process.on("exit", () => {
     //console.log("Exiting vsacode.js process with code:", code);
         //console.log(usage);
     fs.rmSync(tmpDir, { recursive: true });
 });
 
 // cli arguments
-let args: string[] = process.argv.slice(2);
+const args: string[] = process.argv.slice(2);
 if (args.length == 0) {
     help.main();
 }
 
 // load and parse toml file
-let _toml: Buffer = fs.readFileSync(path.join(__dirname, "config.toml"));
-let __toml: string = _toml.toString();
-let config: IconfigToml = toml.parse(__toml);
+const _toml: Buffer = fs.readFileSync(path.join(__dirname, "config.toml"));
+const __toml: string = _toml.toString();
+const config: IconfigToml = toml.parse(__toml);
 
-let flags: string[] = [];
-for (let arg of args) {
+const flags: string[] = [];
+for (const arg of args) {
     if (arg.startsWith("-")) {
-        var i = args.indexOf(arg);
+        const i = args.indexOf(arg);
         args.splice(i, 1);
         flags.push(arg);
     }
 }
 // process flags
-for (let flag of flags) {
+for (const flag of flags) {
     if (flag == "--version" || flag == "-V") {
         process.stdout.write(`vsa ${config.version}\n`)
         process.exit(0)
@@ -75,25 +73,27 @@ for (let flag of flags) {
 
 
 //console.log(toml.stringify(config));
-let commands = config.commands;
+const commands = config.commands;
 env.engines = config.engines;
 
-let cmd: string = args[0]
-let command = commands[cmd];
+const cmd: string = args[0]
+const command = commands[cmd];
 args.shift();
 if (command == undefined) {
     console.error(err(`no such command: \`${cmd}\`\n`));
     process.exit(1);
     //help.main();
 }
+
+env.cmd = command;
 let subcommand: string = args[0];
 if (command.name == "help") {
     if (command.subcommands.includes(subcommand)) {
         help[commands[subcommand].name]();
     }
 }
-let usage = help[command.name];
-let short_usage = help[`short_${command.name}`];
+const usage = help[command.name];
+const short_usage = help[`short_${command.name}`];
 if (!command.subcommands.includes(subcommand))
     subcommand = "main";
 else
@@ -118,11 +118,11 @@ if (command.name != "help") {
         usage(1);
     }
     // read extension/package.json file
-    let _json: Buffer = fs.readFileSync(path.join(env.tmpDir, "extension", "package.json"));
+    const _json: Buffer = fs.readFileSync(path.join(env.tmpDir, "extension", "package.json"));
     let __json: string = _json.toString();
     __json = __json.replace(/\s\/\/(.)+/g, "");
     // package.json file object
-    let packageJson = JSON.parse(__json);
+    const packageJson = JSON.parse(__json);
     env.packageJson = packageJson
 }
 const exec = require(`./commands/${command.name}.js`)

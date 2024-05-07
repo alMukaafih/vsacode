@@ -15,14 +15,14 @@ import { ArrayMap, ObjectMap, StringMap } from "../typings/map.js"
  * @param {string} [isFile=true] - it is a File and not a Folder
  */
 function encode(text: string): string {
-    let match: RegExpMatchArray | null = text.match(/[^a-zA-Z0-9_-]/g);
+    const match: RegExpMatchArray | null = text.match(/[^a-zA-Z0-9_-]/g);
     if (match == null)
         return text
     let pattern: RegExp;
-    let u: string = "u";
+    let u = "u";
     let encoded: string;
     let unicode: string;
-    for (let char of match) {
+    for (const char of match) {
         encoded = char.charCodeAt(0).toString(16);
         unicode = `\\u{${encoded}}`;
         if (encoded.length == 4) {
@@ -45,7 +45,7 @@ export class MapFileIcons {
     map2: ArrayMap;
     key: string;
     value: string;
-    constructor(txt_1: string, txt_2: string="", isFile: boolean=true, isFullFile: boolean=false) {
+    constructor(txt_1: string, txt_2="", isFile=true, isFullFile=false) {
         /** Prefix */
         this.x = txt_1;
         /** Suffix */
@@ -71,10 +71,10 @@ export class MapFileIcons {
                 continue;
             if (this.map2[this.value] == undefined)
                 this.map2[this.value] = [];
-            if (this.isFile == true)
+            if (this.isFile)
                 this.key = encode(this.key);
             
-            if (this.isFile == true && this.isFullFile == true)
+            if (this.isFile && this.isFullFile)
                 this.key = "f_" + this.key;
             this.key = this.x + this.key + this.y + this.z;
             this.map2[this.value].push(this.key);

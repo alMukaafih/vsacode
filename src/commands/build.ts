@@ -1,10 +1,7 @@
 import * as fs from "node:fs";
-import * as os from "node:os";
-import * as path from "node:path";
-import { StringMap } from "../typings/map.js"
 
 export function main(env: any) {
-    let contributes = env.packageJson.contributes
+    const contributes = env.packageJson.contributes
     /** Path to acode directory in temp directory
      *  @constant {string}
      */
@@ -12,20 +9,20 @@ export function main(env: any) {
     if (!fs.existsSync(env.buildDir))
         fs.mkdirSync(env.buildDir)
 
-    let outDir = process.cwd();
+    const outDir = process.cwd();
     env.outDir = outDir
 
     let engine
     let _engine
     env.runtime = 0
-    for (let k in contributes) {
+    for (const k in contributes) {
         _engine = env.engines[k]
         if (_engine == undefined)
             continue
         env.engine = _engine.name
         engine = require(`../engines/${_engine.name}.js`);
         // process each contrib
-        for (let contrib of contributes[k]) {
+        for (const contrib of contributes[k]) {
             process.chdir(outDir)
             env.contrib = contrib
             engine.main(env);
@@ -34,4 +31,26 @@ export function main(env: any) {
     }
     if (!env.runtime)
         console.error(env.err("could not process file"))
+}
+
+export function help(): string {
+    return `Convert the plugin at <path>
+
+[b][c:green]Usage:[/0] [c:cyan][b]vsa build[/0] [c:cyan][OPTIONS] <PATH>
+
+[b][c:green]Arguments:[/0]
+  [c:cyan]<PATH>
+
+[b][c:green]Options:
+      [c:cyan]--single[/0]
+          Produce a single output
+
+Run \`[c:cyan][b]vsa help build[/0]\` for more detailed information.
+`
+}
+
+export function short_help(): string {
+    return `[c:green][b]Usage: [c:cyan]vsa build[/0] [c:cyan]<PATH>[/0]
+For more information, try '[c:cyan][b]--help[/0]'.
+`
 }

@@ -19,51 +19,25 @@ interface IfontProperties {
     size?: string
 }
 
-interface IlanguageProperties {
-    id: string
-    extensions: string[]
-    filenames: string[]
-    icon: {
-        light: string
-        dark: string
-    }
-}
-
 export interface IfileIconTheme {
     hidesExplorerArrows: boolean
     fonts?: [IfontProperties]
-    iconDefinitions: { 
-        [name: string]: IdefinitionProperties
-    }
+    iconDefinitions: Record<string, IdefinitionProperties>
     file: string
     folder?: string
     folderExpanded?: string
-    folderNames?: {
-        [name: string]: string
-    }
-    folderNamesExpanded?: {
-        [name: string]: string
-    }
+    folderNames?: Record<string, string>
+    folderNamesExpanded?: Record<string, string>
     rootFolder?: string
     rootFolderExpanded?: string
-    rootFolderNames?: {
-        [name: string]: string
-    }
-    rootFolderNamesExpanded?: {
-        [name: string]: string
-    }
-    languageIds?: {
-        [name: string]: string
-    }
+    rootFolderNames?: Record<string, string>
+    rootFolderNamesExpanded?: Record<string, string>
+    languageIds?: Record<string, string>
 
-    fileExtensions?: {
-        [name: string]: string
-    }
-    fileNames?: {
-        [name: string]: string
-    }
-    light?: {}
-    highContrast?: {}
+    fileExtensions?: Record<string, string>
+    fileNames?: Record<string, string>
+    light?: Record<string, never>
+    highContrast?: Record<string, never>
 }
 
 export type DefsMap = IfileIconTheme["iconDefinitions"]
