@@ -1,6 +1,14 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
+export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  testMatch: ["./tests/**/*.[jt]s?(x)"]
+  testMatch: ["**/tests/**/*.[jt]s?(x)"],
+  transform: {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        tsconfig: "tsconfig.test.json"
+      }
+    ]
+  }
 };

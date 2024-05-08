@@ -19,7 +19,7 @@ import * as path from "node:path";
  * @param {Map} map0 - Map to parse
  * @returns {string} CSS style
  */
-function bundleAsset(asset: string, env): string {
+export function bundleAsset(asset: string, env): string {
     const assets: string = env.assets
     const base: string = env.base
     const _plugin: Buffer = fs.readFileSync(path.join(base,  "plugin.json"));
@@ -35,8 +35,8 @@ function bundleAsset(asset: string, env): string {
         dest1 = `${assets}/1_${dest}`
     fs.copyFileSync(asset, dest1);
     //console.log(`    asset \x1b[1m\x1b[32m${dest}.${ext} [emitted] [immutable]\x1b[0m [from ${asset}]`)
-    env.assetList[asset] = `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}`
-    return `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/assets/${dest}`
+    env.assetList[asset] = `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/${path.basename(assets)}/${dest}`
+    return `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/${path.basename(assets)}/${dest}`
 }
 
 export function parse(map0: ArrayMap, env): string {

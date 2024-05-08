@@ -5,7 +5,7 @@
         "resolveJsonModule": true,
         "allowJs": false,
         "removeComments": true,
-        "esModuleInterop": false,
+        "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "noImplicitAny": false,
         "downlevelIteration": true,
@@ -16,7 +16,7 @@
         "strictNullChecks": false
     },
     "include": [
-        "./src",
+        "./src", "./tests"
     ],
     "typedocOptions": {
         "entryPoints": ["src/vsacode.ts", "src/**/*"],

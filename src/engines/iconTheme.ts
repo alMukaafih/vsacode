@@ -54,14 +54,15 @@ function main(env) {
     return 0
 };
 
-function fmt(env) {
+function fmt(env): string {
+    let formatted = ""
     const contrib = env.contrib
     env.id = contrib.id;
     env.label = contrib.label;
-    console.log(
-        `id    => ${env.id}\n` +
-        `label => ${env.label}\n`
-    );
+    
+    formatted += `[b][c:green]${env.id}[/0]/${env.packageJson.publisher},iconThemes ${env.packageJson.version} vscode [convertible,automatic]\n` 
+    // formatted += `label => ${env.label}\n`
+    return formatted
 };
 
 export default {

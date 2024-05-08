@@ -34,7 +34,7 @@ async function main(env: any) {
         console.error(env.err("could not process file"))
 }
 
-export function help(): string {
+function help(): string {
     return `Convert the plugin at <path>
 
 [b][c:green]Usage:[/0] [c:cyan][b]vsa build[/0] [c:cyan][OPTIONS] <PATH>
@@ -43,19 +43,19 @@ export function help(): string {
   [c:cyan]<PATH>
 
 [b][c:green]Options:
-      [c:cyan]--single[/0]
-          Produce a single output
+  [c:cyan]-h[c:white][/0], [c:cyan][b]--help[/0]
+          Print help
 
 Run \`[c:cyan][b]vsa help build[/0]\` for more detailed information.
 `
 }
 
-export function short_help(): string {
+function short_help(): string {
     return `[c:green][b]Usage: [c:cyan]vsa build[/0] [c:cyan]<PATH>[/0]
 For more information, try '[c:cyan][b]--help[/0]'.
 `
 }
 
 export default {
-    main
+    main, help, short_help
 }
