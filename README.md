@@ -1,4 +1,5 @@
 # VS Acode - Plugin Converter
+![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FalMukaafihuun%2Fvsacode%2Fraw%2Fmain%2Fpackage.json&query=%24.version&logo=github&label=vsacode)
 
 ## Overview
 This is a Package for converting [VS Code](https://code.visualstudio.com/) plugins to [Acode](https://acode.app/) plugins.
