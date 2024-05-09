@@ -20,7 +20,7 @@ import { parse, parseFont, test, _test, _css, validate, verify } from "./libutil
  * @param {object} env - Runtime Variables
  * @returns {void}
  */
-export function stylesGen(env): void {
+export function iconThemeStylesGen(env): void {
     const dist: string = env.dist
     const iconJson: IfileIconTheme = env.iconJson
 
@@ -101,6 +101,14 @@ export function stylesGen(env): void {
     const css: string = fonts + folders;
     fs.writeFileSync(path.join(dist, "files.css"), files );
     fs.writeFileSync(path.join(dist, "folders.css"), css );
+}
+
+export function productIconThemeStylesGen(env) {
+
+}
+
+export function themeStylesGen(env) {
+    
 }
 
 /** Generates plugin.json file required by base plugin

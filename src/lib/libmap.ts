@@ -82,3 +82,13 @@ export class MapFileIcons {
         return this.map2;
     }
 }
+
+export class MapThemes {
+    themes
+    constructor(themes) {
+        this.themes = themes
+    }
+    map() {
+        
+    }
+}

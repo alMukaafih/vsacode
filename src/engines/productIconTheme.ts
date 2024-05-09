@@ -1,21 +1,8 @@
-#!/usr/bin/env node
-/**
- * @file Manages the convertion of VSCode plugin to Acode Plugin
- * @name main
- * @author alMukaafih <alMukaafih@example.com>
- * @license MIT
- * @requires node:fs
- * @requires node:os
- * @requires node:path
- * @requires AdmZip
- * @requires libgen
- * @requires libdist
- */
-// imports
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { iconThemeStylesGen, pluginJsonGen } from "../lib/libgen.js";
+import { productIconThemeStylesGen, pluginJsonGen } from "../lib/libgen.js";
 import { distBuild } from "../lib/libdist.js";
+
 
 function main(env) {
     const buildDir: string = env.buildDir
@@ -49,22 +36,11 @@ function main(env) {
     fs.mkdirSync(outDir, { recursive: true });
     env.assetList = {};
     pluginJsonGen(env);
-    iconThemeStylesGen(env);
+    productIconThemeStylesGen(env);
     distBuild(env);
     return 0
-};
-
-function fmt(env): string {
-    let formatted = ""
-    const contrib = env.contrib
-    env.id = contrib.id;
-    env.label = contrib.label;
-    
-    formatted += `[b][c:green]${env.id}[/0]/${env.packageJson.publisher},iconThemes ${env.packageJson.version} vscode [convertible,automatic]\n` 
-    // formatted += `label => ${env.label}\n`
-    return formatted
-};
+}
 
 export default {
-    main, fmt
+    main
 }

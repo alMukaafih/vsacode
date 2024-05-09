@@ -2,7 +2,7 @@
 export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  testMatch: ["**/tests/**/*.[jt]s?(x)"],
+  testMatch: ["**/test/**/*.[jt]s?(x)"],
   transform: {
     "^.+\\.tsx?$": [
       "ts-jest",
