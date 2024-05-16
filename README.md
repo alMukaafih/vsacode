@@ -1,39 +1,34 @@
-# VS Acode - Plugin Converter
+# VS Acode - Extending the Acode Editor
 ![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2FalMukaafihuun%2Fvsacode%2Fraw%2Fmain%2Fpackage.json&query=%24.version&logo=github&label=vsacode)
 
 ## Overview
-This is a Package for converting [VS Code](https://code.visualstudio.com/) plugins to [Acode](https://acode.app/) plugins.
+This is a Package for installing [VS Code](https://code.visualstudio.com/) Extensions in [Acode](https://acode.app/) Editor.
 
-## Installation
-You can install it from npm using
+## Cli Converter
+It includes a command line converter.
+You can install using
 ```sh
 npm install -g vsacode
 ```
 
-## Usage
-This package provides the following command line command
+### Usage
+This is the general usage format
 ```
 vsa [OPTIONS] [COMMAND]
 ```
 
-## Available Commands
-### build
-```
-Convert the plugin at <path>
+### Commands
+- `build:` Converts the Extension. Currently it generate a plugin for each supported contribution point in the Extension.
+- `help:` Prints help about a specific command
+- `list:` List the supported contribution point in the Extension
 
-Usage: vsa build [OPTIONS] <PATH>
+## Acode Plugin
+In progress...
 
-Arguments:
-  <PATH>
-
-Options:
-      --single
-          Produce a single output
-
-Run `vsa help build` for more detailed information.
-```
-
-It generates an Acode plugin for each reconized entry in the VS Code plugin file.
+## Supported Contribution Points 
+- `iconTheme:` 95% support
+- `productIconTheme:` in progress...
+- `theme:` in progress...
 
 ## Authors
 - [@alMukaafih](https://github.com/alMukaafih) - Creator
