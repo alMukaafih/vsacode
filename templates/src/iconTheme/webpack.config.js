@@ -1,23 +1,25 @@
-module.exports = {
+import * as path from "path";
+
+export default {
     mode: "production",
     entry: {
-        main: "",
+        main: "./src/main.ts",
     },
     output: {
-        path: "",
+        path: path.resolve(import.meta.dirname, "dist"),
         filename: "[name].js",
         chunkFilename: "[name].js",
     },
-//     resolve: {
-//         extensions: [".ts", ".js"],
-//         modules: ["node_modules"],
-//     },
+    resolve: {
+        extensions: [".ts", ".js"],
+        modules: ["node_modules"],
+    },
     module: {
         rules: [
             {
                 test: /\.(svg|png)$/,
                 exclude: /node_modules/,
-                loader: "file-loader",
+                loader: "asset/resource",
             },
             {
                 test: /\.ts$/,

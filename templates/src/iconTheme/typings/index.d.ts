@@ -1,5 +1,5 @@
 /// <reference path="acode.d.ts" />
-/// <reference path="editorManager.d.ts" />
+/// <reference types="ace" />
 declare global {
     interface Window {
         toast(message: string, duration: number): void;
