@@ -14,19 +14,16 @@ import Zip from "adm-zip";
 import nunjucks from "nunjucks";
 import { style } from "ziyy";
 
-/** Build acode plugin
- * @param {string} label - Icon Theme label
- * @param {string} id - Icon Theme id
- * @param {string} acode - Build folder
- * @returns {void}
+/**
+ * Build acode plugin
+ * @param env 
  */
-
-export function distBuild(env) {
+export function distBuild(env: Env) {
     const label: string = env.label
     const id: string = env.id
     const base: string = env.base
     const outDir: string = env.outDir
-    const engine: string = env.engine
+    const engine = env.engine
 
     process.chdir(base);
     if (env.runtime) 

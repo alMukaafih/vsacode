@@ -3,8 +3,7 @@ import * as path from "node:path";
 import { themeStylesGen, pluginJsonGen } from "../lib/libgen.js";
 import { distBuild } from "../lib/libdist.js";
 
-
-function main(env) {
+function main(env: Env) {
     const buildDir: string = env.buildDir
     const contrib = env.contrib
     const outDir = env.outDir

@@ -4,18 +4,30 @@
  * @packageDocumentation
  */
 // imports
-import * as fs from "node:fs";
-import * as os from "node:os";
-import * as path from "node:path";
-
 import Zip from "adm-zip";
 import * as toml from "smol-toml";
 import { style, template } from "ziyy";
 import help from "./commands/help.js";
 
-type Env = Record<string, any>;
+let fs
+let os
+let path
+if (typeof window != "undefined" && typeof window.acode != "undefined") {
+    fs = acode.require("fs")
+    os = {
+        tmpdir: (): string => {
+            return CACHE_STORAGE 
+        }
+    }
+    path = acode.require("Url")
+} else {
+    fs = await import("node:fs")
+    os = await import("node:os")
+    path = await import("node:path")
+}
 
 const err = template("[b][c:red]error[c:white]: [/0]")
+
 const env: Env = {
     err: err,
     home: path.dirname(import.meta.dirname)
@@ -30,7 +42,16 @@ const appPrefix = "vsa-";
 /** Temporary directory fullpath
  * @constant {string}
  */
-const tmpDir: string = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix));
+let tmpDir: string
+if (typeof window != "undefined" && typeof window.acode != "undefined") {
+    const bytes = new Uint8Array(6)
+    crypto.getRandomValues(bytes)
+    const binString = Array.from(bytes, (byte) => String.fromCodePoint(byte)).join("")
+    const rand = btoa(binString)
+    tmpDir = await fs(path.join(os.tmpdir(), `${appPrefix}${rand}`)).createDirectory()
+} else {
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix));
+}
 env.tmpDir = tmpDir
 
 // cleanup task
@@ -49,7 +70,8 @@ if (args.length == 0) {
 // load and parse toml file
 const _toml: Buffer = fs.readFileSync(path.join(import.meta.dirname, "config.toml"));
 const __toml: string = _toml.toString();
-const config = toml.parse(__toml);
+const _config: any = toml.parse(__toml);
+const config: IconfigToml = _config
 
 const flags: string[] = [];
 for (const arg of args) {
@@ -71,7 +93,6 @@ for (const flag of flags) {
 }
 
 
-//console.log(toml.stringify(config));
 const commands = config.commands;
 env.engines = config.engines;
 
@@ -132,6 +153,10 @@ if (command.name != "help") {
 const { default: exec } = await import(`./commands/${command.name}.js`)
 exec[subcommand](env)
 
+/**
+ * Prints help message for vsacode
+ * @param err Exit error code
+ */
 function help_msg(err = 0) {
     process.stdout.write(style(`VS Code plugin to Acode plugin converter
 

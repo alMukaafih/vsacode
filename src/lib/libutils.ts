@@ -5,21 +5,17 @@
  * @requires node:fs
  * @requires node:path
  */
-/**
- * @typedef {object} Map
- */
 // imports
-import { DefsMap, IconsMap, FontsMap } from "../typings/fileIconTheme.js";
-import { ArrayMap, ObjectMap } from "../typings/map.js"
 import * as fs from "node:fs";
 import * as path from "node:path";
 
 /**
- * Converts Map to CSS string
- * @param {Map} map0 - Map to parse
- * @returns {string} CSS style
+ * Bundles asset
+ * @param asset Asset
+ * @param env Environment variables
+ * @returns Asset's url
  */
-export function bundleAsset(asset: string, env): string {
+export function bundleAsset(asset: string, env: Env): string {
     const assets: string = env.assets
     const base: string = env.base
     const _plugin: Buffer = fs.readFileSync(path.join(base,  "plugin.json"));
@@ -39,7 +35,7 @@ export function bundleAsset(asset: string, env): string {
     return `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/${path.basename(assets)}/${dest}`
 }
 
-export function parse(map0: ArrayMap, env): string {
+export function parse(map0: ArrayMap, env: Env): string {
     const root: string = env.root
     const ref: DefsMap = env.iconDefs
     
@@ -82,7 +78,7 @@ export function parse(map0: ArrayMap, env): string {
     return css.replace(/\s/g, "");
 }
 
-export function parseFont(env): string {
+export function parseFont(env: Env): string {
     const map: FontsMap = env.iconJson.fonts
     const root: string = env.root
 
@@ -108,12 +104,12 @@ export function parseFont(env): string {
 }
 
 /** Generate CSS style
- * @param {string} name - Icon path
- * @param {string} [exe=default] - Extention of file
- * @param {string} [kind=.file_type_] - Prefix to the CSS class name
- * @returns {string} CSS style
+ * @param name Icon path
+ * @param exe Extention of file
+ * @param kind Prefix to the CSS class name
+ * @returns CSS output
  */
-export function _css(name: string, exe="default", kind=".file_type_", env) {
+export function _css(name: string, exe="default", kind=".file_type_", env: Env): string {
     const root: string = env.root
     const ref: DefsMap = env.iconDefs
 
@@ -148,9 +144,10 @@ export function _css(name: string, exe="default", kind=".file_type_", env) {
     return css.replace(/\s/g, "")
 }
 
-/** Test if the object exists
- * @param {IconsMap} name
- * @returns {object}
+/**
+ * Test if the object exists
+ * @param  map
+ * @returns Map
  */
 export function test(map: IconsMap): object {
     if (map)
@@ -159,11 +156,12 @@ export function test(map: IconsMap): object {
         return {"": ""};
 }
 
-/** Test if Map has a property
- * @param {object} map - Map
- * @param {string} name - Property to test
- * @param {string} [def] - Default return value
- * @returns {string} Property
+/**
+ * Test if Map has a property
+ * @param map Definition maps
+ * @param name Property name
+ * @param def Return value
+ * @returns
  */
 export function _test(map: DefsMap, name: string | undefined, def=""): string {
     if (!name)
@@ -173,12 +171,12 @@ export function _test(map: DefsMap, name: string | undefined, def=""): string {
     return name.replace(/-/g, "_");
 }
 
-/** Check if Icon exists at mapped location
- * @param {Map} map0 - Map
- * @param {string} root - Parent directory of Icon Theme json file
- * @returns {Map}
+/**
+ * Check if Icon exists at mapped location
+ * @param env - Environment variables
+ * @returns Map
  */
-export function validate(env): DefsMap {
+export function validate(env: Env): DefsMap {
     const map0: DefsMap = env.iconDefs
     const root: string = env.root
     for(const [key, value] of Object.entries(map0)) {
@@ -192,9 +190,9 @@ export function validate(env): DefsMap {
 }
 
 /** Check that Map1 correctly maps Map2
- * @param {Map} map1 - Map1
- * @param {Map} map2 - Map2
- * @returns {Map}
+ * @param map1 - Map1
+ * @param map2 - Map2
+ * @returns Map
  */
 export function verify(map1: ObjectMap, map2: DefsMap): ObjectMap {
     for(const [key] of Object.entries(map1)) {

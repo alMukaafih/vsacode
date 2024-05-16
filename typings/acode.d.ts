@@ -1,6 +1,27 @@
 type Strings = string[];
 declare var acode: Acode;
 
+type LanguageMap = { [key: string]: string };
+declare const strings: LanguageMap;
+declare const ASSETS_DIRECTORY: string;
+declare const DATA_STORAGE: string;
+declare const CACHE_STORAGE: string;
+declare const PLUGIN_DIR: string;
+declare const KEYBINDING_FILE: string;
+declare const IS_FREE_VERSION: string;
+declare const ANDROID_SDK_INT: number;
+declare const DOES_SUPPORT_THEME: boolean;
+
+interface String{
+    /**
+     * Capitalize the first letter of a string
+     */
+    capitalize(): string;
+    /**
+     * Generate a hash from a string
+     */
+    hash(): string;
+  }
 
 interface WCPage extends HTMLElement {
     on(event: 'hide' | 'show', cb: (this: WCPage) => void): void;
@@ -16,10 +37,10 @@ interface WCPage extends HTMLElement {
     get body(): HTMLElement | null;
     set body($el: HTMLElement | null);
     
-    get innerHTML(): string | undefined;
+    get innerHTML(): string;
     set innerHTML(html: string);
     
-    get textContent(): string | undefined;
+    get textContent(): string | null;
     set textContent(text: string);
     
     get lead(): HTMLElement;

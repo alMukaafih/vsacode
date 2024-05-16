@@ -10,7 +10,7 @@
   "type": "module",
   "scripts": {
     "clean": "scripts/clean.js",
-    "build": "scripts/build.js",
+    "build": "npm run clean && scripts/build.js",
     "build-doc": "npx typedoc",
     "prepublish": "npm run build",
     "test": "npx jest"

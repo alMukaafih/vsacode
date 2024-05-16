@@ -3,10 +3,7 @@
  * @module libmap
  * @author alMukaafih
  */
-/**
- * @typedef {object} Map
- */
-import { ArrayMap, ObjectMap, StringMap } from "../typings/map.js"
+
 /**
  * Creates a new Map Blueprint
  * @class MapFileIcons

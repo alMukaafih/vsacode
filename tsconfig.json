@@ -16,7 +16,7 @@
         "strictNullChecks": false
     },
     "include": [
-        "./src",
+        "./src", "typings",
     ],
     "typedocOptions": {
         "entryPoints": ["src/vsacode.ts", "src/**/*"],

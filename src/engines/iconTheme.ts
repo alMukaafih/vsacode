@@ -17,7 +17,7 @@ import * as path from "node:path";
 import { iconThemeStylesGen, pluginJsonGen } from "../lib/libgen.js";
 import { distBuild } from "../lib/libdist.js";
 
-function main(env) {
+function main(env: Env) {
     const buildDir: string = env.buildDir
     const contrib = env.contrib
     const outDir = env.outDir
@@ -54,7 +54,7 @@ function main(env) {
     return 0
 };
 
-function fmt(env): string {
+function fmt(env: Env): string {
     let formatted = ""
     const contrib = env.contrib
     env.id = contrib.id;

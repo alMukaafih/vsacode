@@ -1,8 +1,6 @@
 import * as fs from "node:fs";
-import { createRequire } from "node:module";
-const require = createRequire(import.meta.url)
 
-async function main(env: any) {
+async function main(env: Env) {
     const contributes = env.packageJson.contributes
     /** Path to acode directory in temp directory
      *  @constant {string}

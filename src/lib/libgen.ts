@@ -7,20 +7,18 @@
  * @requires libutils
  * @requires libmap
  */
- 
-import { IfileIconTheme } from "../typings/fileIconTheme.js"
+
 // imports
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { MapFileIcons } from "./libmap.js";
 import { parse, parseFont, test, _test, _css, validate, verify } from "./libutils.js";
 
-/** Generates styles.ts file from Icon Theme's json file
- * @name stylesGen
- * @param {object} env - Runtime Variables
- * @returns {void}
+/**
+ * Generates styles.ts file from Icon Theme's json file
+ * @param env 
  */
-export function iconThemeStylesGen(env): void {
+export function iconThemeStylesGen(env: Env): void {
     const dist: string = env.dist
     const iconJson: IfileIconTheme = env.iconJson
 
@@ -103,23 +101,17 @@ export function iconThemeStylesGen(env): void {
     fs.writeFileSync(path.join(dist, "folders.css"), css );
 }
 
-export function productIconThemeStylesGen(env) {
+export function productIconThemeStylesGen(env: Env) {
 
 }
 
-export function themeStylesGen(env) {
+export function themeStylesGen(env: Env) {
     
 }
 
-/** Generates plugin.json file required by base plugin
- * @function
- * @name pluginJsonGen
- * @param {object} author - Author credentials
- * @param {string} id - The id of the Icon Theme
- * @param {string} label - The Label of the Icon Theme
- * @param {string} version - The Version of the Plugin
- * @param {string} base - Build folder
- * @returns {void}
+/**
+ * Generates plugin.json file required by base plugin
+ * @param env 
  */
 export function pluginJsonGen(env): void {
     const packageJson = env.packageJson

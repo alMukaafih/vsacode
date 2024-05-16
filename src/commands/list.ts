@@ -1,6 +1,6 @@
 import { style } from "ziyy"
 
-async function main(env) {
+async function main(env: Env) {
     const contributes = env.packageJson.contributes
     let _engine
     let formatted = ""

@@ -19,7 +19,7 @@ interface IfontProperties {
     size?: string
 }
 
-export interface IfileIconTheme {
+interface IfileIconTheme {
     hidesExplorerArrows: boolean
     fonts?: [IfontProperties]
     iconDefinitions: Record<string, IdefinitionProperties>
@@ -40,7 +40,7 @@ export interface IfileIconTheme {
     highContrast?: Record<string, never>
 }
 
-export type DefsMap = IfileIconTheme["iconDefinitions"]
-export type IconsMap = IfileIconTheme["folderNames"]
-export type FontsMap = IfileIconTheme["fonts"]
+type DefsMap = IfileIconTheme["iconDefinitions"]
+type IconsMap = IfileIconTheme["folderNames"]
+type FontsMap = IfileIconTheme["fonts"]
 
