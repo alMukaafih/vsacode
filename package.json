@@ -18,6 +18,7 @@
   "dependencies": {
     "adm-zip": "^0.5.10",
     "file-type": "^19.0.0",
+    "jszip": "^3.10.1",
     "nunjucks": "^3.2.4",
     "smol-toml": "^1.1.4",
     "xml2js": "^0.6.2",
@@ -29,6 +30,7 @@
     "@types/ace": "^0.0.52",
     "@types/adm-zip": "^0.5.5",
     "@types/node": "^20.11.16",
+    "@types/nunjucks": "^3.2.6",
     "@types/xml2js": "^0.4.14",
     "eslint": "^8.57.0",
     "globals": "^15.1.0",
