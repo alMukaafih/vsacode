@@ -30,7 +30,7 @@ function normalize(config) {
             contrib.modes = [];
         }
         contrib.modes.unshift("main");
-        newConfig.engines[`${contrib.name}s`] = {
+        newConfig.engines[`${contrib.contrib}`] = {
             name: contrib.name,
             path: `./engines/${contrib.name}.js`,
             modes: contrib.modes,

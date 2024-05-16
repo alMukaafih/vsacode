@@ -3,7 +3,7 @@ import { style } from "ziyy";
 async function main(env) {
     const { default: exec } = await import(`./${env.cmd.name}.js`)
     const help_msg = exec.help()
-    process.stdout.write(help_msg)
+    process.stdout.write(style(help_msg))
     
 }
 

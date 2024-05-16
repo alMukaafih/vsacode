@@ -90,7 +90,7 @@ if (command.name == "help") {
     if (command.subcommands.includes(subcommand)) {
         const command = commands[subcommand]
         env.cmd = command;
-        help.main(env);
+        await help.main(env);
         process.exit(0)
     } else {
         help_msg(1)
