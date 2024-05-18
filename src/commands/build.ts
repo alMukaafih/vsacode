@@ -24,7 +24,7 @@ async function main(env: Env) {
         for (const contrib of contributes[k]) {
             process.chdir(outDir)
             env.contrib = contrib
-            engine.main(env);
+            await engine.main(env);
             env.runtime++
         }
     }

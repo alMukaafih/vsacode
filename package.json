@@ -1,7 +1,7 @@
 {
   "name": "vsacode",
   "version": "0.5.0",
-  "description": "VSCode to Acode",
+  "description": "Extending the Acode Editor",
   "author": "alMukaafih <almukaafih@gmail.com>",
   "license": "MIT",
   "bin": {
@@ -10,8 +10,8 @@
   "type": "module",
   "scripts": {
     "clean": "scripts/clean.js",
-    "build": "npm run clean && scripts/build.js",
-    "build-doc": "npx typedoc",
+    "build": "npm run clean dist && scripts/build.js",
+    "build-doc": "npm run clean docs && npx typedoc",
     "prepublish": "npm run build",
     "test": "npx jest"
   },

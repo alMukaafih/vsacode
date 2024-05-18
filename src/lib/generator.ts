@@ -1,24 +1,24 @@
 /**
  * A module that generates files
- * @module libgen
+ * @module generator
  * @author alMukaafih
- * @requires node:fs
+ * @requires compat
  * @requires node:path
- * @requires libutils
- * @requires libmap
+ * @requires utils
+ * @requires mapper
  */
 
 // imports
-import * as fs from "node:fs";
+import { fs } from  "./compat.js"
 import * as path from "node:path";
-import { MapFileIcons } from "./libmap.js";
-import { parse, parseFont, test, _test, _css, validate, verify } from "./libutils.js";
+import { MapFileIcons } from "./mapper.js";
+import { parse, parseFont, test, _test, _css, validate, verify } from "./utils.js";
 
 /**
  * Generates styles.ts file from Icon Theme's json file
  * @param env 
  */
-export function iconThemeStylesGen(env: Env): void {
+export async function iconThemeStylesGen(env: Env): Promise<void> {
     const dist: string = env.dist
     const iconJson: IfileIconTheme = env.iconJson
 
@@ -37,21 +37,21 @@ export function iconThemeStylesGen(env: Env): void {
     const rootFolder: string = _test(iconDefs, iconJson.rootFolder, folder);
     const rootFolderExp: string = _test(iconDefs, iconJson.rootFolderExpanded, rootFolder);
     
-    files += _css(file, "default", ".file_type_", env);
+    files += await _css(file, "default", ".file_type_", env);
     folders += `.list.collapsible.hidden > .tile > .folder::before {
         content: "" !important;
         }\n`;
-    folders += _css(folder, "", `.list.collapsible.hidden > div.tile[data-name][data-type="dir"] > .icon.folder`, env);
+    folders += await _css(folder, "", `.list.collapsible.hidden > div.tile[data-name][data-type="dir"] > .icon.folder`, env);
 
-    folders += _css(folder, "", `#file-browser > ul > li.tile[type="dir"]  > .icon.folder`, env);
+    folders += await _css(folder, "", `#file-browser > ul > li.tile[type="dir"]  > .icon.folder`, env);
     
-    folders += _css(folder, "", `#file-browser > ul > li.tile[type="directory"]  > .icon.folder`, env);
+    folders += await _css(folder, "", `#file-browser > ul > li.tile[type="directory"]  > .icon.folder`, env);
     
-    folders += _css(folderExp,"", `.list.collapsible > div.tile[data-name][data-type="dir"] > .icon.folder`, env);
+    folders += await _css(folderExp,"", `.list.collapsible > div.tile[data-name][data-type="dir"] > .icon.folder`, env);
     
-    folders += _css(rootFolder, "", `.list.collapsible.hidden > div[data-type="root"] > .icon.folder`, env);
+    folders += await _css(rootFolder, "", `.list.collapsible.hidden > div[data-type="root"] > .icon.folder`, env);
     
-    folders += _css(rootFolderExp, "",`.list.collapsible > div[data-type="root"] > .icon.folder`, env);
+    folders += await _css(rootFolderExp, "",`.list.collapsible > div[data-type="root"] > .icon.folder`, env);
     let foldersMap = {};
     let filesMap = {};
     //foldersMap
@@ -87,18 +87,18 @@ export function iconThemeStylesGen(env: Env): void {
     
     // validate
     //iconDefs = rehash(iconDefs);
-    iconDefs = validate(env);
+    iconDefs = await validate(env);
     foldersMap = verify(foldersMap, iconDefs);
     filesMap = verify(filesMap, iconDefs);
     
-    folders += parse(foldersMap, env);
-    files += parse(filesMap, env);
+    folders += await parse(foldersMap, env);
+    files += await parse(filesMap, env);
     
-    fonts += parseFont(env)
+    fonts += await parseFont(env)
 
     const css: string = fonts + folders;
-    fs.writeFileSync(path.join(dist, "files.css"), files );
-    fs.writeFileSync(path.join(dist, "folders.css"), css );
+    await fs.writeFile(path.join(dist, "files.css"), files );
+    await fs.writeFile(path.join(dist, "folders.css"), css );
 }
 
 export function productIconThemeStylesGen(env: Env) {
@@ -113,7 +113,7 @@ export function themeStylesGen(env: Env) {
  * Generates plugin.json file required by base plugin
  * @param env 
  */
-export function pluginJsonGen(env): void {
+export async function pluginJsonGen(env: Env): Promise<void> {
     const packageJson = env.packageJson
     const id: string = env.id
     const label: string = env.label
@@ -134,14 +134,14 @@ export function pluginJsonGen(env): void {
     };
     const assets = path.join(tmpDir, "extension")
     process.chdir(base);
-    fs.writeFileSync(path.join("plugin.json"), JSON.stringify(json));
-    fs.copyFileSync(path.join(assets, packageJson.icon), "icon.png");
-    fs.copyFileSync(path.join(assets, "README.md"), "readme.md");
+    await fs.writeFile(path.join("plugin.json"), JSON.stringify(json));
+    await fs.copyFile(path.join(assets, packageJson.icon), "icon.png");
+    await fs.copyFile(path.join(assets, "README.md"), "readme.md");
     const _overrides = path.join(home, "overrides", id)
-    if (fs.existsSync(_overrides)) {
-        const overrides = fs.readdirSync(_overrides);
+    if (await fs.exists(_overrides)) {
+        const overrides = await fs.readdir(_overrides);
         for (const override of overrides) {
-            fs.copyFileSync(path.join(_overrides, override), path.basename(override))
+            await fs.copyFile(path.join(_overrides, override), path.basename(override))
         }
     }
 }

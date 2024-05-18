@@ -1,6 +1,6 @@
 /**
  * A module that generates files
- * @module libmap
+ * @module mapper
  * @author alMukaafih
  */
 

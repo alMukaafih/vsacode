@@ -12,12 +12,11 @@
  * @requires libdist
  */
 // imports
-import * as fs from "node:fs";
-import * as path from "node:path";
-import { iconThemeStylesGen, pluginJsonGen } from "../lib/libgen.js";
-import { distBuild } from "../lib/libdist.js";
+import { fs, path } from  "../lib/compat.js"
+import { iconThemeStylesGen, pluginJsonGen } from "../lib/generator.js";
+import { distBuild } from "../lib/dist.js";
 
-function main(env: Env) {
+async function main(env: Env) {
     const buildDir: string = env.buildDir
     const contrib = env.contrib
     const outDir = env.outDir
@@ -27,11 +26,11 @@ function main(env: Env) {
     env.base = base
     const dist: string = path.join(base, "dist");
     env.dist = dist
-    if (!fs.existsSync(base))
-        fs.cpSync(path.join(home, "source"), base, { recursive: true });
-    if (fs.existsSync(dist))
-        fs.rmSync(dist, { recursive: true });
-    fs.mkdirSync(dist);
+    if (!await fs.exists(base))
+        await fs.cp(path.join(home, "source"), base, { recursive: true });
+    if (await fs.exists(dist))
+        await fs.rm(dist, { recursive: true });
+    await fs.mkdir(dist);
     env.id = contrib.id;
     env.label = contrib.label;
     env.path = contrib.path;
@@ -41,16 +40,16 @@ function main(env: Env) {
     if(env.id == undefined && env.label == undefined && env.path == undefined)
         return 1;
 
-    const _json: Buffer = fs.readFileSync(icons);
+    const _json: Buffer = await fs.readFile(icons);
     let __json: string = _json.toString();
     __json = __json.replace(/\s\/\/(.)+/g, "");
     const iconJson = JSON.parse(__json);
     env.iconJson = iconJson
-    fs.mkdirSync(outDir, { recursive: true });
+    await fs.mkdir(outDir, { recursive: true });
     env.assetList = {};
-    pluginJsonGen(env);
-    iconThemeStylesGen(env);
-    distBuild(env);
+    await pluginJsonGen(env);
+    await iconThemeStylesGen(env);
+    await distBuild(env);
     return 0
 };
 

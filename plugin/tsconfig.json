@@ -16,11 +16,6 @@
         "strictNullChecks": false
     },
     "include": [
-        "./src", "typings",
+        "../typings", "./src",
     ],
-    "typedocOptions": {
-        "entryPoints": ["src/vsacode.ts", "src/**/*", "typings/*"],
-        "entryPointStrategy": "expand",
-        "out": "docs"
-    }
 }

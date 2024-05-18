@@ -4,27 +4,12 @@
  * @packageDocumentation
  */
 // imports
+import { fs, path, os } from  "./lib/compat.js"
+
 import Zip from "adm-zip";
 import * as toml from "smol-toml";
 import { style, template } from "ziyy";
 import help from "./commands/help.js";
-
-let fs
-let os
-let path
-if (typeof window != "undefined" && typeof window.acode != "undefined") {
-    fs = acode.require("fs")
-    os = {
-        tmpdir: (): string => {
-            return CACHE_STORAGE 
-        }
-    }
-    path = acode.require("Url")
-} else {
-    fs = await import("node:fs")
-    os = await import("node:os")
-    path = await import("node:path")
-}
 
 const err = template("[b][c:red]error[c:white]: [/0]")
 
@@ -42,23 +27,14 @@ const appPrefix = "vsa-";
 /** Temporary directory fullpath
  * @constant {string}
  */
-let tmpDir: string
-if (typeof window != "undefined" && typeof window.acode != "undefined") {
-    const bytes = new Uint8Array(6)
-    crypto.getRandomValues(bytes)
-    const binString = Array.from(bytes, (byte) => String.fromCodePoint(byte)).join("")
-    const rand = btoa(binString)
-    tmpDir = await fs(path.join(os.tmpdir(), `${appPrefix}${rand}`)).createDirectory()
-} else {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix));
-}
+const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), appPrefix));
 env.tmpDir = tmpDir
 
 // cleanup task
 process.on("exit", () => {
     //console.log("Exiting vsacode.js process with code:", code);
         //console.log(usage);
-    fs.rmSync(tmpDir, { recursive: true });
+    fs.rm(tmpDir, { recursive: true });
 });
 
 // cli arguments
@@ -68,7 +44,7 @@ if (args.length == 0) {
 }
 
 // load and parse toml file
-const _toml: Buffer = fs.readFileSync(path.join(import.meta.dirname, "config.toml"));
+const _toml: Buffer = await fs.readFile(path.join(import.meta.dirname, "config.toml"));
 const __toml: string = _toml.toString();
 const _config: any = toml.parse(__toml);
 const config: IconfigToml = _config
@@ -143,7 +119,7 @@ if (command.name != "help") {
         usage(1);
     }
     // read extension/package.json file
-    const _json: Buffer = fs.readFileSync(path.join(env.tmpDir, "extension", "package.json"));
+    const _json: Buffer = await fs.readFile(path.join(env.tmpDir, "extension", "package.json"));
     let __json: string = _json.toString();
     __json = __json.replace(/\s\/\/(.)+/g, "");
     // package.json file object

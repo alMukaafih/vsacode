@@ -1,13 +1,12 @@
 /**
  * A module that contains utilities used
- * @module libutils
+ * @module utils
  * @author alMukaafih
- * @requires node:fs
+ * @requires compat
  * @requires node:path
  */
 // imports
-import * as fs from "node:fs";
-import * as path from "node:path";
+import { fs, path } from  "./compat.js"
 
 /**
  * Bundles asset
@@ -15,27 +14,27 @@ import * as path from "node:path";
  * @param env Environment variables
  * @returns Asset's url
  */
-export function bundleAsset(asset: string, env: Env): string {
+export async function bundleAsset(asset: string, env: Env): Promise<string> {
     const assets: string = env.assets
     const base: string = env.base
-    const _plugin: Buffer = fs.readFileSync(path.join(base,  "plugin.json"));
+    const _plugin: Buffer = await fs.readFile(path.join(base,  "plugin.json"));
     const __plugin: string = _plugin.toString();
     const plugin = JSON.parse(__plugin);
-    if (!fs.existsSync(assets)) 
-        fs.mkdirSync(assets);
+    if (!await fs.exists(assets)) 
+        await fs.mkdir(assets);
     if (asset in env.assetList)
         return env.assetList[asset];
     const dest = path.basename(asset)
     let dest1 = `${assets}/${dest}`
-    if (fs.existsSync(dest1))
+    if (await fs.exists(dest1))
         dest1 = `${assets}/1_${dest}`
-    fs.copyFileSync(asset, dest1);
+    await fs.copyFile(asset, dest1);
     //console.log(`    asset \x1b[1m\x1b[32m${dest}.${ext} [emitted] [immutable]\x1b[0m [from ${asset}]`)
     env.assetList[asset] = `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/${path.basename(assets)}/${dest}`
     return `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/${path.basename(assets)}/${dest}`
 }
 
-export function parse(map0: ArrayMap, env: Env): string {
+export async function parse(map0: ArrayMap, env: Env): Promise<string> {
     const root: string = env.root
     const ref: DefsMap = env.iconDefs
     
@@ -63,7 +62,7 @@ export function parse(map0: ArrayMap, env: Env): string {
             fontSize = `    font-size: ${ref[key].fontSize};\n`;
 
         if (ref[key].iconPath)
-            iconPath = `    background-image: url(${bundleAsset(path.join(root, ref[key].iconPath), env)});\n`;
+            iconPath = `    background-image: url(${await bundleAsset(path.join(root, ref[key].iconPath), env)});\n`;
 
         classes = value.join(",");
         style = classes + `{\n    content: "${fontChar}" !important;\n`
@@ -78,7 +77,7 @@ export function parse(map0: ArrayMap, env: Env): string {
     return css.replace(/\s/g, "");
 }
 
-export function parseFont(env: Env): string {
+export async function parseFont(env: Env): Promise<string> {
     const map: FontsMap = env.iconJson.fonts
     const root: string = env.root
 
@@ -89,7 +88,7 @@ export function parseFont(env: Env): string {
     let style = "";
     for (const font of map) {
         for (const src of font.src) {
-            srcs.push(`url(${bundleAsset(path.join(root, src.path), env)}) format("${src.format}")`)
+            srcs.push(`url(${await bundleAsset(path.join(root, src.path), env)}) format("${src.format}")`)
         }
         style = `@font-face {\n`
         + `    font-family: "${font.id}";\n`
@@ -109,7 +108,7 @@ export function parseFont(env: Env): string {
  * @param kind Prefix to the CSS class name
  * @returns CSS output
  */
-export function _css(name: string, exe="default", kind=".file_type_", env: Env): string {
+export async function _css(name: string, exe="default", kind=".file_type_", env: Env): Promise<string> {
     const root: string = env.root
     const ref: DefsMap = env.iconDefs
 
@@ -132,7 +131,7 @@ export function _css(name: string, exe="default", kind=".file_type_", env: Env):
         fontSize = `    font-size: ${ref[name].fontSize};\n`;
 
     if (ref[name].iconPath)
-        iconPath = `    background-image: url(${bundleAsset(path.join(root, ref[name].iconPath), env)});\n`;
+        iconPath = `    background-image: url(${await bundleAsset(path.join(root, ref[name].iconPath), env)});\n`;
     
     const css = kind + exe +  `::before {\n    content: "${fontChar}" !important;\n`
     + fontColor + fontId + fontSize + iconPath
@@ -176,14 +175,14 @@ export function _test(map: DefsMap, name: string | undefined, def=""): string {
  * @param env - Environment variables
  * @returns Map
  */
-export function validate(env: Env): DefsMap {
+export async function validate(env: Env): Promise<DefsMap> {
     const map0: DefsMap = env.iconDefs
     const root: string = env.root
     for(const [key, value] of Object.entries(map0)) {
         // console.log(value);
         if (!value.iconPath)
             continue
-        if ( !(fs.existsSync(path.join(root, value.iconPath))) )
+        if ( !(await fs.exists(path.join(root, value.iconPath))) )
             delete map0[key];
     }
     return map0;
