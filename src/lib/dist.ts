@@ -27,11 +27,8 @@ export async function distBuild(env: Env) {
     if (env.runtime) 
         console.log("")
     console.log(style(`    [c:cyan][b]Building[/0] ${label}`));
-    const _pluginJson = await fs.readFile(path.join(base, "plugin.json"));
-    const __pluginJson = _pluginJson.toString();
-    const pluginJson = __pluginJson.replace(/\s/g, "")
-    nunjucks.configure(path.join(env.home, "templates"), { autoescape: false });
-    const mainJs = nunjucks.render(`${engine}.njk`, { pluginJson })
+    nunjucks.configure(path.join(env.home, "dist", "templates"), { autoescape: false });
+    const mainJs = nunjucks.render(`${engine}.njk`, { cssList: env.cssList, pluginId: env.pluginId })
     await fs.writeFile(path.join(base, "dist", "main.js"), mainJs);
     
     const distZip = new Zip();

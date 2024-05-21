@@ -1,8 +1,19 @@
-const path = require("path");
+import * as path from "path";
 
-module.exports = (env, options) => {
+export default (env, options) => {
   const { mode = "development" } = options;
   const rules = [
+    {
+      test: /\.m?js$/,
+      use: [
+        {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+        },
+      ],
+    },
     {
       test: /\.(svg|png)$/,
       exclude: /node_modules/,
@@ -21,7 +32,7 @@ module.exports = (env, options) => {
       main: "./src/vsacode.ts",
     },
     output: {
-      path: path.resolve(__dirname, "dist"),
+      path: path.resolve(import.meta.dirname, "dist"),
       filename: "[name].js",
       chunkFilename: "[name].js",
     },

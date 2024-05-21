@@ -6,8 +6,8 @@ export default {
         main: "./src/main.ts",
     },
     output: {
-        path: path.resolve(import.meta.dirname, "dist"),
-        filename: "[name].js",
+        path: path.resolve(import.meta.dirname, "..", "..", "dist", "templates"),
+        filename: "iconTheme.js",
         chunkFilename: "[name].js",
     },
     resolve: {

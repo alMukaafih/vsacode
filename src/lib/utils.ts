@@ -6,6 +6,7 @@
  * @requires node:path
  */
 // imports
+import JSZip from "jszip";
 import { fs, path } from  "./compat.js"
 
 /**
@@ -199,4 +200,59 @@ export function verify(map1: ObjectMap, map2: DefsMap): ObjectMap {
             delete map1[key];
     }
     return map1;
+}
+
+/**
+ * Create directory recursively 
+ * @param parent 
+ * @param dir 
+ */
+export async function createFileRecursive(parent: string, dir: string | string[]): Promise<void> {
+    let isDir = false;
+    if (typeof dir === 'string') {
+      if (dir.endsWith('/')) {
+        isDir = true;
+        dir = dir.slice(0, -1);
+      }
+      dir = dir.split('/');
+    }
+    dir = dir.filter(d => d);
+    const cd = dir.shift();
+    const newParent = path.join(parent, cd);
+    if (!(await fs.exists(newParent))) {
+      if (dir.length || isDir) {
+        try { await fs.mkdir(newParent) } catch {}
+      } else {
+        await fs.writeFile(newParent, "");
+      }
+    }
+    if (dir.length) {
+      await createFileRecursive(newParent, dir);
+    }
+  }
+
+export async function unzip(env: Env): Promise<void> {
+    const tmpDir = env.tmpDir
+    const data = env.zipData
+    const zip = new JSZip()
+    await zip.loadAsync(data)
+    const promises = Object.keys(zip.files).map(async (file) => {
+        let correctFile = file;
+        if (/\\/.test(correctFile)) {
+            correctFile = correctFile.replace(/\\/g, '/')
+        }
+    
+        const filePath = path.join(tmpDir, correctFile)
+        if (!await fs.exists(filePath)) {
+            await createFileRecursive(tmpDir, correctFile)
+        }
+    
+        if (correctFile.endsWith('/')) return;
+    
+        let data = await zip.files[file].async('string')
+
+        await fs.writeFile(filePath, data)
+    });
+    
+    await Promise.all(promises);
 }

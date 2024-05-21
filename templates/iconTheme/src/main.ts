@@ -1,4 +1,3 @@
-import plugin from "../plugin.json";
 const helpers = acode.require('helpers');
 
 function encode(text: string): string {
@@ -60,12 +59,10 @@ class IconAcode {
     // Plugin initialization
     public async init(): Promise<void> {
         // Appending style element with head
-        document.head.insertAdjacentHTML("beforeend",`<link id="${plugin.id}" rel="stylesheet" href="https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/files.css"></link>`);
-        document.head.insertAdjacentHTML("beforeend",`<link id="${plugin.id}" rel="stylesheet" href="https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/folders.css"></link>`);
+        document.head.insertAdjacentHTML("beforeend",`{% for css in cssList %}<link id="{{ pluginId }}" rel="stylesheet" href="https://localhost/__cdvfile_files-external__/plugins/{{ pluginId }}/{{ css }}"></link>{% endfor %}`)   
     }
-
     public async destroy(): Promise<void> {
-        const links = document.querySelectorAll(`#${plugin.id}`)
+        const links = document.querySelectorAll("{{ pluginId }}")
         for (const link of links) {
             link.remove();
         }
@@ -75,10 +72,10 @@ class IconAcode {
 if (window.acode) {
     const acodePlugin = new IconAcode();
     acode.setPluginInit(
-        plugin.id,
+        "{{ pluginId }}",
         async (
             baseUrl: string,
-            $page: WCPage,
+            $page: AcodeApi.WCPage,
             { cacheFileUrl, cacheFile }: any
         ) => {
             if (!baseUrl.endsWith("/")) {
@@ -88,7 +85,7 @@ if (window.acode) {
             await acodePlugin.init();
         }
     );
-    acode.setPluginUnmount(plugin.id, () => {
+    acode.setPluginUnmount("{{ pluginId }}", () => {
         acodePlugin.destroy();
     });
 }

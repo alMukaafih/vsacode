@@ -9,7 +9,7 @@ interface Env {
      */
     err: (message: string) => string
     /**
-     * Dirname of vsacode.js script.
+     * Root directory of package.
      */
     home: string
     /**
@@ -92,4 +92,16 @@ interface Env {
      * Assets directory
      */
     assets?: string
+    /**
+     * Zip Data
+     */
+    zipData?: Buffer
+    /**
+     * CSS file name list
+     */
+    cssList?: string[]
+    /**
+     * Plugin id
+     */
+    pluginId?: string
 }

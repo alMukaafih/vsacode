@@ -99,6 +99,7 @@ export async function iconThemeStylesGen(env: Env): Promise<void> {
     const css: string = fonts + folders;
     await fs.writeFile(path.join(dist, "files.css"), files );
     await fs.writeFile(path.join(dist, "folders.css"), css );
+    env.cssList = ["files.css", "folders.css"]
 }
 
 export function productIconThemeStylesGen(env: Env) {
@@ -135,6 +136,7 @@ export async function pluginJsonGen(env: Env): Promise<void> {
     const assets = path.join(tmpDir, "extension")
     process.chdir(base);
     await fs.writeFile(path.join("plugin.json"), JSON.stringify(json));
+    env.pluginId = json.id
     await fs.copyFile(path.join(assets, packageJson.icon), "icon.png");
     await fs.copyFile(path.join(assets, "README.md"), "readme.md");
     const _overrides = path.join(home, "overrides", id)

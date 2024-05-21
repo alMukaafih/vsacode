@@ -1,0 +1,15 @@
+{
+    "id": "almukaafih.vsacode",
+    "name": "VS Acode",
+    "main": "dist/main.js",
+    "version": "",
+    "readme": "readme.md",
+    "icon": "icon.png",
+    "files": [],
+    "minVersionCode": 292,
+    "author": {
+        "name": "alMukaafih",
+        "email": "almukaafih@gmail.com",
+        "github": "alMukaafih"
+    }
+}

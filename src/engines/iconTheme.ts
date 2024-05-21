@@ -27,7 +27,7 @@ async function main(env: Env) {
     const dist: string = path.join(base, "dist");
     env.dist = dist
     if (!await fs.exists(base))
-        await fs.cp(path.join(home, "source"), base, { recursive: true });
+        await fs.mkdir(base)
     if (await fs.exists(dist))
         await fs.rm(dist, { recursive: true });
     await fs.mkdir(dist);

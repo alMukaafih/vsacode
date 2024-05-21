@@ -6,7 +6,7 @@
 // imports
 import { fs, path, os } from  "./lib/compat.js"
 
-import Zip from "adm-zip";
+import { unzip } from "./lib/utils.js"
 import * as toml from "smol-toml";
 import { style, template } from "ziyy";
 import help from "./commands/help.js";
@@ -110,8 +110,8 @@ if (env.vsix == undefined && command.name != "help") {
 }
 if (command.name != "help") {
     try {
-        const zip = new Zip(env.vsix);
-        zip.extractAllTo(env.tmpDir);
+        env.zipData = await fs.readFile(env.vsix)
+        await unzip(env)
     }
     catch(error) {
         //console.log(error);

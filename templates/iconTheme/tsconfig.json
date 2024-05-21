@@ -11,11 +11,7 @@
         "noImplicitAny": false,
         "strict": false
     },
-    "exclude": [
-        "./dist/**/*",
-        "./postcss.config.js",
-        "./node_modules/*",
-        "../node_modules/*",
-        "./webpack.config.js"
-    ]
+    "include": [
+        "./src", "../../typings",
+    ],
 }
