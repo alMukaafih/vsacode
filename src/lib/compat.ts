@@ -40,9 +40,9 @@ export const fs = {
     },
     mkdir: async (path: string, options?: { recursive: boolean }) => {
         if (typeof window != "undefined" && typeof window.acode != "undefined") {
-            return await fst(path).createDirectory()
+            return await fst(pth.join(DATA_STORAGE, path)).createDirectory()
         } else {
-            return fst.mkdirSync(pth.join(DATA_STORAGE, path), options)
+            return fst.mkdirSync(path, options)
         }
     },
     mkdtemp: async (prefix: string): Promise<string> => {
@@ -60,7 +60,7 @@ export const fs = {
         if (typeof window != "undefined" && typeof window.acode != "undefined") {
             return await fst(path).lsDir()
         } else {
-            return fst.readFileSync(path)
+            return fst.readdirSync(path)
         }
     },
     readFile: async (path: string): Promise<Buffer> => {
