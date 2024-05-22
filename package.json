@@ -1,11 +1,11 @@
 {
   "name": "vsacode",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Extending the Acode Editor",
   "author": "alMukaafih <almukaafih@gmail.com>",
   "license": "MIT",
   "bin": {
-    "vsa": "./dist/vsacode.js"
+    "vsa": "dist/vsacode.js"
   },
   "type": "module",
   "scripts": {
@@ -68,6 +68,11 @@
     "lib": "lib",
     "test": "test"
   },
+  "files": [
+    "./dist",
+    "./overrides",
+    "./typings"
+  ],
   "keywords": [
     "acode",
     "vsacode",

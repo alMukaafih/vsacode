@@ -8,7 +8,7 @@ src/
 .github/
 ./config.toml
 addons/
-./templates/
+./templates
 plugin/
 eslint.config.js
 jest.config.js
