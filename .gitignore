@@ -137,3 +137,5 @@ view
 docs
 Acode
 vsacode-plugin
+plugin.json
+plugin/plugin.json

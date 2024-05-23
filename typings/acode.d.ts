@@ -21,7 +21,7 @@ interface String{
      * Generate a hash from a string
      */
     hash(): string;
-  }
+}
 
 declare namespace AcodeApi {
     interface WCPage extends HTMLElement {
@@ -75,18 +75,33 @@ declare namespace AcodeApi {
          */
         define(name: string, module: Object | Function ): void;
 
+        /**
+         * This method is used to require a module. 
+         * @param module The name of the module. Module name is case insensitive.
+         */
         require(module: string): any;
 
-        exec(key: string, val: any): boolean | undefined;
+        /**
+         * This method executes a command defined in file src/lib/commands.js.
+         * @param command The name of the command. Command name is case insensitive.
+         * @param value The value of the command. 
+         */
+        exec(command: string, value?: any): boolean | undefined;
 
         get exitAppMessage(): string | undefined;
 
         setLoadingMessage(message: string): void;
 
+         /**
+         * Sets plugin init function
+         * @param id 
+         * @param initFunction 
+         * @param settings 
+         */
         setPluginInit(
             id: string,
-            initFunction: (baseUrl: string, $page: WCPage, options?: any) => Promise<void>,
-            settings?: any
+            initFunction: (baseUrl: string, $page: WCPage, options?: PluginInitOptions) => Promise<void>,
+            settings?: Settings
         ): void;
 
         getPluginSettings(id: string): any;
@@ -136,7 +151,7 @@ declare namespace AcodeApi {
                 match: RegExp,
                 required: boolean,
                 placeholder: string,
-                test: (any)=>boolean
+                test: (value: any) => boolean
             }
         ): Promise<any>;
         
@@ -222,5 +237,201 @@ declare namespace AcodeApi {
             query: object
         }
         trimSlash: (url: string) => string
+    }
+    /**
+     * You can use this parameter to define the settings of the plugin. The settings will be displayed in the plugin page.
+     */
+    interface Settings {
+        /**
+         * An array of settings
+         */
+        list: {
+            /**
+             * The key of the setting. This key will be used to access the value of the setting.
+             */
+            key: string
+            /**
+             * The text of the setting. This text will be displayed in the settings page.
+             */
+            text: string
+            /**
+             * The icon of the setting. This icon will be displayed in the settings page.
+             */
+            icon? :string
+            /**
+             * The info of the setting. This info will be displayed in the settings page.
+             */
+            info?: string
+            /**
+             * The value of the setting. This value will be displayed in the settings page.
+             */
+            value?: any
+            /**
+             * The value text of the setting. This value text will be displayed in the settings page.
+             * @param value 
+             * @returns 
+             */
+            valueText?: (value: any) => string
+            /**
+             * If this property is set to true, the setting will be displayed as a checkbox.
+             */
+            checkbox?: boolean
+            /**
+             * If this property is set to an array, the setting will be displayed as a select.
+             * The array should contain the options of the select.
+             * Each option can be a string or an array of two strings.
+             * If the option is a string, the value and the text of the option will be the same.
+             * If the option is an array of two strings,
+             * the first string will be the value of the option and the second string will be the text of the option.
+             */
+            select?: (string | string[])[]
+            /**
+             * If this property is set to true, the setting will be displayed as a prompt.
+             */
+            prompt?: string
+            /**
+             * The type of the prompt. This property is only used when the prompt property is set to true. The default value is text.
+             */
+            promptType?: string
+            /**
+             * The options of the prompt. This property is only used when the prompt property is set to true and the promptType property is set to select.
+             */
+            promptOptions?: {
+                /**
+                 * The regular expression to match the value.
+                 */
+                match: RegExp
+                /**
+                 * If this property is set to true, the value is required.
+                 */
+                required: boolean
+                /**
+                 * The placeholder of the prompt.
+                 */
+                placeholder: string
+                /**
+                 * The test function to test the value.
+                 * @param value 
+                 * @returns 
+                 */
+                test: (value: any) => boolean
+    
+            }[]
+        }[]
+        /**
+         * The callback function that will be called when the settings are changed.
+         * @param key 
+         * @param value 
+         * @returns 
+         */
+        cb: (key: string, value: any) => void
+    }
+    /**
+     * This object can be used to access the cached files
+     */
+    interface PluginInitOptions {
+        /**
+         * Url of the cached file.
+         */
+        cacheFileUrl: string
+        /**
+         * File object of the cached file. Using this object, you can write/read the file.
+         */
+        cacheFile: File
+        /**
+         * If this is the first time the plugin is loaded, this value will be true. Otherwise, it will be false.
+         */
+        firstInit: boolean
+    }
+    interface SidebarApps {
+        /**
+         * @param icon icon of the app
+         * @param id id of the app
+         * @param initFunction
+         * @param prepend weather to show this app at the top of the sidebar or not
+         * @param onSelected
+         * @returns
+         */
+        add: (
+            icon: string,
+            id: string,
+            title: string,
+            initFunction: (container: HTMLElement) => void,
+            prepend?: boolean,
+            onSelected?: (container: HTMLElement) => void
+        ) => void
+        /**
+         * Removes a sidebar app with the given ID.
+         * @param id - The ID of the sidebar app to remove.
+         * @returns
+         */
+        remove: (id: string) => void 
+    }
+    /**
+     * The fs module provides an API for interacting with the file system in Acode.
+     * It allows for operations such as reading, writing, and manipulating files and directories.
+     * @param url either the location of any file or directory
+     */
+    function fs (url: string): FileSystem
+    interface FileSystem {
+        /**
+         * It is used to list the contents of a specified directory,
+         * including all subdirectories and files within it.
+         */
+        lsDir: () => Promise<string[]>
+        /**
+         * It allows you to read the contents of a specified file.
+         * @param encoding
+         * @returns 
+         */
+        readFile: (encoding?: string) => Promise<string>
+        /**
+         * It creates a new, empty file in the specified location with the specified file {name}.
+         * If a file with the same name already exists, it will be overwritten.
+         * @param name 
+         * @param content 
+         * @returns 
+         */
+        createFile: (name: string, content: string) => Promise<string>
+        /**
+         * It is used to write data to a file.
+         * @param content 
+         * @returns 
+         */
+        writeFile: (content: string | ArrayBuffer) => Promise<void>
+        /**
+         * It is used to create a new directory in the file system.
+         * @param name 
+         * @returns 
+         */
+        createDirectory: (name: string) => Promise<string>
+        /**
+         * It is used to remove a specified file or directory from the file system.
+         * It is important to use caution when using this method as deleted files and directories cannot be recovered.
+         * @returns 
+         */
+        delete: () => Promise<void>
+        /**
+         * It is used to copy a file or directory from a specified source path to a specified destination path.
+         * @param destination
+         * @returns
+         */
+        copyTo: (destination: string) => Promise<string>
+        /**
+         * It allows you to move a file or directory from its current location to a new destination.
+         * @param destination 
+         * @returns 
+         */
+        moveTo: (destination: string) => Promise<string>
+        /**
+         * It allows for the renaming of a file or directory.
+         * @param newName 
+         * @returns 
+         */
+        renameTo: (newName: string) => Promise<string>
+        /**
+         * It checks if a specified file or directory exists in the file system and returns a boolean value indicating the result.
+         */
+        exists: () => Promise<boolean>
     }
 }

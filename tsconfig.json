@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "module": "nodenext",
-        "moduleResolution": "nodenext",
+        "module": "node16",
+        "target": "es2020",
         "resolveJsonModule": true,
         "allowJs": false,
         "removeComments": true,
@@ -13,7 +13,10 @@
         "declaration": true,
         "outDir": "./dist",
         "rootDir": "./src",
-        "strictNullChecks": false
+        "verbatimModuleSyntax": true,
+        "sourceMap": true,
+        "declarationMap": true,
+        "strictNullChecks": false,
     },
     "include": [
         "./src", "typings",
