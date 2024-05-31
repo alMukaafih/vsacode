@@ -12,9 +12,9 @@
     "clean": "scripts/clean.js",
     "build": "npm run clean dist && scripts/build.js && npm run build-tmplt",
     "build-tmplt": "npm run clean dist/templates && scripts/build-tmplt.js",
-    "build-doc": "npm run clean docs && npx typedoc",
+    "build-doc": "npm run clean docs && typedoc",
     "prepublish": "npm run build",
-    "test": "npx jest"
+    "test": "jest"
   },
   "dependencies": {
     "adm-zip": "^0.5.10",
@@ -77,5 +77,8 @@
     "acode",
     "vsacode",
     "cli"
+  ],
+  "workspaces": [
+    "addons/server"
   ]
 }
