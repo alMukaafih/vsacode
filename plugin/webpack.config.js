@@ -1,4 +1,5 @@
 import * as path from "path";
+import { exec } from "child_process";
 
 export default (env, options) => {
   const { mode = "development" } = options;
@@ -29,7 +30,7 @@ export default (env, options) => {
   const main = {
     mode,
     entry: {
-      main: "./src/vsacode.ts",
+      main: "./src/main.ts",
     },
     output: {
       path: path.resolve(import.meta.dirname, "dist"),
@@ -37,7 +38,10 @@ export default (env, options) => {
       chunkFilename: "[name].js",
     },
     resolve: {
-      extensions: [".ts", ".js"],
+      extensionAlias: {
+        '.js': ['.ts', '.js'],
+        '.mjs': ['.mts', '.mjs'],
+      },
     },
     module: {
       rules,

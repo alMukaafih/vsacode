@@ -29,7 +29,8 @@ interface Env {
      */
     vsix?: string
     /**
-     * VS Code Extension package.json file.
+     * VS Code contribution
+     *  package.json file.
      */
     packageJson?: any
     /**
@@ -73,7 +74,8 @@ interface Env {
      */
     path?: string
     /**
-     * Dirname of VS Code Extension package.json file.
+     * Dirname of VS Code contribution
+     *  package.json file.
      */
     root?: string
     /**
@@ -105,3 +107,69 @@ interface Env {
      */
     pluginId?: string
 }
+declare namespace VsaApi {
+    /**
+     * An contribution
+     *
+     */
+    interface Contribution {
+        /**
+         * Name of contribution
+         *
+         */
+        name: string
+        /**
+         * Activate contribution
+         *
+         */
+        activate(): void
+        /**
+         * Deactivate contribution
+         *
+         */
+        deactivate(): void
+    }
+
+    /**
+     * List of contributions
+     */
+    interface Contributions {
+        [id: string]: Contribution
+    }
+
+    interface ModulesMap {
+        iconThemes: VsaApi.Contributions
+        prodctIconThemes: VsaApi.Contributions
+    }
+
+    /**
+     * A Setting
+     */
+    class Setting {
+        /**
+         * Add a setting
+         * @param id
+         * @param name
+         */
+        add(id: string, name: string): void
+        /**
+         * Remove a setting
+         * @param id
+         */
+        remove(id: string): void
+        /**
+         * Returns the list of settings
+         */
+        list(): string[][]
+    }
+
+    interface Vsacode {
+        activeIconTheme: string
+        activeProductIconTheme: string
+        modules?: Record<string, any>
+        define?: (module: string, value: any) => void
+        require?: (module: string) => void
+    }
+}
+
+declare var vsacode: VsaApi.Vsacode

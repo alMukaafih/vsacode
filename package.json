@@ -12,6 +12,7 @@
     "clean": "scripts/clean.js",
     "build": "npm run clean dist && scripts/build.js && npm run build-tmplt",
     "build-tmplt": "npm run clean dist/templates && scripts/build-tmplt.js",
+    "build-plugin": "npm run clean plugin/dist && scripts/build-plugin.js",
     "build-doc": "npm run clean docs && typedoc",
     "prepublish": "npm run build",
     "test": "jest"

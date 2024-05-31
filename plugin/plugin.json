@@ -1,15 +1,1 @@
-{
-    "id": "almukaafih.vsacode",
-    "name": "VS Acode",
-    "main": "dist/main.js",
-    "version": "",
-    "readme": "readme.md",
-    "icon": "icon.png",
-    "files": [],
-    "minVersionCode": 292,
-    "author": {
-        "name": "alMukaafih",
-        "email": "almukaafih@gmail.com",
-        "github": "alMukaafih"
-    }
-}
+{"id":"almukaafih.vsacode.beta","name":"VS Acode (Beta)","main":"main.js","version":"0.5.2-beta","readme":"README.md","icon":"icon.png","files":[],"minVersionCode":292,"author":{"name":"alMukaafih","email":"almukaafih@gmail.com","github":"alMukaafih"}}
