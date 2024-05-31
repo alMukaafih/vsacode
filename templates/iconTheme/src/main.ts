@@ -34,7 +34,7 @@ function get_type_file(filename: string): string {
     let _icon="";
     for (const i of li)
         _icon = _icon + "file_type_" + i.toLowerCase() + " ";
-    
+
     return _icon;
 }
 
@@ -53,15 +53,13 @@ helpers.getIconForFile = filename => {
     return `file file_type_default ${icon_mode} ${type}`;
 };
 
-class IconAcode {
-    // Base url
-    public baseUrl: string | undefined;
-    // Plugin initialization
-    public async init(): Promise<void> {
+let contribution = {
+    name: "{{ pluginName }}",
+    activate: () => {
         // Appending style element with head
-        document.head.insertAdjacentHTML("beforeend",`{% for css in cssList %}<link id="{{ pluginId }}" rel="stylesheet" href="https://localhost/__cdvfile_files-external__/plugins/{{ pluginId }}/{{ css }}"></link>{% endfor %}`)   
-    }
-    public async destroy(): Promise<void> {
+        document.head.insertAdjacentHTML("beforeend",`{% for css in cssList %}<link id="{{ pluginId }}" rel="stylesheet" href="https://localhost/__cdvfile_files-external__/plugins/{{ pluginId }}/{{ css }}"></link>{% endfor %}`)
+    },
+    deactivate: () => {
         const links = document.querySelectorAll("{{ pluginId }}")
         for (const link of links) {
             link.remove();
@@ -69,7 +67,32 @@ class IconAcode {
     }
 }
 
-if (window.acode) {
+class IconAcode {
+    // Base url
+    public baseUrl: string | undefined;
+    // Plugin initialization
+    public async init(): Promise<void> {
+        if (typeof window.vsacode == "undefined") {
+            contribution.activate()
+            acode.define("iconThemes", {
+                "{{ pluginId }}": contribution
+            })
+            window.vsacode = {
+                activeIconTheme: "{{ pluginId }}",
+                activeProductIconTheme: "none"
+            }
+        }
+        else if (typeof window.vsacode != "undefined") {
+            let iconThemes = acode.require("iconThemes")
+            iconThemes["{{ pluginId }}"] = contribution
+        }
+    }
+    public async destroy(): Promise<void> {
+        contribution.deactivate()
+    }
+}
+
+if (typeof window.acode != "undefined") {
     const acodePlugin = new IconAcode();
     acode.setPluginInit(
         "{{ pluginId }}",

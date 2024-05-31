@@ -1,14 +1,22 @@
-import plugin from "../plugin.json";
 import { initApp } from "./app/index.js";
+import { HOME, ID } from "./lib/constants.js";
 
-const sidebarApps: AcodeApi.SidebarApps = acode.require("sidebarApps")
-const fs: typeof AcodeApi.fs = acode.require("fs")
+const sidebarApps = acode.require("sidebarApps")
+const fs = acode.require("fs")
+const { join } = acode.require("url")
+
+if (typeof window.vsacode == "undefined") {
+    window.vsacode = {
+        activeIconTheme: "none",
+        activeProductIconTheme: "none"
+    }
+}
 
 let active = {
     fileIconTheme: ""
 }
 
-let settings: AcodeApi.Settings = {
+let settings: AcodeApi.PluginSettings = {
     list: [
         {
             key: "fileIconTheme",
@@ -21,8 +29,8 @@ let settings: AcodeApi.Settings = {
     cb: (key, value) => {
         if (key == "fileIconTheme") {
             active.fileIconTheme = value
-        } 
-        fs(`https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/active.json`).writeFile(JSON.stringify(active))
+        }
+        fs(join(HOME, "active.json")).writeFile(JSON.stringify(active))
     }
 }
 
@@ -34,28 +42,28 @@ class Vsacode {
         const icon = ".icon.vsacode-icon::before{"
             + "display:inline-block;"
             + "content:'';"
-            + `background-image:url(https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/app-icon.svg);`
+            + `background-image:url(${HOME}app-icon.svg);`
             + "background-size:contain;"
             + "background-repeat:no-repeat;"
             + "height:1em;"
             + "width:1em;"
         let style = document.createElement("style")
-        style.id = plugin.id
+        style.id = ID
         style.append(icon)
         document.head.append(style)
 
         sidebarApps.add("vsacode-icon", "vsacode", "VS Acode", initApp)
-        active = JSON.parse(await fs(`https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/active.json`).readFile("utf-8"))
+        active = JSON.parse(await fs(join(HOME, "active.json")).readFile("utf-8"))
     }
     async destroy(): Promise<void> {
 
     }
 }
 
-if (window.acode) {
-    const vsacode = new Vsacode()
+if (typeof window.acode != "undefined") {
+    const vsa = new Vsacode()
     acode.setPluginInit(
-        plugin.id,
+        ID,
         async (
             baseUrl: string,
             $page: AcodeApi.WCPage,
@@ -64,12 +72,12 @@ if (window.acode) {
             if (!baseUrl.endsWith("/")) {
                 baseUrl += "/"
             }
-            vsacode.baseUrl = baseUrl;
-            await vsacode.init()
+            vsa.baseUrl = baseUrl;
+            await vsa.init()
         },
         settings
     );
-    acode.setPluginUnmount(plugin.id, () => {
-        vsacode.destroy()
+    acode.setPluginUnmount(ID, () => {
+        vsa.destroy()
     })
 }
