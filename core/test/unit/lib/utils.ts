@@ -1,4 +1,4 @@
-import { bundleAsset, parse } from "../../../src/lib/libutils"
+import { bundleAsset, parse } from "../../../src/lib/utils"
 import { describe, expect, test } from "@jest/globals"
 import * as fs from "node:fs";
 import * as os from "node:os";
@@ -23,13 +23,13 @@ describe("asset bundler function", () => {
             assetList: {}
         })).toBe(`https://localhost/__cdvfile_files-external__/plugins/test-id/assets/test-asset`)
     })
-    test("link returned will point to a valid file", () => {
+    test("link returned will point to a valid file", async () => {
         const link = bundleAsset("./test-asset", {
             base: `./`,
             assets: `./assets`,
             assetList: {}
         })
-        expect(fs.existsSync(link.substring(61))).toBe(true)
+        expect(fs.existsSync((await link).substring(61))).toBe(true)
     })
 })
 

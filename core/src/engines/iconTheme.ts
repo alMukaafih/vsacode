@@ -16,11 +16,10 @@ import { fs, path } from  "../lib/compat.js"
 import { iconThemeStylesGen, pluginJsonGen } from "../lib/generator.js";
 import { distBuild } from "../lib/dist.js";
 
-async function main(env: Env) {
+async function __static(env: Env) {
     const buildDir: string = env.buildDir
     const contrib = env.contrib
     const outDir = env.outDir
-    const home: string = env.home
 
     const base: string = path.resolve(buildDir, contrib.id)
     env.base = base
@@ -58,12 +57,12 @@ function fmt(env: Env): string {
     const contrib = env.contrib
     env.id = contrib.id;
     env.label = contrib.label;
-    
-    formatted += `[b][c:green]${env.id}[/0]/${env.packageJson.publisher},iconThemes ${env.packageJson.version} vscode [convertible,automatic]\n` 
+
+    formatted += `[b][c:green]${env.id}[/0]/${env.packageJson.publisher},iconThemes ${env.packageJson.version} vscode [convertible,automatic]\n`
     // formatted += `label => ${env.label}\n`
     return formatted
 };
 
 export default {
-    main, fmt
+    main: __static, __static, fmt
 }

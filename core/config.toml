@@ -1,6 +1,7 @@
 [[commands]]
 name = "build"
 options = ["--single"]
+vsix = true
 
 [[commands]]
 name = "b"
@@ -9,8 +10,10 @@ alias = "build"
 [[commands]]
 name = "list"
 options = ["-a"]
+vsix = true
 
 [[engines]]
 name = "iconTheme"
 contrib = "iconThemes"
 template = "iconTheme"
+modes = ["--static", "--dynamic"]

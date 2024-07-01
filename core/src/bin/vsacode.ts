@@ -4,12 +4,12 @@
  * @packageDocumentation
  */
 // imports
-import { fs, path, os } from  "./lib/compat.js"
+import { fs, path, os } from  "../lib/compat.js"
 
-import { unzip } from "./lib/utils.js"
+import { unzip } from "../lib/utils.js"
 import * as toml from "smol-toml";
 import { style, template } from "ziyy";
-import help from "./commands/help.js";
+import help from "../commands/help.js";
 
 const err = template("[b][c:red]error[c:white]: [/0]")
 
@@ -34,7 +34,7 @@ env.tmpDir = tmpDir
 process.on("exit", () => {
     //console.log("Exiting vsacode.js process with code:", code);
         //console.log(usage);
-    fs.rm(tmpDir, { recursive: true });
+    void fs.rm(tmpDir, { recursive: true });
 });
 
 // cli arguments
@@ -46,8 +46,7 @@ if (args.length == 0) {
 // load and parse toml file
 const _toml: Buffer = await fs.readFile(path.join(import.meta.dirname, "config.toml"));
 const __toml: string = _toml.toString();
-const _config: any = toml.parse(__toml);
-const config: IconfigToml = _config
+const config = toml.parse(__toml) as unknown as IconfigToml;
 
 const flags: string[] = [];
 for (const arg of args) {

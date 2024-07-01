@@ -172,4 +172,11 @@ declare namespace VsaApi {
     }
 }
 
+declare namespace AcodeApi {
+    interface ModulesMap {
+        iconThemes: VsaApi.Contributions
+        prodctIconThemes: VsaApi.Contributions
+    }
+}
+
 declare var vsacode: VsaApi.Vsacode

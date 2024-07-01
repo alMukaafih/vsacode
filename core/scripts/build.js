@@ -22,6 +22,7 @@ function normalize(config) {
             path: `./commands/${cmd.name}.js`,
             subcommands: cmd.subcommands,
             options: cmd.options,
+            vsix: cmd.vsix,
             alias: cmd.alias,
         };
     }
@@ -37,13 +38,13 @@ function normalize(config) {
             template: contrib.template
         };
     }
-    
+
     newConfig.commands.help = {
         name: "help",
         subcommands: ["main"],
         options: [],
     };
-    
+
     for (let k in newConfig.commands) {
         let alias = newConfig.commands[k].alias;
         if (alias && alias in newConfig.commands) {
@@ -70,3 +71,4 @@ let packageJson = JSON.parse(__json);
 newConfig.version = packageJson.version;
 
 fs.writeFileSync(path.join("dist", "config.toml"), toml.stringify(newConfig));
+fs.writeFileSync(path.join("dist", "config.json"), JSON.stringify(newConfig, undefined, 2));
