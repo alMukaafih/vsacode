@@ -55,8 +55,11 @@ function normalize(config) {
     return newConfig;
 }
 
-child_process.execSync(`npx tsc`, { stdio: 'inherit' });
-fs.chmodSync("dist/vsacode.js", 0o775);
+try {
+    child_process.execSync(`yarn run -T tsc`, { stdio: 'inherit' });
+} catch {}
+
+fs.chmodSync("dist/bin/vsacode.js", 0o775);
 
 let _toml = fs.readFileSync("config.toml");
 let __toml = _toml.toString();

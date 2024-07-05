@@ -12,6 +12,6 @@
         "strict": false
     },
     "include": [
-        "./src", "../../typings",
+        "./src", "../../../typings",
     ],
 }

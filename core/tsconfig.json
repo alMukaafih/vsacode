@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "node16",
-    "target": "es2020",
+    "target": "es2022",
     "resolveJsonModule": true,
     "allowJs": false,
     "removeComments": true,
@@ -14,13 +14,13 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "verbatimModuleSyntax": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "declarationMap": false,
     "strictNullChecks": false
   },
   "include": ["./src", "../typings"],
   "typedocOptions": {
-    "entryPoints": ["src/vsacode.ts", "src/**/*", "../typings/*"],
+    "entryPoints": ["src/bin/vsacode.ts", "src/**/*", "../typings/*"],
     "entryPointStrategy": "expand",
     "out": "docs"
   }

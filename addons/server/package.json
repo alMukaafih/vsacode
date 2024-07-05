@@ -14,7 +14,7 @@
     "hono": "^4.4.0",
     "node-pty": "^1.0.0",
     "properties-file": "^3.5.4",
-    "typescript": "^5.4.5"
+    "typescript": "~5.4.5"
   },
   "devDependencies": {
     "@types/node": "^20.11.17"

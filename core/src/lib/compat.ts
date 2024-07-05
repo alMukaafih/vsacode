@@ -1,51 +1,55 @@
-let fst
-let ost
-let pth
+let fsNode: typeof import("fs")
+let osNode: typeof import("os")
+let pathNode: typeof import("path")
+
+let fsBrowser: AcodeApi.ModulesMap["fs"]
+let osBrowser: { tmpdir: () => string }
+let pathBrowser: AcodeApi.Url
 
 if (typeof window != "undefined" && typeof window.acode != "undefined") {
-    fst = acode.require("fs")
-    ost = {
+    fsBrowser = acode.require("fs")
+    osBrowser = {
         tmpdir: (): string => {
             return CACHE_STORAGE
         }
     }
-    pth = acode.require("url")
+    pathBrowser = acode.require("url")
 } else {
-    fst = await import("node:fs")
-    ost = await import("node:os")
-    pth = await import("node:path")
+    fsNode = await import("fs")
+    osNode = await import("os")
+    pathNode = await import("path")
 }
 
 class Fs {
     async copyFile(src: string, dest: string) {
         if (typeof window != "undefined" && typeof window.acode != "undefined") {
-            await fst(src).copyTo(dest)
+            await fsBrowser(src).copyTo(dest)
         } else {
-            fst.copyFileSync(src, dest)
+            fsNode.copyFileSync(src, dest)
         }
     }
 
     async cp(src: string, dest: string, options?: { recursive: boolean }) {
         if (typeof window != "undefined" && typeof window.acode != "undefined") {
-            await fst(src).copyTo(dest)
+            await fsBrowser(src).copyTo(dest)
         } else {
-            fst.cpSync(src, dest, options)
+            fsNode.cpSync(src, dest, options)
         }
     }
 
     async exists(path: string): Promise<boolean> {
         if (typeof window != "undefined" && typeof window.acode != "undefined") {
-            return await fst(path).exists()
+            return await fsBrowser(path).exists()
         } else {
-            return fst.existsSync(path)
+            return fsNode.existsSync(path)
         }
     }
 
     async mkdir(path: string, options?: { recursive: boolean }) {
         if (typeof window != "undefined" && typeof window.acode != "undefined") {
-            return await fst(pth.join(DATA_STORAGE, path)).createDirectory()
+            return await fsBrowser(pathNode.join(DATA_STORAGE, path)).createDirectory("")
         } else {
-            return fst.mkdirSync(path, options)
+            return fsNode.mkdirSync(path, options)
         }
     }
 
@@ -53,51 +57,52 @@ class Fs {
         if (typeof window != "undefined" && typeof window.acode != "undefined") {
             const bytes = new Uint8Array(6)
             crypto.getRandomValues(bytes)
-            const binString = Array.from(bytes, (byte) => String.fromCodePoint(byte)).join("")
+            const decoder = new TextDecoder()
+            const binString = decoder.decode(bytes)
             const rand = btoa(binString)
-            return await fst(`${prefix}${rand}`).createDirectory()
+            return await fsBrowser(`${prefix}${rand}`).createDirectory("")
         } else {
-            return fst.mkdtempSync(prefix)
+            return fsNode.mkdtempSync(prefix)
         }
     }
 
     async readdir(path:string): Promise<string[]> {
         if (typeof window != "undefined" && typeof window.acode != "undefined") {
-            return await fst(path).lsDir()
+            return await fsBrowser(path).lsDir()
         } else {
-            return fst.readdirSync(path)
+            return fsNode.readdirSync(path)
         }
     }
 
-    async readFile(path: string): Promise<Buffer> {
+    async readFile(path: string): Promise<Buffer | Uint8Array> {
         if (typeof window != "undefined" && typeof window.acode != "undefined") {
-            return await fst(path).readFile()
+            return new Uint8Array(await fsBrowser(path).readFile())
         } else {
-            return fst.readFileSync(path)
+            return fsNode.readFileSync(path)
         }
     }
 
     async rm(path: string, options?: { recursive: boolean }): Promise<void> {
         if (typeof window != "undefined" && typeof window.acode != "undefined") {
-            await fst(path).delete()
+            await fsBrowser(path).delete()
         } else {
-            fst.rmSync(path, options)
+            fsNode.rmSync(path, options)
         }
     }
 
     async writeFile(file: string, data: string): Promise<void> {
         if (typeof window != "undefined" && typeof window.acode != "undefined") {
-            await fst(file).writeFile(data)
+            await fsBrowser(file).writeFile(data)
         } else {
-            fst.writeFileSync(file, data)
+            fsNode.writeFileSync(file, data)
         }
     }
 
-    async unlink(path: string, options?: { recursive: boolean }): Promise<void> {
+    async unlink(path: string): Promise<void> {
         if (typeof window != "undefined" && typeof window.acode != "undefined") {
-            await fst(path).delete()
+            await fsBrowser(path).delete()
         } else {
-            fst.unlinkSync(path, options)
+            fsNode.unlinkSync(path)
         }
     }
 }
@@ -106,22 +111,34 @@ export const fs = new Fs
 
 class Path {
     basename(path: string): string {
-        return pth.basename(path)
+        if (typeof window != "undefined" && typeof window.acode != "undefined") {
+            return pathBrowser.basename(path)
+        } else {
+            return pathNode.basename(path)
+        }
     }
 
     dirname(path: string): string {
-        return pth.dirname(path)
+        if (typeof window != "undefined" && typeof window.acode != "undefined") {
+            return pathBrowser.dirname(path)
+        } else {
+            return pathNode.dirname(path)
+        }
     }
 
     join(...paths: string[]): string {
-        return pth.join(...paths)
+        if (typeof window != "undefined" && typeof window.acode != "undefined") {
+            return pathBrowser.join(...paths)
+        } else {
+            return pathNode.join(...paths)
+        }
     }
 
     resolve(...paths: string[]): string {
         if (typeof window != "undefined" && typeof window.acode != "undefined") {
-            return pth.join(...paths)
+            return pathBrowser.join(...paths)
         } else {
-            return pth.resolve(...paths)
+            return pathNode.resolve(...paths)
         }
     }
 
@@ -131,8 +148,17 @@ export const path = new Path
 
 class Os {
     tmpdir(): string {
-        return ost.tmpdir()
+        if (typeof window != "undefined" && typeof window.acode != "undefined") {
+            return osBrowser.tmpdir()
+        } else {
+            return osNode.tmpdir()
+        }
     }
 }
 
 export const os = new Os
+
+export function toString(buf: Buffer | Uint8Array): string {
+        const utf8decoder = new TextDecoder()
+        return utf8decoder.decode(buf)
+}

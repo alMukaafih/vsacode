@@ -1,4 +1,8 @@
+import { Runtime } from "vsacode"
+import { HOME } from "../lib/constants.js";
 const fileBrowser = acode.require("fileBrowser")
+const fs = acode.require("fs")
+
 /**
  * Click handler for files app
  * @param {MouseEvent} e
@@ -6,7 +10,10 @@ const fileBrowser = acode.require("fileBrowser")
  */
 async function clickHandler(e: MouseEvent) {
     const myFile = await fileBrowser('file', 'Select VS Code Extension', true)
-    return;
+    const env = { home: HOME }
+    const file = await fs(myFile.url).readFile()
+    const runtime = new Runtime(env)
+    runtime.run()
 }
 
 /**
@@ -26,7 +33,7 @@ export function initApp(app: HTMLElement) {
     header.append(span)
     header.classList.add("header")
     app.append(header)
-    //app.classList.add("files")
-    //app.setAttribute("data-msg", "Select VS Code Extension")
-    //sapp.addEventListener('click', clickHandler);
+    app.classList.add("files")
+    app.setAttribute("data-msg", "Select VS Code Extension")
+    app.addEventListener('click', clickHandler);
 }

@@ -4,8 +4,6 @@ import { join } from 'path';
 import { readFileSync, createWriteStream, readdirSync, statSync, writeFileSync } from 'fs';
 import jszip from 'jszip';
 
-process.chdir("./plugin")
-
 // Manipulate plugin.json file
 const plugin = {
     id: "almukaafih.vsacode",
@@ -31,7 +29,7 @@ if (process.argv.length == 2) {
 }
 writeFileSync("plugin.json", JSON.stringify(plugin))
 
-execSync("npx webpack-cli --mode production")
+execSync("yarn webpack-cli --mode production", { stdio: 'inherit' })
 
 const iconFile = 'icon.png';
 const pluginJson = 'plugin.json';
@@ -52,7 +50,7 @@ loadFile('', distFolder);
 
 zip
   .generateNodeStream({ type: 'nodebuffer', streamFiles: true })
-  .pipe(createWriteStream('../vsacode.zip'))
+  .pipe(createWriteStream('vsacode.zip'))
   .on('finish', () => {
     console.log('vsacode.zip written.');
   });

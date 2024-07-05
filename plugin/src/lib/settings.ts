@@ -1,4 +1,4 @@
-import { HOME } from "./constants"
+import { HOME } from "./constants.js"
 
 const fsOperation = acode.require("fs")
 const { join } = acode.require("url")

@@ -32,7 +32,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.23.9":
+"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.23.9, @babel/core@npm:^7.24.7":
   version: 7.24.7
   resolution: "@babel/core@npm:7.24.7"
   dependencies:
@@ -1903,7 +1903,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:^7.1.14":
+"@types/babel__core@npm:^7, @types/babel__core@npm:^7.1.14":
   version: 7.20.5
   resolution: "@types/babel__core@npm:7.20.5"
   dependencies:
@@ -2185,6 +2185,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vsacode/plugin@workspace:plugin":
+  version: 0.0.0-use.local
+  resolution: "@vsacode/plugin@workspace:plugin"
+  dependencies:
+    "@babel/core": "npm:^7.24.7"
+    "@babel/plugin-transform-runtime": "npm:^7.24.3"
+    "@babel/preset-env": "npm:^7.24.5"
+    "@eslint/js": "npm:^9.2.0"
+    "@jest/globals": "npm:^29.7.0"
+    "@types/babel__core": "npm:^7"
+    babel-loader: "npm:^9.1.3"
+    eslint: "npm:^8.57.0"
+    jest: "npm:^29.7.0"
+    jszip: "npm:^3.10.1"
+    ts-jest: "npm:^29.1.2"
+    ts-loader: "npm:^9.5.1"
+    typescript: "npm:~5.4.5"
+    typescript-eslint: "npm:^7.8.0"
+    vsacode: "workspace:core"
+    webpack: "npm:^5.90.1"
+    webpack-cli: "npm:^5.1.4"
+  languageName: unknown
+  linkType: soft
+
 "@vsacode/server@workspace:addons/server":
   version: 0.0.0-use.local
   resolution: "@vsacode/server@workspace:addons/server"
@@ -2195,7 +2219,7 @@ __metadata:
     hono: "npm:^4.4.0"
     node-pty: "npm:^1.0.0"
     properties-file: "npm:^3.5.4"
-    typescript: "npm:^5.4.5"
+    typescript: "npm:~5.4.5"
   languageName: unknown
   linkType: soft
 
@@ -5464,12 +5488,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"plugin@workspace:plugin":
-  version: 0.0.0-use.local
-  resolution: "plugin@workspace:plugin"
-  languageName: unknown
-  linkType: soft
-
 "prelude-ls@npm:^1.2.1":
   version: 1.2.1
   resolution: "prelude-ls@npm:1.2.1"
@@ -5935,7 +5953,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"smol-toml@npm:^1.1.4":
+"smol-toml@npm:^1.2.2":
   version: 1.2.2
   resolution: "smol-toml@npm:1.2.2"
   checksum: 10c0/25a1be6dab16db07b1c7380df6175512a3f3d74fdf59ddb3e2eea126e985e0ae56b8150f5a0bea2bd4df259c59694374febdaa626a009b9d7958f9c1d385dd99
@@ -6393,23 +6411,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.4.5":
-  version: 5.5.2
-  resolution: "typescript@npm:5.5.2"
+"typescript@npm:~5.4.5":
+  version: 5.4.5
+  resolution: "typescript@npm:5.4.5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/8ca39b27b5f9bd7f32db795045933ab5247897660627251e8254180b792a395bf061ea7231947d5d7ffa5cb4cc771970fd4ef543275f9b559f08c9325cccfce3
+  checksum: 10c0/2954022ada340fd3d6a9e2b8e534f65d57c92d5f3989a263754a78aba549f7e6529acc1921913560a4b816c46dce7df4a4d29f9f11a3dc0d4213bb76d043251e
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.4.5#optional!builtin<compat/typescript>":
-  version: 5.5.2
-  resolution: "typescript@patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=379a07"
+"typescript@patch:typescript@npm%3A~5.4.5#optional!builtin<compat/typescript>":
+  version: 5.4.5
+  resolution: "typescript@patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=5adc0c"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/a7b7ede75dc7fc32a76d0d0af6b91f5fbd8620890d84c906f663d8783bf3de6d7bd50f0430b8bb55eac88a38934af847ff709e7156e5138b95ae94cbd5f73e5b
+  checksum: 10c0/db2ad2a16ca829f50427eeb1da155e7a45e598eec7b086d8b4e8ba44e5a235f758e606d681c66992230d3fc3b8995865e5fd0b22a2c95486d0b3200f83072ec9
   languageName: node
   linkType: hard
 
@@ -6513,6 +6531,10 @@ __metadata:
 "vsacode-dev@workspace:.":
   version: 0.0.0-use.local
   resolution: "vsacode-dev@workspace:."
+  dependencies:
+    "@types/ace": "npm:^0.0.52"
+    eslint: "npm:^8.57.0"
+    typescript: "npm:~5.4.5"
   languageName: unknown
   linkType: soft
 
@@ -6520,28 +6542,24 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "vsacode@workspace:core"
   dependencies:
-    "@babel/plugin-transform-runtime": "npm:^7.24.3"
-    "@babel/preset-env": "npm:^7.24.5"
     "@eslint/js": "npm:^9.2.0"
     "@jest/globals": "npm:^29.7.0"
-    "@types/ace": "npm:^0.0.52"
     "@types/adm-zip": "npm:^0.5.5"
     "@types/node": "npm:^20.11.16"
     "@types/nunjucks": "npm:^3.2.6"
     "@types/xml2js": "npm:^0.4.14"
     adm-zip: "npm:^0.5.10"
-    babel-loader: "npm:^9.1.3"
     eslint: "npm:^8.57.0"
     file-type: "npm:^19.0.0"
     globals: "npm:^15.1.0"
     jest: "npm:^29.7.0"
     jszip: "npm:^3.10.1"
     nunjucks: "npm:^3.2.4"
-    smol-toml: "npm:^1.1.4"
+    smol-toml: "npm:^1.2.2"
     ts-jest: "npm:^29.1.2"
     ts-loader: "npm:^9.5.1"
     typedoc: "npm:^0.25.12"
-    typescript: "npm:^5.4.5"
+    typescript: "npm:~5.4.5"
     typescript-eslint: "npm:^7.8.0"
     webpack: "npm:^5.90.1"
     webpack-cli: "npm:^5.1.4"

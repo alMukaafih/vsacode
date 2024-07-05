@@ -14,7 +14,7 @@ import { style } from "ziyy";
 
 /**
  * Build acode plugin
- * @param env 
+ * @param env
  */
 export async function distBuild(env: Env) {
     const label: string = env.label
@@ -24,13 +24,13 @@ export async function distBuild(env: Env) {
     const engine = env.engine
 
     process.chdir(base);
-    if (env.runtime) 
+    if (env.runtime)
         console.log("")
     console.log(style(`    [c:cyan][b]Building[/0] ${label}`));
     nunjucks.configure(path.join(env.home, "dist", "templates"), { autoescape: false });
-    const mainJs = nunjucks.render(`${engine}.njk`, { cssList: env.cssList, pluginId: env.pluginId })
+    const mainJs = nunjucks.render(`${engine.name}.njk`, { cssList: env.cssList, pluginId: env.pluginId })
     await fs.writeFile(path.join(base, "dist", "main.js"), mainJs);
-    
+
     const distZip = new Zip();
     distZip.addLocalFolder(path.join(base, "dist"));
     distZip.addLocalFile(path.join(base, "plugin.json"));

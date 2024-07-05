@@ -42,6 +42,7 @@ export default (env, options) => {
         '.js': ['.ts', '.js'],
         '.mjs': ['.mts', '.mjs'],
       },
+      fallback: { "os": false, "path": false, "fs": false }
     },
     module: {
       rules,
