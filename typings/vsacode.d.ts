@@ -3,109 +3,143 @@
  */
 interface Env {
     /**
-     * Styles error message.
-     * @param message
-     * @returns Styled string
+     * Assets directory
      */
-    err: (message: string) => string
+    assets?: string
+
     /**
-     * Root directory of package.
+     * Cached assets.
      */
-    home: string
+    assetList?: Record<string, string>
+
     /**
-     * Temporary directory.
+     * Build directory of contribution.
      */
-    tmpDir?: string
+    base?: string
+
+    /**
+     * Build directory.
+     */
+    buildDir?: string
+
+    /**
+     * Command internal data.
+     */
+    cmd?: IconfigToml["commands"][""]
+
+    /**
+     * Contribution point information.
+     */
+    contrib?: Record<string, any>
+
+    /**
+     * CSS file name list
+     */
+    cssList?: string[]
+
+    /**
+     * Dist directory.
+     */
+    dist?: string
+
+    /**
+     * Engine internal data.
+     */
+    engine?: IconfigToml["engines"][""]
+
     /**
      * Available engines.
      */
     engines?: IconfigToml["engines"]
+
     /**
-     * Command internal data.
+     * Styles error message.
+     * @param message
+     * @returns Styled string
      */
-    cmd?: Record<string, any>
+    err?: (message: string) => string
+
     /**
-     * Name of vsix file.
+     * Root directory of package.
      */
-    vsix?: string
+    home: string
+
+    /**
+     * Id of contribution.
+     */
+    id?: string
+
+    /**
+     * Icons definition.
+     */
+    iconDefs?: DefsMap
+
+    /**
+     * IconTheme JSON file.
+     */
+    iconJson?: any
+
+    /**
+     * Label of contribution.
+     */
+    label?: string
+
+    /**
+     * Output directory.
+     */
+    outDir?: string
+
     /**
      * VS Code contribution
      *  package.json file.
      */
     packageJson?: any
-    /**
-     * Build directory.
-     */
-    buildDir?: string
-    /**
-     * Output directory.
-     */
-    outDir?: string
-    /**
-     * Number of times engine runs.
-     */
-    runtime?: number
-    /**
-     * Engine internal data.
-     */
-    engine?: Record<string, any>
-    /**
-     * Contribution point information.
-     */
-    contrib?: Record<string, any>
-    /**
-     * Build directory of contribution.
-     */
-    base?: string
-    /**
-     * Dist directory.
-     */
-    dist?: string
-    /**
-     * Id of contribution.
-     */
-    id?: string
-    /**
-     * Label of contribution.
-     */
-    label?: string
+
     /**
      * Path of contribution.
      */
     path?: string
-    /**
-     * Dirname of VS Code contribution
-     *  package.json file.
-     */
-    root?: string
-    /**
-     * IconTheme JSON file.
-     */
-    iconJson?: any
-    /**
-     * Cached assets.
-     */
-    assetList?: Record<string, any>
-    /**
-     * Icons definition.
-     */
-    iconDefs?: DefsMap
-    /**
-     * Assets directory
-     */
-    assets?: string
-    /**
-     * Zip Data
-     */
-    zipData?: Buffer
-    /**
-     * CSS file name list
-     */
-    cssList?: string[]
+
     /**
      * Plugin id
      */
     pluginId?: string
+
+    /**
+     * Dirname of VS Code contribution
+     *  JSON file.
+     */
+    root?: string
+
+    /**
+     * Number of times engine runs.
+     */
+    runtime?: number
+
+    /**
+     * Subcommand
+     */
+    subCmd?: string | "main"
+
+    /**
+     * Skip style generation
+     */
+    skipStyles?: boolean
+
+    /**
+     * Temporary directory.
+     */
+    tmpDir?: string
+
+    /**
+     * Name of vsix file.
+     */
+    vsix?: string
+
+    /**
+     * Zip Data
+     */
+    zipData?: Buffer | Uint8Array
 }
 declare namespace VsaApi {
     /**

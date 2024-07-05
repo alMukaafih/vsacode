@@ -17,11 +17,8 @@ import { fs, path } from  "./compat.js"
  */
 export async function bundleAsset(asset: string, env: Env): Promise<string> {
     const assets: string = env.assets
-    const base: string = env.base
-    const _plugin: Buffer = await fs.readFile(path.join(base,  "plugin.json"));
-    const __plugin: string = _plugin.toString();
-    const plugin = JSON.parse(__plugin);
-    if (!await fs.exists(assets)) 
+    const pluginId = env.pluginId
+    if (!await fs.exists(assets))
         await fs.mkdir(assets);
     if (asset in env.assetList)
         return env.assetList[asset];
@@ -31,14 +28,14 @@ export async function bundleAsset(asset: string, env: Env): Promise<string> {
         dest1 = `${assets}/1_${dest}`
     await fs.copyFile(asset, dest1);
     //console.log(`    asset \x1b[1m\x1b[32m${dest}.${ext} [emitted] [immutable]\x1b[0m [from ${asset}]`)
-    env.assetList[asset] = `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/${path.basename(assets)}/${dest}`
-    return `https://localhost/__cdvfile_files-external__/plugins/${plugin.id}/${path.basename(assets)}/${dest}`
+    env.assetList[asset] = `https://localhost/__cdvfile_files-external__/plugins/${pluginId}/${path.basename(assets)}/${dest}`
+    return `https://localhost/__cdvfile_files-external__/plugins/${pluginId}/${path.basename(assets)}/${dest}`
 }
 
 export async function parse(map0: ArrayMap, env: Env): Promise<string> {
     const root: string = env.root
     const ref: DefsMap = env.iconDefs
-    
+
     let css = "";
     let classes: string;
     let style: string;
@@ -47,7 +44,7 @@ export async function parse(map0: ArrayMap, env: Env): Promise<string> {
     let fontId = "";
     let fontSize = "";
     let iconPath = "";
-    
+
     for(const [key, value] of Object.entries(map0)) {
         if (!ref[key])
             continue
@@ -133,7 +130,7 @@ export async function _css(name: string, exe="default", kind=".file_type_", env:
 
     if (ref[name].iconPath)
         iconPath = `    background-image: url(${await bundleAsset(path.join(root, ref[name].iconPath), env)});\n`;
-    
+
     const css = kind + exe +  `::before {\n    content: "${fontChar}" !important;\n`
     + fontColor + fontId + fontSize + iconPath
     + `    background-size: contain;\n`
@@ -203,9 +200,9 @@ export function verify(map1: ObjectMap, map2: DefsMap): ObjectMap {
 }
 
 /**
- * Create directory recursively 
- * @param parent 
- * @param dir 
+ * Create directory recursively
+ * @param parent
+ * @param dir
  */
 export async function createFileRecursive(parent: string, dir: string | string[]): Promise<void> {
     let isDir = false;
@@ -221,7 +218,7 @@ export async function createFileRecursive(parent: string, dir: string | string[]
     const newParent = path.join(parent, cd);
     if (!(await fs.exists(newParent))) {
       if (dir.length || isDir) {
-        try { await fs.mkdir(newParent) } catch {}
+        try { await fs.mkdir(newParent) } catch { /* empty */ }
       } else {
         await fs.writeFile(newParent, "");
       }
@@ -238,21 +235,21 @@ export async function unzip(env: Env): Promise<void> {
     await zip.loadAsync(data)
     const promises = Object.keys(zip.files).map(async (file) => {
         let correctFile = file;
-        if (/\\/.test(correctFile)) {
+        if (correctFile.includes('\\')) {
             correctFile = correctFile.replace(/\\/g, '/')
         }
-    
+
         const filePath = path.join(tmpDir, correctFile)
         if (!await fs.exists(filePath)) {
             await createFileRecursive(tmpDir, correctFile)
         }
-    
+
         if (correctFile.endsWith('/')) return;
-    
-        let data = await zip.files[file].async('string')
+
+        const data = await zip.files[file].async('string')
 
         await fs.writeFile(filePath, data)
     });
-    
+
     await Promise.all(promises);
 }

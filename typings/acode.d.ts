@@ -217,12 +217,21 @@ declare namespace AcodeApi {
          * including all subdirectories and files within it.
          */
         lsDir(): Promise<string[]>
+
         /**
          * It allows you to read the contents of a specified file.
          * @param encoding
          * @returns
          */
-        readFile(encoding?: string): Promise<string>
+        readFile(): Promise<ArrayBuffer>
+
+        /**
+         * It allows you to read the contents of a specified file.
+         * @param encoding
+         * @returns
+         */
+        readFile(encoding: "utf8"): Promise<string>
+
         /**
          * It creates a new, empty file in the specified location with the specified file {name}.
          * If a file with the same name already exists, it will be overwritten.
@@ -231,47 +240,55 @@ declare namespace AcodeApi {
          * @returns
          */
         createFile(name: string, content?: string): Promise<string>
+
         /**
          * It is used to write data to a file.
          * @param content
          * @returns
          */
         writeFile(content: string | ArrayBuffer): Promise<void>
+
         /**
          * It is used to create a new directory in the file system.
          * @param name
          * @returns
          */
         createDirectory(name: string): Promise<string>
+
         /**
          * It is used to remove a specified file or directory from the file system.
          * It is important to use caution when using this method as deleted files and directories cannot be recovered.
          * @returns
          */
         delete(): Promise<void>
+
         /**
          * It is used to copy a file or directory from a specified source path to a specified destination path.
          * @param destination
          * @returns
          */
         copyTo(destination: string): Promise<string>
+
         /**
          * It allows you to move a file or directory from its current location to a new destination.
          * @param destination
          * @returns
          */
         moveTo(destination: string): Promise<string>
+
         /**
          * It allows for the renaming of a file or directory.
          * @param newName
          * @returns
          */
         renameTo(newName: string): Promise<string>
+
         /**
          * It checks if a specified file or directory exists in the file system and returns a boolean value indicating the result.
          */
         exists(): Promise<boolean>
     }
+
     /**
      *
      */
@@ -284,11 +301,13 @@ declare namespace AcodeApi {
          * @returns A string representing an icon class for the file specified by the filename. The icon class returned corresponds to the file type, which is determined by the file extension of the provided filename.
          */
         getIconForFile(filename: string): string
+
         /**
          * Checks whether given type is file or not
          * @returns
          */
         isFile(type: 'file' | 'link'): boolean
+
         /**
          * Checks whether given type is directory or not
          * @returns
@@ -296,6 +315,7 @@ declare namespace AcodeApi {
         isDir(type: 'dir' | 'directory' | 'folder'): boolean
 
     }
+
     /**
      *
      */
@@ -315,6 +335,7 @@ declare namespace AcodeApi {
         onclick?: (event: Event) => void;
         onchange?: (event: Event) => void;
     }
+
     /**
      * Adds and remove intent handler for the app.
      * The intent handler supports URI scheme acode://<module>/<action>/<value>.
@@ -327,6 +348,7 @@ declare namespace AcodeApi {
          * @returns
          */
         addHandler(handler: (event: IntentEvent) => void): void
+
         /**
          * Removes an intent handler from the app.
          * @param handler
@@ -334,6 +356,7 @@ declare namespace AcodeApi {
          */
         removeHandler(handler: (event: IntentEvent) => void): void
     }
+
     /**
      *
      */
@@ -342,23 +365,28 @@ declare namespace AcodeApi {
          * The module name.
          */
         module: string
+
         /**
          * The action name.
          */
         action: string
+
         /**
          * The value.
          */
         value: string
+
         /**
          * Prevents the default behavior of the intent.
          */
         preventDefault: () => void
+
         /**
          * Stops the propagation of the intent.
          */
         stopPropagation: () => void
     }
+
     /**
      * Builtin acode modules
      */
@@ -404,6 +432,7 @@ declare namespace AcodeApi {
         url: Url
         windowResize: any
     }
+
     /**
      * This object can be used to access the cached files
      */
@@ -412,15 +441,18 @@ declare namespace AcodeApi {
          * Url of the cached file.
          */
         cacheFileUrl: string
+
         /**
          * File object of the cached file. Using this object, you can write/read the file.
          */
         cacheFile: File
+
         /**
          * If this is the first time the plugin is loaded, this value will be true. Otherwise, it will be false.
          */
         firstInit: boolean
     }
+
     /**
      * You can use this parameter to define the settings of the plugin. The settings will be displayed in the plugin page.
      */
@@ -540,7 +572,7 @@ declare namespace AcodeApi {
         /**
          * The type of the selected item, either 'file' or 'folder'
          */
-        type: string
+        type: "file" | "folder"
         /**
          * The url of the selected item
          */

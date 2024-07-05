@@ -1,5 +1,5 @@
-import { fs, path } from  "../lib/compat.js"
-import { productIconThemeStylesGen, pluginJsonGen } from "../lib/generator.js";
+import { fs, path, toString } from  "../lib/compat.js"
+import { productIconThemeStylesGen, pluginJsonGen } from "../lib/generator/index.js";
 import { distBuild } from "../lib/dist.js";
 
 async function main(env: Env) {
@@ -26,8 +26,8 @@ async function main(env: Env) {
     if(env.id == undefined && env.label == undefined && env.path == undefined)
         return 1;
 
-    const _json: Buffer = await fs.readFile(icons);
-    let __json: string = _json.toString();
+    const _json = await fs.readFile(icons);
+    let __json: string = toString(_json);
     __json = __json.replace(/\s\/\/(.)+/g, "");
     const iconJson = JSON.parse(__json);
     env.iconJson = iconJson

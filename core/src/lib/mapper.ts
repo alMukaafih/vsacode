@@ -57,7 +57,7 @@ export class MapFileIcons {
      * @param {Map} map1 - MapX
      * @param {Map} map2 - MapY
      * @param {Map} map0 - Main map
-     * @returns {Map} 
+     * @returns {Map}
      */
     map(map1, map2, map0) {
         this.map1 = map1;
@@ -70,7 +70,7 @@ export class MapFileIcons {
                 this.map2[this.value] = [];
             if (this.isFile)
                 this.key = encode(this.key);
-            
+
             if (this.isFile && this.isFullFile)
                 this.key = "f_" + this.key;
             this.key = this.x + this.key + this.y + this.z;
@@ -86,6 +86,6 @@ export class MapThemes {
         this.themes = themes
     }
     map() {
-        
+        /* empty */
     }
 }
