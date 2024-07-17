@@ -16,12 +16,6 @@ permissions:
     paths:
       - core
       - .github/workflows/CI.yml
-    paths-ignore:
-      - '**/*.md'
-      - LICENSE
-      - '**/*.gitignore'
-      - .editorconfig
-      - docs/**
   pull_request: null
 defaults:
   run:
