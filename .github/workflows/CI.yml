@@ -3,6 +3,7 @@ env:
   DEBUG: napi:*
   APP_NAME: core
   MACOSX_DEPLOYMENT_TARGET: '10.13'
+  APP_VERSION: 0.6.0
 permissions:
   contents: write
   id-token: write
@@ -40,18 +41,24 @@ jobs:
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
-            build: yarn build --target x86_64-unknown-linux-gnu
+            build: |
+              cd core
+              yarn build --target x86_64-unknown-linux-gnu
           - host: ubuntu-latest
             target: x86_64-unknown-linux-musl
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
-            build: yarn build --target x86_64-unknown-linux-musl
+            build: |
+              cd core
+              yarn build --target x86_64-unknown-linux-musl
           - host: macos-latest
             target: aarch64-apple-darwin
             build: yarn build --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
-            build: yarn build --target aarch64-unknown-linux-gnu
+            build: |
+              cd core
+              yarn build --target aarch64-unknown-linux-gnu
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
             setup: |
@@ -73,6 +80,7 @@ jobs:
             build: |-
               set -e &&
               rustup target add aarch64-unknown-linux-musl &&
+              cd core &&
               yarn build --target aarch64-unknown-linux-musl
           - host: windows-latest
             target: aarch64-pc-windows-msvc
@@ -92,7 +100,6 @@ jobs:
         if: ${{ !matrix.settings.docker }}
         with:
           node-version: 20
-          cache: yarn
       - name: Install
         uses: dtolnay/rust-toolchain@stable
         if: ${{ !matrix.settings.docker }}
@@ -128,7 +135,6 @@ jobs:
         if: matrix.settings.target == 'i686-pc-windows-msvc'
         with:
           node-version: 20
-          cache: yarn
           architecture: x86
       - name: Build in docker
         uses: addnab/docker-run-action@v3
@@ -145,31 +151,33 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: ${{ env.APP_NAME }}.*.node
+          path: "${{ env.APP_NAME }}/${{ env.APP_NAME }}.*.node"
           if-no-files-found: error
   build-freebsd:
-    runs-on: macos-13
+    runs-on: ubuntu-latest
     name: Build FreeBSD
     steps:
       - uses: actions/checkout@v4
       - name: Build
         id: build
-        uses: cross-platform-actions/action@v0.24.0
+        uses: cross-platform-actions/action@v0.25.0
         env:
           DEBUG: napi:*
+          RUSTUP_HOME: /usr/local/rustup
+          CARGO_HOME: /usr/local/cargo
           RUSTUP_IO_THREADS: 1
         with:
           operating_system: freebsd
-          version: '13.2'
+          version: '14.0'
           memory: 8G
           cpu_count: 3
-          environment_variables: DEBUG RUSTUP_IO_THREADS
+          environment_variables: 'DEBUG RUSTUP_IO_THREADS'
           shell: bash
           run: |
-            sudo pkg install -y -f curl node libnghttp2 npm
+            sudo pkg install -y -f curl node libnghttp2 npm yarn
             sudo npm install -g yarn --ignore-scripts
             curl https://sh.rustup.rs -sSf --output rustup.sh
-            sh rustup.sh -y --profile minimal --default-toolchain stable
+            sh rustup.sh -y --profile minimal --default-toolchain beta
             source "$HOME/.cargo/env"
             echo "~~~~ rustc --version ~~~~"
             rustc --version
@@ -177,6 +185,7 @@ jobs:
             node -v
             echo "~~~~ yarn --version ~~~~"
             yarn --version
+            cd core
             pwd
             ls -lah
             whoami
@@ -184,7 +193,6 @@ jobs:
             freebsd-version
             yarn install
             yarn build
-            yarn test
             rm -rf node_modules
             rm -rf target
             rm -rf .yarn/cache
@@ -192,7 +200,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: ${{ env.APP_NAME }}.*.node
+          path: "${{ env.APP_NAME }}/${{ env.APP_NAME }}.*.node"
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -216,7 +224,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: yarn
           architecture: x64
       - name: Install dependencies
         run: yarn install
@@ -224,7 +231,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: .
+          path: ${{ env.APP_NAME }}/.
       - name: List packages
         run: ls -R .
         shell: bash
@@ -249,12 +256,14 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: yarn
       - name: Install dependencies
-        run: yarn install
+        run: |
+          yarn install
+          mv ../node_modules .
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           name: bindings-x86_64-unknown-linux-gnu
-          path: .
+          path: ${{ env.APP_NAME }}/.
       - name: List packages
         run: ls -R .
         shell: bash
@@ -282,11 +291,12 @@ jobs:
         run: |
           yarn config set supportedArchitectures.libc "musl"
           yarn install
+          mv ../node_modules .
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           name: bindings-x86_64-unknown-linux-musl
-          path: .
+          path: ${{ env.APP_NAME }}/.
       - name: List packages
         run: ls -R .
         shell: bash
@@ -309,7 +319,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-aarch64-unknown-linux-gnu
-          path: .
+          path: ${{ env.APP_NAME }}/.
       - name: List packages
         run: ls -R .
         shell: bash
@@ -318,6 +328,7 @@ jobs:
           yarn config set supportedArchitectures.cpu "arm64"
           yarn config set supportedArchitectures.libc "glibc"
           yarn install
+          cp -a ../node_modules .
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -330,6 +341,7 @@ jobs:
           options: '--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build'
           run: |
             set -e
+            cd core
             yarn test
             ls -la
   test-linux-aarch64-musl-binding:
@@ -343,7 +355,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-aarch64-unknown-linux-musl
-          path: .
+          path: ${{ env.APP_NAME }}/.
       - name: List packages
         run: ls -R .
         shell: bash
@@ -352,6 +364,7 @@ jobs:
           yarn config set supportedArchitectures.cpu "arm64"
           yarn config set supportedArchitectures.libc "musl"
           yarn install
+          cp -a ../node_modules .
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -364,6 +377,7 @@ jobs:
           options: '--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build'
           run: |
             set -e
+            cd core
             yarn test
   test-linux-arm-gnueabihf-binding:
     name: Test bindings on armv7-unknown-linux-gnueabihf - node@${{ matrix.node }}
@@ -382,7 +396,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-armv7-unknown-linux-gnueabihf
-          path: .
+          path: ${{ env.APP_NAME }}/.
       - name: List packages
         run: ls -R .
         shell: bash
@@ -390,6 +404,7 @@ jobs:
         run: |
           yarn config set supportedArchitectures.cpu "arm"
           yarn install
+          cp -a ../node_modules .
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -402,6 +417,7 @@ jobs:
           options: '--platform linux/arm/v7 -v ${{ github.workspace }}:/build -w /build'
           run: |
             set -e
+            cd core
             yarn test
             ls -la
   universal-macOS:
@@ -422,19 +438,19 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-x86_64-apple-darwin
-          path: artifacts
+          path: ${{ env.APP_NAME }}/artifacts
       - name: Download macOS arm64 artifact
         uses: actions/download-artifact@v4
         with:
           name: bindings-aarch64-apple-darwin
-          path: artifacts
+          path: ${{ env.APP_NAME }}/artifacts
       - name: Combine binaries
         run: yarn universal
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: bindings-universal-apple-darwin
-          path: ${{ env.APP_NAME }}.*.node
+          path: "${{ env.APP_NAME }}/${{ env.APP_NAME }}.*.node"
           if-no-files-found: error
   publish:
     name: Publish
@@ -460,7 +476,7 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
+          path: core/artifacts
       - name: Move artifacts
         run: yarn artifacts
       - name: List packages

@@ -2,6 +2,5 @@
   "name": "vsacode-dev",
   "workspaces": [
     "core"
-  ],
-  "packageManager": "yarn@4.3.1"
+  ]
 }
