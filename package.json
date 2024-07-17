@@ -42,6 +42,5 @@
     "test": "ava",
     "universal": "napi universal",
     "version": "napi version"
-  },
-  "packageManager": "yarn@4.3.1"
+  }
 }
