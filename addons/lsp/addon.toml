@@ -1,5 +1,0 @@
-[[commands]]
-name = "lsp"
-path = "./lsp.js"
-options = ["main"]
-help = "lsp_help"
