@@ -99,6 +99,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vsacode/core@workspace:core":
+  version: 0.0.0-use.local
+  resolution: "@vsacode/core@workspace:core"
+  dependencies:
+    "@napi-rs/cli": "npm:^2.18.4"
+    ava: "npm:^6.0.1"
+  languageName: unknown
+  linkType: soft
+
 "abbrev@npm:1":
   version: 1.1.1
   resolution: "abbrev@npm:1.1.1"
@@ -1436,12 +1445,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vsacode@workspace:.":
+"vsacode-dev@workspace:.":
   version: 0.0.0-use.local
-  resolution: "vsacode@workspace:."
-  dependencies:
-    "@napi-rs/cli": "npm:^2.18.4"
-    ava: "npm:^6.0.1"
+  resolution: "vsacode-dev@workspace:."
   languageName: unknown
   linkType: soft
 

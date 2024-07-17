@@ -1,0 +1,20 @@
+{
+  "name": "@vsacode/core-android-arm-eabi",
+  "version": "0.6.0",
+  "os": [
+    "android"
+  ],
+  "cpu": [
+    "arm"
+  ],
+  "main": "core.android-arm-eabi.node",
+  "files": [
+    "core.android-arm-eabi.node"
+  ],
+  "description": "Extending the Acode Editor.",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  },
+  "repository": "https://github.com/alMukaafih/vsacode.git"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@vsacode/core-linux-arm64-musl",
+  "version": "0.6.0",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "main": "core.linux-arm64-musl.node",
+  "files": [
+    "core.linux-arm64-musl.node"
+  ],
+  "description": "Extending the Acode Editor.",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  },
+  "repository": "https://github.com/alMukaafih/vsacode.git",
+  "libc": [
+    "musl"
+  ]
+}

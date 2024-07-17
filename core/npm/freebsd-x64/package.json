@@ -1,0 +1,20 @@
+{
+  "name": "@vsacode/core-freebsd-x64",
+  "version": "0.6.0",
+  "os": [
+    "freebsd"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "core.freebsd-x64.node",
+  "files": [
+    "core.freebsd-x64.node"
+  ],
+  "description": "Extending the Acode Editor.",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  },
+  "repository": "https://github.com/alMukaafih/vsacode.git"
+}

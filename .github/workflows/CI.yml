@@ -1,7 +1,7 @@
 name: CI
 env:
   DEBUG: napi:*
-  APP_NAME: vsacode
+  APP_NAME: core
   MACOSX_DEPLOYMENT_TARGET: '10.13'
 permissions:
   contents: write
@@ -13,6 +13,9 @@ permissions:
       - devel
     tags-ignore:
       - '**'
+    paths:
+      - core
+      - .github/workflows/CI.yml
     paths-ignore:
       - '**/*.md'
       - LICENSE
@@ -20,6 +23,9 @@ permissions:
       - .editorconfig
       - docs/**
   pull_request: null
+defaults:
+  run:
+    working-directory: ./core
 jobs:
   build:
     strategy:
