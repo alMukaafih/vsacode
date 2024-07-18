@@ -1,0 +1,17 @@
+{
+  "name": "@vsacode/build-darwin-universal",
+  "version": "0.6.0",
+  "os": [
+    "darwin"
+  ],
+  "main": "build.darwin-universal.node",
+  "files": [
+    "build.darwin-universal.node"
+  ],
+  "description": "Extending the Acode Editor.",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  },
+  "repository": "https://github.com/alMukaafih/vsacode.git"
+}

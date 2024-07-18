@@ -1,0 +1,20 @@
+{
+  "name": "@vsacode/build-linux-arm-musleabihf",
+  "version": "0.6.0",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "arm"
+  ],
+  "main": "build.linux-arm-musleabihf.node",
+  "files": [
+    "build.linux-arm-musleabihf.node"
+  ],
+  "description": "Extending the Acode Editor.",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  },
+  "repository": "https://github.com/alMukaafih/vsacode.git"
+}
