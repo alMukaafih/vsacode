@@ -1,0 +1,41 @@
+{
+  "name": "vsacode",
+  "version": "0.6.0",
+  "description": "Extending the Acode Editor.",
+  "author": "alMukaafih",
+  "license": "MIT",
+  "bin": {
+    "vsa": "dist/bin/vsa.js"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alMukaafih/vsacode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alMukaafih/vsacode/issues"
+  },
+  "homepage": "https://github.com/alMukaafih/vsacode#readme",
+  "keywords": [
+    "acode",
+    "vsacode",
+    "cli"
+  ],
+  "dependencies": {
+    "@vsacode/build": "workspace:",
+    "smol-toml": "^1.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.7.0",
+    "@types/ace": "^0.0.52",
+    "@types/node": "^20.14.11",
+    "eslint": "~8.57.0",
+    "typescript": "~5.4.5",
+    "typescript-eslint": "^7.16.1"
+  },
+  "engines": {
+    "node": ">= 10"
+  }
+}

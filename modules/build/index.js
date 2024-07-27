@@ -310,7 +310,6 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { Config, vsacode } = nativeBinding
+const { Main } = nativeBinding
 
-module.exports.Config = Config
-module.exports.vsacode = vsacode
+module.exports.Main = Main

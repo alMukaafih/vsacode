@@ -1,0 +1,23 @@
+{
+  "name": "@vsacode/mgr",
+  "version": "0.6.0",
+  "description": "Extending the Acode Editor.",
+  "main": "src/index.js",
+  "private": true,
+  "scripts": {
+    "vsa": "vsa"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alMukaafih/vsacode.git"
+  },
+  "author": "alMukaafih",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alMukaafih/vsacode/issues"
+  },
+  "homepage": "https://github.com/alMukaafih/vsacode#readme",
+  "engines": {
+    "node": ">= 10"
+  }
+}

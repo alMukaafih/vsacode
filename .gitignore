@@ -45,9 +45,6 @@ build/Release
 node_modules/
 jspm_packages/
 
-# TypeScript v1 declaration files
-typings/
-
 # TypeScript cache
 *.tsbuildinfo
 
@@ -190,3 +187,6 @@ $RECYCLE.BIN/
 !.yarn/versions
 
 *.node
+vsacode-main
+!core/dist
+core/dist/**/*.d.ts

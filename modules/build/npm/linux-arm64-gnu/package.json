@@ -16,8 +16,16 @@
   "engines": {
     "node": ">= 10"
   },
-  "repository": "https://github.com/alMukaafih/vsacode.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alMukaafih/vsacode.git"
+  },
   "libc": [
     "glibc"
-  ]
+  ],
+  "author": "alMukaafih",
+  "bugs": {
+    "url": "https://github.com/alMukaafih/vsacode/issues"
+  },
+  "homepage": "https://github.com/alMukaafih/vsacode#readme"
 }

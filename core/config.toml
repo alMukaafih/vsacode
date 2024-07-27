@@ -1,0 +1,30 @@
+version = "0.6.0"
+
+[flags]
+# Print help
+--help = { arg = false }
+# Print version info and exit
+--version = { arg = false }
+
+# Build plugin from vsix
+[modules.build]
+import = "@vsacode/build"
+[modules.build.attributes]
+tmpDir = true
+vsix = true
+
+# Manage vsacode
+[modules.mgr]
+import = "@vsacode/mgr"
+[modules.mgr.attributes]
+args = true
+private = true
+subCmd = true
+
+[aliases.flags]
+-h = "--help"
+-V = "--version"
+
+[aliases.modules]
+b = "build"
+m = "mgr"

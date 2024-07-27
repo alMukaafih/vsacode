@@ -42,8 +42,17 @@
     "prepublishOnly": "napi prepublish -t npm",
     "test": "ava",
     "universal": "napi universal",
-    "version": "napi version"
+    "version": "napi version",
+    "vsa": "vsa"
   },
-  "repository": "https://github.com/alMukaafih/vsacode.git",
-  "description": "Extending the Acode Editor."
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alMukaafih/vsacode.git"
+  },
+  "description": "Extending the Acode Editor.",
+  "author": "alMukaafih",
+  "bugs": {
+    "url": "https://github.com/alMukaafih/vsacode/issues"
+  },
+  "homepage": "https://github.com/alMukaafih/vsacode#readme"
 }

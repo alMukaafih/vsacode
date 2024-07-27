@@ -1,9 +1,9 @@
-name: Build Module CI
+name: CI
 env:
   DEBUG: napi:*
-  APP_NAME: build
   MACOSX_DEPLOYMENT_TARGET: '10.13'
-  APP_PATH: modules/build
+  MODULES: modules/*
+  VSA__PRIVATE: 1
 permissions:
   contents: write
   id-token: write
@@ -15,12 +15,10 @@ permissions:
     tags-ignore:
       - '**'
     paths:
-      - modules/build
-      - .github/workflows/build-module-ci.yml
+      - core
+      - modules
+      - .github/workflows/CI.yml
   pull_request: null
-defaults:
-  run:
-    working-directory: modules/build
 
 jobs:
   build:
@@ -30,68 +28,64 @@ jobs:
         settings:
           - host: macos-latest
             target: x86_64-apple-darwin
-            build: yarn build --target x86_64-apple-darwin
+            build: ./vsa mgr build --hoist --target x86_64-apple-darwin
           - host: windows-latest
-            build: yarn build --target x86_64-pc-windows-msvc
+            build: ./vsa mgr build --hoist --target x86_64-pc-windows-msvc
             target: x86_64-pc-windows-msvc
           - host: windows-latest
             build: |
-              yarn build --target i686-pc-windows-msvc
-              yarn test
+              ./vsa mgr build --hoist --target i686-pc-windows-msvc
+              ./vsa mgr test
             target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
             build: |
-              cd modules/build
-              yarn build --target x86_64-unknown-linux-gnu
+              ./vsa mgr build --hoist --target x86_64-unknown-linux-gnu
           - host: ubuntu-latest
             target: x86_64-unknown-linux-musl
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
             build: |
-              cd modules/build
-              yarn build --target x86_64-unknown-linux-musl
+              ./vsa mgr build --hoist --target x86_64-unknown-linux-musl
           - host: macos-latest
             target: aarch64-apple-darwin
-            build: yarn build --target aarch64-apple-darwin
+            build: ./vsa mgr build --hoist --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
             build: |
-              cd modules/build
-              yarn build --target aarch64-unknown-linux-gnu
+              ./vsa mgr build --hoist --target aarch64-unknown-linux-gnu
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
             setup: |
               sudo apt-get update
               sudo apt-get install gcc-arm-linux-gnueabihf -y
-            build: yarn build --target armv7-unknown-linux-gnueabihf
+            build: ./vsa mgr build --hoist --target armv7-unknown-linux-gnueabihf
           - host: ubuntu-latest
             target: armv7-unknown-linux-musleabihf
-            build: yarn build --target armv7-unknown-linux-musleabihf
+            build: ./vsa mgr build --hoist --target armv7-unknown-linux-musleabihf
           - host: ubuntu-latest
             target: aarch64-linux-android
-            build: yarn build --target aarch64-linux-android
+            build: ./vsa mgr build --hoist --target aarch64-linux-android
           - host: ubuntu-latest
             target: armv7-linux-androideabi
-            build: yarn build --target armv7-linux-androideabi
+            build: ./vsa mgr build --hoist --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
             build: |-
               set -e &&
               rustup target add aarch64-unknown-linux-musl &&
-              cd modules/build &&
-              yarn build --target aarch64-unknown-linux-musl
+              ./vsa mgr build --hoist --target aarch64-unknown-linux-musl
           - host: windows-latest
             target: aarch64-pc-windows-msvc
-            build: yarn build --target aarch64-pc-windows-msvc
+            build: ./vsa mgr build --hoist --target aarch64-pc-windows-msvc
           - host: ubuntu-latest
             target: riscv64gc-unknown-linux-gnu
             setup: |
               sudo apt-get update
               sudo apt-get install gcc-riscv64-linux-gnu -y
-            build: yarn build --target riscv64gc-unknown-linux-gnu
+            build: ./vsa mgr build --hoist --target riscv64gc-unknown-linux-gnu
     name: stable - ${{ matrix.settings.target }} - node@20
     runs-on: ${{ matrix.settings.host }}
     steps:
@@ -152,7 +146,28 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: ${{ env.APP_PATH }}/${{ env.APP_NAME }}.*.node
+          path: "*.*.node"
+          if-no-files-found: error
+  build-core:
+    name: Build Core
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+      - name: Install dependencies
+        run: yarn install
+      - name: Build
+        run: ./vsa mgr build --core
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dists-core
+          path: |
+            core/dist
           if-no-files-found: error
   build-freebsd:
     runs-on: ubuntu-latest
@@ -167,12 +182,13 @@ jobs:
           RUSTUP_HOME: /usr/local/rustup
           CARGO_HOME: /usr/local/cargo
           RUSTUP_IO_THREADS: 1
+          VSA__PRIVATE: 1
         with:
           operating_system: freebsd
           version: '14.0'
           memory: 8G
           cpu_count: 3
-          environment_variables: DEBUG RUSTUP_IO_THREADS
+          environment_variables: DEBUG RUSTUP_IO_THREADS VSA__PRIVATE
           shell: bash
           run: |
             sudo pkg install -y -f curl node libnghttp2 npm yarn
@@ -186,14 +202,13 @@ jobs:
             node -v
             echo "~~~~ yarn --version ~~~~"
             yarn --version
-            cd ${{ env.APP_PATH }}
             pwd
             ls -lah
             whoami
             env
             freebsd-version
             yarn install
-            yarn build
+            ./vsa mgr build --hoist --target x86_64-unknown-freebsd
             rm -rf node_modules
             rm -rf target
             rm -rf .yarn/cache
@@ -201,7 +216,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
-          path: ${{ env.APP_PATH }}/${{ env.APP_NAME }}.*.node
+          path: "*.*.node"
           if-no-files-found: error
   test-macOS-windows-binding:
     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
@@ -227,17 +242,20 @@ jobs:
           node-version: ${{ matrix.node }}
           architecture: x64
       - name: Install dependencies
-        run: yarn install
+        run: |
+          yarn install
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           name: bindings-${{ matrix.settings.target }}
-          path: ${{ env.APP_PATH }}/.
+          path: .
+      - name: Resolve bindings
+        run: ./vsa mgr resolve
       - name: List packages
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: yarn test
+        run: ./vsa mgr test
   test-linux-x64-gnu-binding:
     name: Test bindings on Linux-x64-gnu - node@${{ matrix.node }}
     needs:
@@ -257,19 +275,19 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: yarn
       - name: Install dependencies
-        run: |
-          yarn install
-          mv ../node_modules .
+        run: yarn install
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           name: bindings-x86_64-unknown-linux-gnu
-          path: ${{ env.APP_PATH }}/.
+          path: .
+      - name: Resolve bindings
+        run: ./vsa mgr resolve
       - name: List packages
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-slim yarn test
+        run: docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-slim ./vsa mgr test
   test-linux-x64-musl-binding:
     name: Test bindings on x86_64-unknown-linux-musl - node@${{ matrix.node }}
     needs:
@@ -292,17 +310,18 @@ jobs:
         run: |
           yarn config set supportedArchitectures.libc "musl"
           yarn install
-          mv ../node_modules .
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           name: bindings-x86_64-unknown-linux-musl
-          path: ${{ env.APP_PATH }}/.
+          path: .
+      - name: Resolve bindings
+        run: ./vsa mgr resolve
       - name: List packages
         run: ls -R .
         shell: bash
       - name: Test bindings
-        run: docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-alpine yarn test
+        run: docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-alpine ./vsa mgr test
   test-linux-aarch64-gnu-binding:
     name: Test bindings on aarch64-unknown-linux-gnu - node@${{ matrix.node }}
     needs:
@@ -316,20 +335,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: bindings-aarch64-unknown-linux-gnu
-          path: ${{ env.APP_PATH }}/.
-      - name: List packages
-        run: ls -R .
-        shell: bash
       - name: Install dependencies
         run: |
           yarn config set supportedArchitectures.cpu "arm64"
           yarn config set supportedArchitectures.libc "glibc"
           yarn install
-          cp -a ../node_modules .
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: bindings-aarch64-unknown-linux-gnu
+          path: .
+      - name: Resolve bindings
+        run: ./vsa mgr resolve
+      - name: List packages
+        run: ls -R .
+        shell: bash
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -342,8 +362,7 @@ jobs:
           options: '--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build'
           run: |
             set -e
-            cd core
-            yarn test
+            ./vsa mgr test
             ls -la
   test-linux-aarch64-musl-binding:
     name: Test bindings on aarch64-unknown-linux-musl - node@${{ matrix.node }}
@@ -352,20 +371,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: bindings-aarch64-unknown-linux-musl
-          path: ${{ env.APP_PATH }}/.
-      - name: List packages
-        run: ls -R .
-        shell: bash
       - name: Install dependencies
         run: |
           yarn config set supportedArchitectures.cpu "arm64"
           yarn config set supportedArchitectures.libc "musl"
           yarn install
-          cp -a ../node_modules .
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: bindings-aarch64-unknown-linux-musl
+          path: .
+      - name: Resolve bindings
+        run: ./vsa mgr resolve
+      - name: List packages
+        run: ls -R .
+        shell: bash
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -378,8 +398,7 @@ jobs:
           options: '--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build'
           run: |
             set -e
-            cd core
-            yarn test
+            ./vsa mgr test
   test-linux-arm-gnueabihf-binding:
     name: Test bindings on armv7-unknown-linux-gnueabihf - node@${{ matrix.node }}
     needs:
@@ -393,19 +412,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: bindings-armv7-unknown-linux-gnueabihf
-          path: ${{ env.APP_PATH }}/.
-      - name: List packages
-        run: ls -R .
-        shell: bash
       - name: Install dependencies
         run: |
           yarn config set supportedArchitectures.cpu "arm"
           yarn install
-          cp -a ../node_modules .
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: bindings-armv7-unknown-linux-gnueabihf
+          path: .
+      - name: Resolve bindings
+        run: ./vsa mgr resolve
+      - name: List packages
+        run: ls -R .
+        shell: bash
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         with:
@@ -418,8 +438,7 @@ jobs:
           options: '--platform linux/arm/v7 -v ${{ github.workspace }}:/build -w /build'
           run: |
             set -e
-            cd core
-            yarn test
+            ./vsa mgr test
             ls -la
   universal-macOS:
     name: Build universal macOS binary
@@ -439,64 +458,71 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bindings-x86_64-apple-darwin
-          path: ${{ env.APP_PATH }}/artifacts
+          path: artifacts
       - name: Download macOS arm64 artifact
         uses: actions/download-artifact@v4
         with:
           name: bindings-aarch64-apple-darwin
-          path: ${{ env.APP_PATH }}/artifacts
+          path: artifacts
+      - name: Resolve bindings
+        run: ./vsa mgr resolve artifacts
+      - name: List packages
+        run: ls -R .
+        shell: bash
       - name: Combine binaries
-        run: yarn universal
+        run: |
+          ./vsa mgr universal
+          ./vsa mgr hoist
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: bindings-universal-apple-darwin
-          path: ${{ env.APP_PATH }}/${{ env.APP_NAME }}.*.node
+          path: "*.*.node"
           if-no-files-found: error
-  publish:
-    name: Publish
-    runs-on: ubuntu-latest
-    needs:
-      - build-freebsd
-      - test-macOS-windows-binding
-      - test-linux-x64-gnu-binding
-      - test-linux-x64-musl-binding
-      - test-linux-aarch64-gnu-binding
-      - test-linux-aarch64-musl-binding
-      - test-linux-arm-gnueabihf-binding
-      - universal-macOS
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: yarn
-      - name: Install dependencies
-        run: yarn install
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: core/artifacts
-      - name: Move artifacts
-        run: yarn artifacts
-      - name: List packages
-        run: ls -R ./npm
-        shell: bash
-      - name: Publish
-        run: |
-          npm config set provenance true
-          if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
-          then
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --access public
-          elif git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+";
-          then
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --tag next --access public
-          else
-            echo "Not a release, skipping publish"
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  # publish:
+  #   name: Publish
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - build-freebsd
+  #     - test-macOS-windows-binding
+  #     - test-linux-x64-gnu-binding
+  #     - test-linux-x64-musl-binding
+  #     - test-linux-aarch64-gnu-binding
+  #     - test-linux-aarch64-musl-binding
+  #     - test-linux-arm-gnueabihf-binding
+  #     - universal-macOS
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Setup node
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20
+  #         cache: yarn
+  #     - name: Install dependencies
+  #       run: yarn install
+  #     - name: Download all artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         path: artifacts
+  #     - name: Move artifacts
+  #       run: yarn artifacts
+  #     - name: List packages
+  #       run: ls -R ./npm
+  #       shell: bash
+  #     - name: Publish
+  #       run: |
+  #         npm config set provenance true
+  #         if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
+  #         then
+  #           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+  #           npm publish --access public
+  #         elif git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+";
+  #         then
+  #           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+  #           npm publish --tag next --access public
+  #         else
+  #           echo "Not a release, skipping publish"
+  #         fi
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
