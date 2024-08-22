@@ -2,15 +2,23 @@
   "name": "vsacode-dev",
   "description": "Extending the Acode Editor.",
   "version": "0.6.0",
+  "private": true,
   "workspaces": [
     "core",
     "modules/*"
   ],
-  "devDependencies": {
-    "typescript": "~5.4.5"
+  "dependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/plugin-transform-runtime": "^7.25.4",
+    "@babel/preset-env": "^7.25.4",
+    "@babel/runtime": "^7.25.6",
+    "@babel/runtime-corejs3": "^7.25.6",
+    "babel-loader": "^9.1.3"
   },
-  "scripts": {
-    "vsa": "vsa"
+  "devDependencies": {
+    "@types/ace": "^0.0.52",
+    "jszip": "^3.10.1",
+    "typescript": "~5.4.5"
   },
   "repository": {
     "type": "git",
@@ -24,5 +32,6 @@
   "homepage": "https://github.com/alMukaafih/vsacode#readme",
   "engines": {
     "node": ">= 10"
-  }
+  },
+  "packageManager": "yarn@4.4.0"
 }

@@ -10,28 +10,13 @@ interface Config {
         /** The package name of the module */
         import: string;
 
-        /** Expected flags */
-        flags: Record<string, {
-            /** Does flag require an argument? */
-            arg: boolean
-        }>;
-
         /** Module attributes */
         attributes: {
-            /** Expects arguments? */
-            args: boolean;
-
             /** Is an Internal command? */
             internal: boolean;
 
-            /** Has subcommands? */
-            subCmd: boolean;
-
             /** Requires Temporary Directory? */
             tmpDir: boolean;
-
-            /** Requires vsix file? */
-            vsix: boolean;
         }
     }>;
 

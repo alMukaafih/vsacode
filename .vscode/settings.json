@@ -2,5 +2,9 @@
     "rust-analyzer.linkedProjects": [
         "modules/build/Cargo.toml"
     ],
-    "rust-analyzer.procMacro.ignored": { "napi-derive": ["napi"] }
+    "rust-analyzer.procMacro.ignored": {
+        "napi-derive": [
+            "napi"
+        ]
+    }
 }

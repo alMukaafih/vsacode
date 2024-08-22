@@ -1,12 +1,20 @@
 declare namespace Vsa {
     interface Env {
-        args?: Array<string>
-        buildDir?: string
-        currentDir: string
-        flags?: Array<string>
-        home: string
-        tmpDir?: string
-        vsixPath?: string
+        args: Array<Arg>;
+        buildDir?: string;
+        home: string;
+        isDebug: boolean;
+        tmpDir?: string;
+    }
+
+    enum ArgType {
+        Flag, Param
+    }
+
+    interface Arg {
+        type: ArgType;
+        key: string;
+        value?: string;
     }
 
     class Component {

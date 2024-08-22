@@ -17,9 +17,7 @@ vsix = true
 [modules.mgr]
 import = "@vsacode/mgr"
 [modules.mgr.attributes]
-args = true
 internal = true
-subCmd = true
 
 [aliases.flags]
 -h = "--help"

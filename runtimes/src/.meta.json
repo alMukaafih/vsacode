@@ -1,7 +1,7 @@
 {
   "id": "%id%",
-  "iconThemes": ["%iconTheme%"],
-  "proThemes": ["%proTheme%"],
+  "iconThemes": [["%value%", "%text%"]],
+  "proThemes": [["%value%", "%text%"]],
   "themes": [
     {
       "id": "%id%",

@@ -3,10 +3,10 @@ export class Runtime {
     #currentTheme: string;
     #id: string;
 
-    async init(id: string, themes: string[]) {
+    async init(id: string, themes: string[][]) {
         this.#id = id;
         for (const theme of themes) {
-            this.#themes[theme] = theme;
+            this.#themes[theme[0]] = theme[0];
         }
 
         const __theme = this.#themes[this.#currentTheme];

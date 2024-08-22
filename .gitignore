@@ -188,5 +188,11 @@ $RECYCLE.BIN/
 
 *.node
 vsacode-main
+acode-theme
+Acode
+ziyy
+var
+icons
+rutty
 !core/dist
 core/dist/**/*.d.ts

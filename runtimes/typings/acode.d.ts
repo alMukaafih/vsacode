@@ -256,7 +256,7 @@ declare namespace AcodeApi {
          * It is used to list the contents of a specified directory,
          * including all subdirectories and files within it.
          */
-        lsDir(): Promise<string[]>;
+        lsDir?(): Promise<string[]>;
 
         /**
          * It allows you to read the contents of a specified file.
@@ -326,7 +326,7 @@ declare namespace AcodeApi {
         /**
          * It checks if a specified file or directory exists in the file system and returns a boolean value indicating the result.
          */
-        exists(): Promise<boolean>;
+        exists?(): Promise<boolean>;
     }
 
     /**
@@ -515,6 +515,7 @@ declare namespace AcodeApi {
              * The icon of the setting. This icon will be displayed in the settings page.
              */
             icon?: string;
+            iconColor?: string;
 
             /**
              * The info of the setting. This info will be displayed in the settings page.
@@ -998,7 +999,7 @@ declare namespace AcodeApi {
      * It allows for operations such as reading, writing, and manipulating files and directories.
      * @param url either the location of any file or directory
      */
-    function fs(url: string): FileSystem;
+    function fs(...url: string[]): FileSystem;
 
     /**
      *
