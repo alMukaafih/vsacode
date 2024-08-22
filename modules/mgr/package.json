@@ -4,12 +4,10 @@
   "description": "Extending the Acode Editor.",
   "main": "src/index.js",
   "private": true,
-  "scripts": {
-    "vsa": "vsa"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alMukaafih/vsacode.git"
+    "url": "git+https://github.com/alMukaafih/vsacode.git",
+    "directory": "modules/mgr"
   },
   "author": "alMukaafih",
   "license": "MIT",

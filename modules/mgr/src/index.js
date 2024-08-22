@@ -7,6 +7,10 @@ class Main {
         this.env = env;
         this.__root = path.resolve(this.env.home, "..");
         this.__bin = path.join(this.__root, "node_modules", ".bin");
+        if (process.platform == "win32") {
+            process.env.PATH += `;${this.__bin}`;
+        }
+        process.env.PATH += `:${this.__bin}`;
         this.__core = path.resolve(this.__root, "core");
         this.__modules = path.resolve(this.__root, "modules");
     }
@@ -113,7 +117,7 @@ class Main {
 
     buildCore() {
         process.chdir(this.__core);
-        child_process.execSync(`${this.__bin}/tsc`, { stdio: "inherit" });
+        child_process.execSync(`tsc`, { stdio: "inherit" });
     }
 
     buildModule(dir) {
@@ -138,7 +142,7 @@ class Main {
             typeof scripts.build != "undefined"
         ) {
             process.chdir(__module);
-            child_process.execSync(`${this.__bin}/${scripts.build} ${target}`, {
+            child_process.execSync(`${scripts.build} ${target}`, {
                 stdio: "inherit",
             });
         }
@@ -218,7 +222,7 @@ class Main {
         this.description = packageJson.description;
         this.license = packageJson.license;
         this.author = packageJson.author;
-        this.repository = packageJson.repository;
+        //this.repository = packageJson.repository;
         this.bugs = packageJson.bugs;
         this.homepage = packageJson.homepage;
         this.engines = packageJson.engines;
@@ -252,7 +256,7 @@ class Main {
         packageJson.description = this.description;
         packageJson.license = this.license;
         packageJson.author = this.author;
-        packageJson.repository = this.repository;
+        //packageJson.repository = this.repository;
         packageJson.bugs = this.bugs;
         packageJson.homepage = this.homepage;
         packageJson.engines = this.engines;
