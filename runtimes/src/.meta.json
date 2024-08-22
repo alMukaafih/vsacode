@@ -1,0 +1,11 @@
+{
+  "id": "%id%",
+  "iconThemes": ["%iconTheme%"],
+  "proThemes": ["%proTheme%"],
+  "themes": [
+    {
+      "id": "%id%",
+      "name": "%name%"
+    }
+  ]
+}

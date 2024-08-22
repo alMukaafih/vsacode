@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es2017",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "removeComments": false,
+    "esModuleInterop": false,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "downlevelIteration": true,
+    "strict": false,
+    "declaration": false,
+    "sourceMap": false,
+    "strictNullChecks": false,
+    "allowSyntheticDefaultImports": true,
+    "allowArbitraryExtensions": true,
+    //"verbatimModuleSyntax": true,
+    "outDir": "dist",
+  },
+  "include": ["./src", "typings"]
+}
