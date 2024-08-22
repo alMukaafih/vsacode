@@ -7,6 +7,7 @@ exports.init = void 0;
 const node_path_1 = __importDefault(require("node:path"));
 const node_os_1 = __importDefault(require("node:os"));
 const node_fs_1 = __importDefault(require("node:fs"));
+const ziyy_1 = require("ziyy");
 const toml = require("smol-toml");
 function init(args0) {
     if (args0.length < 1)
@@ -36,8 +37,11 @@ function init(args0) {
         process.exit(1);
     }
     if (_module.attributes.private && !process.env.VSA__PRIVATE) {
-        console.log("VSA__PRIVATE not set");
+        console.log((0, ziyy_1.style)("<c.red>VSA__PRIVATE not set"));
         //process.exit(1)
+    }
+    else {
+        console.log((0, ziyy_1.style)("<c.green>VSA__PRIVATE set"));
     }
     let args = [];
     let flags = [];
@@ -83,7 +87,7 @@ function init(args0) {
     }
     catch (e) {
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        console.log(`Error: ${e.message}`);
+        console.log((0, ziyy_1.style)(`<c.red>error:</c> ${e.message}`));
         process.exit(1);
     }
 }

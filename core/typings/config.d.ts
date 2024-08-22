@@ -1,5 +1,7 @@
 /** Configuration file */
 interface Config {
+    /** Version */
+    version: string;
     /** Expected flags */
     flags: Record<string, string>;
 
@@ -19,8 +21,8 @@ interface Config {
             /** Expects arguments? */
             args: boolean;
 
-            /** Is a Private command? */
-            private: boolean;
+            /** Is an Internal command? */
+            internal: boolean;
 
             /** Has subcommands? */
             subCmd: boolean;

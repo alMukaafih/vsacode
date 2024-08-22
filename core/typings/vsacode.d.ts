@@ -10,7 +10,7 @@ declare namespace Vsa {
     }
 
     class Component {
-        constructor(env: Env);
+        constructor(env: Env, module?: any);
         init(): void;
     }
 

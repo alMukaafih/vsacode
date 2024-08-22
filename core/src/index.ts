@@ -1,6 +1,7 @@
 import path from "node:path";
 import os from "node:os";
 import fs from "node:fs";
+import { style } from "ziyy";
 
 const toml = require("smol-toml");
 
@@ -36,9 +37,11 @@ export function init(args0: string[]) {
         process.exit(1);
     }
 
-    if (_module.attributes.private && !process.env.VSA__PRIVATE) {
-        console.log("VSA__PRIVATE not set");
+    if (_module.attributes.internal && !process.env.VSA__PRIVATE) {
+        console.log(style("<c.red>VSA__PRIVATE not set"));
         //process.exit(1)
+    } else {
+        console.log(style("<c.green>VSA__PRIVATE set"));
     }
 
     let args: string[] = [];
@@ -66,8 +69,6 @@ export function init(args0: string[]) {
     if (_module.attributes.args)
         env.args = args;
 
-
-
     let tmpDir: string;
     if (_module.attributes.tmpDir) {
         tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "vsa-"));
@@ -80,7 +81,6 @@ export function init(args0: string[]) {
         });
     }
 
-
     if (args0.includes("--debug")) {
         console.log(env);
     }
@@ -92,7 +92,7 @@ export function init(args0: string[]) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        console.log(`Error: ${e.message}`);
+        console.log(style(`<c.red>error:</c> ${e.message}`));
         process.exit(1);
     }
 }
