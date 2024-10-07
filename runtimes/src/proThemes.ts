@@ -1,20 +1,27 @@
+const PLUGIN_URL = "https://localhost/__cdvfile_files-external__/plugins";
+
 export class Runtime {
-    #themes: Record<string, string> = {};
-    #currentTheme: string;
-    #id: string;
+    id: string;
+    theme: string;
+    link: HTMLLinkElement;
 
-    async init(id: string, themes: string[][]) {
-        this.#id = id;
-        for (const theme of themes) {
-            this.#themes[theme[0]] = theme[0];
-        }
+    async init(id: string, theme: string) {
+        this.id = id;
 
-        const __theme = this.#themes[this.#currentTheme];
+        this.theme = theme;
+
         const linkEl = document.createElement("link");
-        linkEl.id = "iconTheme";
-        linkEl.href = `${PLUGIN_DIR}/${this.#id}/productIconThemes/${__theme}.css`;
+        linkEl.id = this.id;
+        linkEl.href = `${PLUGIN_URL}/${this.id}/2/${this.theme}.css`;
         linkEl.rel = "stylesheet";
         document.head.appendChild(linkEl);
+        this.link = linkEl;
+    }
+
+    dispose() {
+        // @vsa-debug
+        console.log(`${this.id}:protheme:dispose - {}`);
+        if (this.link) this.link.remove();
     }
 }
 

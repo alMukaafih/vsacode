@@ -64,3 +64,14 @@ macro_rules! throw_error {
         return Err(Error::new(napi::Status::$x, format!("{}", $y)));
     };
 }
+
+#[macro_export]
+macro_rules! ext {
+    ( $x:expr ) => {
+        if let Some(path) = path!($x).extension() {
+            ok!(path.to_str())
+        } else {
+            ""
+        }
+    };
+}

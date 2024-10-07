@@ -6,9 +6,9 @@ import proThemes from "./proThemes";
 // @vsa-theme
 import themes from "./themes";
 
-const fsOperation = window.acode.require("fsOperation");
+let main: Main;
 
-var JSON = window.JSON;
+const fsOperation = window.acode.require("fs");
 
 export interface Disposable {
     dispose(): void;
@@ -51,6 +51,26 @@ async function updateSettings(key: string, value: any) {
     await saveSettings();
 }
 
+async function listener(e: CustomEvent<{ key: string; value: string }>) {
+    // @vsa-debug
+    console.log(`${meta.id}:config - ${JSON.stringify(e.detail)}`);
+    if (e.detail.key === "enable") {
+        if (!e.detail.value) {
+            main.reset();
+        } else {
+            await main.init();
+        }
+    }
+    // @vsa-icontheme
+    else if (e.detail.key === "iconTheme") {
+        // @vsa-icontheme
+        main.iconThemes.theme = e.detail.value;
+        // @vsa-icontheme
+        main.iconThemes.load();
+        // @vsa-icontheme
+    }
+}
+
 class Main implements Disposable {
     // @vsa-icontheme
     iconThemes = new iconThemes.Runtime();
@@ -67,56 +87,31 @@ class Main implements Disposable {
         await initSettings();
         if (!settings.enable) return;
         // @vsa-protheme
-        await this.proThemes.init(meta.id, meta.proThemes);
-
+        await this.proThemes.init(meta.id, settings.proTheme);
         // @vsa-theme
         await this.themes.init(meta.themes);
         // @vsa-icontheme
-        //window.addEventListener("load", () => {
-            // @vsa-debug
-            //console.log(`window:load`);
-            // @vsa-icontheme
-            this.iconThemes.theme = settings.iconTheme;
-            // @vsa-icontheme
-            this.iconThemes.init(meta.id, meta.iconThemes);
-            // @vsa-icontheme
-        //});
+        await this.iconThemes.init(meta.id, settings.iconTheme);
 
-        window.addEventListener(`${meta.id}:config`, this.listener);
+        window.addEventListener(`${meta.id}:config`, listener);
     }
 
-    async listener(e: CustomEvent<{ key: string; value: string }>) {
-        // @vsa-debug
-        console.log(`${meta.id}:config - ${e.detail}`);
-        if (e.detail.key === "enable") {
-            if (!e.detail.value) this.dispose();
-        }
+    reset() {
         // @vsa-icontheme
-        else if (e.detail.key === "iconTheme") {
-            // @vsa-icontheme
-            this.iconThemes.theme = e.detail.key;
-            // @vsa-icontheme
-            this.iconThemes.reload();
-            // @vsa-icontheme
-        }
+        this.iconThemes.dispose();
     }
 
     dispose() {
         // @vsa-debug
-        console.log(`$dispose:main`);
+        console.log(`${meta.id}:main:dispose`);
         // @vsa-icontheme
-        this.iconThemes.dispose();
-
-        window.removeEventListener(`${meta.id}:config`, this.listener);
-        const elements = document.querySelectorAll(`#${meta.id}`);
-        for (const $el of elements) {
-            $el.remove();
-        }
+        this.reset();
+        window.removeEventListener(`${meta.id}:config`, listener);
     }
 }
 
 if (window.acode) {
-    const main = new Main();
+    main = new Main();
     acode.setPluginInit(
         meta.id,
         async (baseUrl, _$page) => {
@@ -131,7 +126,7 @@ if (window.acode) {
                 {
                     key: "enable",
                     text: "Enable",
-                    value: true,
+                    checkbox: settings.enable,
                 },
                 // @vsa-icontheme
                 {

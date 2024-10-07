@@ -1,4 +1,6 @@
+import { Disposable } from "./main";
 const helpers = acode.require("helpers");
+const Url = acode.require("url");
 
 const iconPath = "0";
 const fontCharacter = "1";
@@ -37,6 +39,7 @@ interface IfontProperties {
 const iconDefinitions = "0";
 const fileExtensions = "1";
 const fileNames = "2";
+const languageIds = "3";
 
 interface IfileIconTheme {
     hidesExplorerArrows: boolean;
@@ -52,76 +55,165 @@ interface IfileIconTheme {
     rootFolderExpanded?: string;
     rootFolderNames?: Record<string, string>;
     rootFolderNamesExpanded?: Record<string, string>;
-    languageIds?: Record<string, string>;
 
     /** fileExtensions */
     "1"?: Record<string, number>;
     /** fileNames */
     "2"?: Record<string, number>;
+    /** languageIds */
+    "3"?: Record<string, number>;
     light?: Record<string, any>;
     highContrast?: Record<string, any>;
 }
 
 type Def = IdefinitionProperties;
 
-export class Runtime {
-    #themes: Record<string, string> = {};
-    #stylesheet: CSSStyleSheet;
-    #currentTheme: string;
-    #theme: IfileIconTheme;
-    #id: string;
-    #style: HTMLStyleElement;
-    #link: HTMLLinkElement;
+function getFileType(filename: string) {
+    const regex = {
+        babel: /\.babelrc$/i,
+        jsmap: /\.js\.map$/i,
+        yarn: /^yarn\.lock$/i,
+        testjs: /\.test\.js$/i,
+        testts: /\.test\.ts$/i,
+        cssmap: /\.css\.map$/i,
+        typescriptdef: /\.d\.ts$/i,
+        clojurescript: /\.cljs$/i,
+        cppheader: /\.(hh|hpp)$/i,
+        jsconfig: /^jsconfig.json$/i,
+        tsconfig: /^tsconfig.json$/i,
+        android: /\.(apk|aab|slim)$/i,
+        jsbeautify: /^\.jsbeautifyrc$/i,
+        webpack: /^webpack\.config\.js$/i,
+        audio: /\.(mp3|wav|ogg|flac|aac)$/i,
+        git: /(^\.gitignore$)|(^\.gitmodules$)/i,
+        video: /\.(mp4|m4a|mov|3gp|wmv|flv|avi)$/i,
+        image: /\.(png|jpg|jpeg|gif|bmp|ico|webp)$/i,
+        npm: /(^package\.json$)|(^package\-lock\.json$)/i,
+        compressed: /\.(zip|rar|7z|tar|gz|gzip|dmg|iso)$/i,
+        eslint: /(^\.eslintrc(\.(json5?|ya?ml|toml))?$|eslint\.config\.(c?js|json)$)/i,
+        postcssconfig:
+            /(^\.postcssrc(\.(json5?|ya?ml|toml))?$|postcss\.config\.(c?js|json)$)/i,
+        prettier:
+            /(^\.prettierrc(\.(json5?|ya?ml|toml))?$|prettier\.config\.(c?js|json)$)/i,
+    };
 
-    async init(id: string, themes: string[][]) {
+    const fileType = Object.keys(regex).find((type) =>
+        regex[type].test(filename),
+    );
+    if (fileType) return fileType;
+
+    return Url.extname(filename).substring(1);
+}
+
+function getIconForFile(filename) {
+    const { getModeForPath } = ace.require("ace/ext/modelist");
+    const type = getFileType(filename);
+    const { name } = getModeForPath(filename);
+
+    return `file file_type_default file_type_${name} file_type_${type}`;
+}
+
+export class Runtime implements Disposable {
+    currentTheme: string;
+    theme_json: IfileIconTheme;
+    id: string;
+    fileExts: HTMLStyleElement;
+    link: HTMLLinkElement;
+    sheet: CSSStyleSheet;
+    cache: Map<string, null>;
+    fileNames: HTMLStyleElement;
+    langIds: HTMLStyleElement;
+
+    set theme(value: string) {
         // @vsa-debug
-        console.log(`${id}:icontheme:init - ${themes}`)
-        this.#id = id;
-        for (const theme of themes) {
-            this.#themes[theme[0]] = theme[0];
-        }
+        console.log(`${this.id}:icontheme.currentTheme - ${value}`);
+        this.currentTheme = value;
+    }
 
-        const __theme = this.#themes[this.#currentTheme];
-        this.#theme = (await import(`./iconThemes/${__theme}.js`)).content;
+    get theme(): string {
+        return this.currentTheme;
+    }
+
+    async init(id: string, theme: string) {
+        this.cache = new Map();
+        // @vsa-debug
+        console.log(`${id}:icontheme:init - ${theme}`);
+        this.id = id;
+
+        this.theme = theme;
+
+        /* for (const sheet of document.styleSheets) {
+            if (sheet.href == "https://localhost/res/file-icons/style.css") {
+                sheet.disabled = true;
+                this.sheet = sheet;
+            }
+        } */
+
+        helpers.getIconForFile = (filename) => {
+            const { getModeForPath } = ace.require("ace/ext/modelist");
+            const type = getFileType(filename);
+            const { name: languageId } = getModeForPath(filename);
+
+            const names = filename.split(".");
+            let result: number;
+            let resultStr = "";
+            let isFull = true;
+            while (names.length > 0) {
+                result = this.resolve(
+                    names.join("."),
+                    isFull,
+                    type,
+                    languageId,
+                );
+
+                if (result + 1) {
+                    resultStr = ` file_type_${result}`;
+                    break;
+                }
+                names.shift();
+                isFull = false;
+            }
+
+            return `file file_type_default file_type_${languageId} file_type_${type}${resultStr}`;
+        };
+
+        this.load();
+    }
+
+    async load() {
+        // @vsa-debug
+        console.log(`${this.id}:reload`);
+        this.reset();
 
         const linkEl = document.createElement("link");
-        linkEl.id = id;
-        linkEl.href = `${PLUGIN_URL}/${this.#id}/iconThemes/${__theme}.css`;
+        linkEl.id = this.id;
+        linkEl.href = `${PLUGIN_URL}/${this.id}/0/${this.theme}.css`;
         linkEl.rel = "stylesheet";
         document.head.appendChild(linkEl);
-        // @vsa-debug
-        console.log(`${id}:icontheme:append:linkEl - ${linkEl}`)
-        this.#link = linkEl;
+        this.link = linkEl;
 
-        const styleEl = document.createElement("style");
-        styleEl.id = id;
-        document.head.appendChild(styleEl);
-        // @vsa-debug
-        console.log(`${id}:icontheme:append:styleEl - ${styleEl}`)
-        this.#style = styleEl;
-        this.#stylesheet = this.#style.sheet;
+        this.theme_json = (await import(`./iconThemes/${this.id}.js`)).content;
 
-        const getIconForFile = structuredClone(helpers.getIconForFile);
-        helpers.getIconForFile = (filename) => {
-            // @vsa-debug
-            console.log(`${id}:icontheme:getIconForFile - ${filename}`)
-            const names = filename.split(".");
-            let full = true;
-            while (names.length > 0) {
-                const status = this.resolve(names.join("."), full);
-                if (status) break;
-                names.shift();
-                full = false;
-            }
-            return getIconForFile(filename);
-        };
+        const langIds = document.createElement("style");
+        langIds.id = this.id;
+        document.head.appendChild(langIds);
+        this.langIds = langIds;
+
+        const fileExts = document.createElement("style");
+        fileExts.id = this.id;
+        document.head.appendChild(fileExts);
+        this.fileExts = fileExts;
+
+        const fileNames = document.createElement("style");
+        fileNames.id = this.id;
+        document.head.appendChild(fileNames);
+        this.fileNames = fileNames;
+
         this.resolveAll();
     }
 
     resolveAll() {
-        let elements = document.querySelectorAll(
-            `.list.collapsible>li.tile[data-type="file"]`,
-        );
+        let elements = document.querySelectorAll(`li.tile[data-type="file"]`);
         for (const $el of elements) {
             helpers.getIconForFile($el.getAttribute("data-name"));
         }
@@ -134,92 +226,130 @@ export class Runtime {
         }
     }
 
-    async insertCSS(name: string, def: Def): Promise<void> {
-        // @vsa-debug
-        console.log(`${this.#id}:icontheme:insertCSS - ${name}, ${def}`)
-        let fontChar = def[fontCharacter] ? def[fontCharacter] : "";
+    resolve(
+        name: string,
+        isFull: boolean,
+        type: string,
+        languageId: string,
+    ): number {
+        let key: number;
+        let isLanguageId = false;
+        if (isFull) {
+            key = this.theme_json[fileNames]
+                ? this.theme_json[fileNames][name]
+                : undefined;
+        } else {
+            key = this.theme_json[fileExtensions]
+                ? this.theme_json[fileExtensions][name]
+                : undefined;
+        }
+
+        if (typeof key != "undefined") {
+        } else if (
+            this.theme_json[languageIds] &&
+            this.theme_json[languageIds][languageId]
+        ) {
+            name = languageId;
+            isFull = false;
+            isLanguageId = true;
+            key = this.theme_json[languageIds][languageId];
+        } else {
+            return -1;
+        }
+
+        let def = this.theme_json[iconDefinitions][key.toString()];
+
+        this.insertCss(name, key.toString(), def, isFull, type, isLanguageId);
+        return key;
+    }
+
+    async insertCss(
+        name: string,
+        key: string,
+        def: Def,
+        isFull: boolean,
+        type: string,
+        isLanguageId: boolean,
+    ): Promise<void> {
+        if (this.cache.has(name)) {
+            return;
+        }
+
+        let content: string;
+        if (def[fontCharacter]) {
+            content = `content:"${def[fontCharacter]}"!important;`;
+        } else if (def[iconPath]) {
+            content =
+                'content:""!important;' +
+                `background-image:url(${PLUGIN_URL}/${this.id}/1/${def[iconPath]});`;
+        }
+
         let _fontColor = def[fontColor] ? `color:${def[fontColor]};` : "";
         let _fontId = def[fontId]
             ? `font-family:"${def[fontId]}"!important;`
             : "";
         let _fontSize = def[fontSize] ? `font-size:${def[fontSize]};` : "";
-        let _iconPath = def[iconPath]
-            ? `background-image:url(${PLUGIN_URL}/${this.#id}/assets/${def[iconPath]});`
-            : "";
+
+        let typeStr = type.length != 0 ? `,.file_type_${type}::before` : "";
+
+        let selector: string;
+        if (isLanguageId) {
+            selector =
+                `.file_type_${name}::before,` +
+                `.file_type_${key}::before` +
+                typeStr;
+        } else {
+            selector = isFull
+                ? `*[data-name="${name}"i][data-type="file"]>.file::before,` +
+                  `*[name="${name}"i][type="file"]>.file::before,` +
+                  `.file_type_${key}::before` +
+                  typeStr
+                : `*[data-name$="${name}"i][data-type="file"]>.file::before,` +
+                  `*[name$="${name}"i][type="file"]>.file::before,` +
+                  `.file_type_${key}::before` +
+                  typeStr;
+        }
 
         const css =
-            `*[data-name$="${name}"i][data-type="file"]>.file::before,` +
-            `*[name$="${name}"i][type="file"]>.file::before` +
-            `{content:"${fontChar}"!important;` +
-            _fontColor +
-            _fontId +
-            _fontSize +
-            _iconPath +
-            `}`;
-        this.#stylesheet.insertRule(css, this.#stylesheet.cssRules.length);
-    }
-
-    resolve(ext: string, full: boolean): boolean {
+            selector + `{` + content + _fontColor + _fontId + _fontSize + `}`;
         // @vsa-debug
-        console.log(`${this.#id}:resolve - ${ext}, ${full}`)
-        let key: number;
-        if (full) {
-            key = this.#theme[fileNames]
-                ? this.#theme[fileNames][ext]
-                : undefined;
+        console.log(`${this.id}.icontheme.insertCSS - ${name} - ${css}`);
+
+        if (isFull) {
+            this.fileNames.sheet.insertRule(
+                css,
+                this.fileNames.sheet.cssRules.length,
+            );
+        } else if (isLanguageId) {
+            this.langIds.sheet.insertRule(
+                css,
+                this.langIds.sheet.cssRules.length,
+            );
+        } else if (!name.includes(".")) {
+            this.fileExts.sheet.insertRule(css, 0);
         } else {
-            key = this.#theme[fileExtensions]
-                ? this.#theme[fileExtensions][ext]
-                : undefined;
+            this.fileExts.sheet.insertRule(
+                css,
+                this.fileExts.sheet.cssRules.length,
+            );
         }
-        if (typeof key == "undefined") {
-            return false;
-        }
-        let __ext = this.#theme[iconDefinitions][key.toString()];
 
-        this.insertCSS(ext, __ext);
-        return true;
+        this.cache.set(name, null);
     }
 
-    async reload() {
-        // @vsa-debug
-        console.log(`${this.#id}:reload - {}`)
-        this.dispose();
-
-        const __theme = this.#themes[this.#currentTheme];
-        this.#theme = (await import(`./iconThemes/${__theme}.js`)).content;
-        const styleEl = document.createElement("style");
-        styleEl.id = this.#id;
-        document.head.appendChild(styleEl);
-        // @vsa-debug
-        console.log(`${this.#id}:icontheme:append:styleEl - ${styleEl}`)
-        this.#style = styleEl;
-
-        const linkEl = document.createElement("link");
-        linkEl.id = this.#id;
-        linkEl.href = `${PLUGIN_URL}/${this.#id}/iconThemes/${__theme}.css`;
-        linkEl.rel = "stylesheet";
-        document.head.appendChild(linkEl);
-        // @vsa-debug
-        console.log(`${this.#id}:icontheme:append:linkEl - ${linkEl}`)
-        this.#link = linkEl;
-
-        this.resolveAll();
+    reset() {
+        if (this.fileExts) this.fileExts.remove();
+        if (this.fileNames) this.fileNames.remove();
+        if (this.langIds) this.langIds.remove();
+        if (this.link) this.link.remove();
     }
 
     dispose() {
         // @vsa-debug
-        console.log(`$dispose:icontheme - {}`)
-        this.#style.remove();
-        this.#link.remove();
-    }
-
-    set theme(value: string) {
-        if (this.#themes[value]) this.#currentTheme = value;
-    }
-
-    get theme(): string {
-        return this.#currentTheme;
+        console.log(`${this.id}:icontheme.dispose`);
+        this.reset();
+        if (this.sheet) this.sheet.disabled = false;
+        helpers.getIconForFile = getIconForFile;
     }
 }
 

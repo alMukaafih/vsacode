@@ -22,7 +22,7 @@ pub fn contrib_main(name: &str, content: &str, build_dir: &str) {
     let _ = write!(out, "{content}");
 }
 
-pub fn contrib<S: Serialize>(folder: &str, name: &str, json: S, build_dir: &str) {
+pub fn contrib<S: Serialize>(folder: &str, name: &str, json: &S, build_dir: &str) {
     let mut path = join!(build_dir, "src", format!("{folder}"));
     if !path.exists() {
         let _ = create_dir(&path);
@@ -30,7 +30,7 @@ pub fn contrib<S: Serialize>(folder: &str, name: &str, json: S, build_dir: &str)
     let mut p1 = path.clone();
     p1.push(format!("{name}.json"));
     let mut out = ok!(File::create(p1));
-    let _ = write!(out, "{}", ok!(serde_json::to_string(&json)));
+    let _ = write!(out, "{}", ok!(serde_json::to_string(json)));
 
     path.push(format!("{name}.js"));
     let mut out = ok!(File::create(path));

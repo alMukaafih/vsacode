@@ -1,6 +1,8 @@
 type Strings = string[];
 declare var acode: AcodeApi.Acode;
+declare var editorManager: AcodeApi.EditorManager;
 declare var tag: typeof AcodeApi.tag;
+declare var toast: (message: string, duration: number) => void;
 
 type LanguageMap = { [key: string]: string };
 declare const strings: LanguageMap;
@@ -23,7 +25,9 @@ interface Window {
     ANDROID_SDK_INT: number;
     DOES_SUPPORT_THEME: boolean;
     acode: AcodeApi.Acode;
+    editorManager: AcodeApi.EditorManager;
     tag: typeof AcodeApi.tag;
+    toast(message: string, duration: number): void;
 }
 
 interface String {
@@ -231,16 +235,76 @@ declare namespace AcodeApi {
      */
     type BrowseMode = "file" | "folder" | "both";
 
+    /** Editor Event */
+    const enum EditorEvent {
+        addFolder = "add-folder",
+        change = "changed",
+        fileContentChanged = "file-content-changed",
+        fileLoaded = "file-loaded",
+        initOpenFileList = "init-open-file-list",
+        newFile = "new-file",
+        removeFile = "remove-file",
+        removeFolder = "remove-folder",
+        renameFile = "rename-file",
+        saveFile = "save-file",
+        switchFile = "switch-file",
+    }
+
     /**
      *
      */
     class EditorFile {
         /**
          *
-         * @param name
-         * @param options
          */
         constructor(name: string, options: FileOptions);
+
+        /** File name */
+        filename: string;
+
+        /** File location on the device */
+        uri: string;
+
+        /** End of line */
+        eol: "windows" | "unix";
+
+        isUnsaved: boolean;
+        session: AceApi.Ace.EditSession;
+
+        on(event: string, callback: (file: EditorFile, e: Event) => void): void;
+
+        /** Makes this file active */
+        makeActive(): void;
+        removeActive(): void;
+
+        /** Saves the file. */
+        save(): Promise<boolean>;
+    }
+
+    interface EditorManager {
+        /** This property returns the current file. */
+        activeFile: EditorFile;
+        /** This is an instance of the Ace editor. */
+        editor: AceApi.Ace.Editor;
+        files: EditorFile[];
+        /** This function adds a listener for the specified event. */
+        emit(event: EditorEvent, ...args: any[]): void;
+        on(
+            event:
+                | EditorEvent.saveFile
+                | EditorEvent.switchFile
+                | EditorEvent.removeFile
+                | EditorEvent.fileLoaded
+                | EditorEvent.fileContentChanged,
+            listener: (file: EditorFile) => void
+        ): void;
+        on(
+            event: EditorEvent.change,
+            listener: (delta: AceApi.Ace.Delta) => void
+        ): void;
+        on(event: EditorEvent, listener: (...args: any[]) => void): void;
+
+        off(event: string, listener: (...args: any[]) => void): void;
     }
 
     /**
@@ -334,7 +398,7 @@ declare namespace AcodeApi {
      */
     interface Helpers {
         /**
-         * This helper method takes in a single parameter, a string named 'filename', and returns a string representing an icon class for the file specified by the filename.
+         * This helper method takes in a single parameter, a string named "filename", and returns a string representing an icon class for the file specified by the filename.
          * The icon class returned corresponds to the file type, which is determined by the file extension of the provided filename.
          * In simple, It will return icon according to filename.
          * @param filename The name of the file for which the icon class is to be returned.
@@ -515,7 +579,6 @@ declare namespace AcodeApi {
              * The icon of the setting. This icon will be displayed in the settings page.
              */
             icon?: string;
-            iconColor?: string;
 
             /**
              * The info of the setting. This info will be displayed in the settings page.
@@ -627,7 +690,7 @@ declare namespace AcodeApi {
      */
     interface SelectedFile {
         /**
-         * The type of the selected item, either 'file' or 'folder'
+         * The type of the selected item, either "file" or "folder"
          */
         type: "file" | "folder";
 
@@ -666,7 +729,7 @@ declare namespace AcodeApi {
 
         /**
          * Adds an event listener to the settings.
-         * @param event The event name.'update:\<setting>' | 'update:\<setting>:after' | 'reset'
+         * @param event The event name."update:\<setting>" | "update:\<setting>:after" | "reset"
          * @param callback The callback function that will be called when the event is triggered
          * @returns
          */
@@ -674,7 +737,7 @@ declare namespace AcodeApi {
 
         /**
          * Removes an event listener from the settings.
-         * @param event The event name.'update:\<setting>' | 'update:\<setting>:after' | 'reset'
+         * @param event The event name."update:\<setting>" | "update:\<setting>:after" | "reset"
          * @param callback The callback function that will be called when the event is triggered
          * @returns
          */
@@ -895,7 +958,7 @@ declare namespace AcodeApi {
      */
     interface Url {
         /**
-         * Returns basename from a url eg. 'index.html' from 'ftp://localhost/foo/bar/index.html'
+         * Returns basename from a url eg. "index.html" from "ftp://localhost/foo/bar/index.html"
          * @param url
          * @returns
          */
@@ -979,7 +1042,7 @@ declare namespace AcodeApi {
 
     /**
      * It allows the user to browse and select a file/folder from their device.
-     * @param mode Specify the file browser mode, the value can be 'file', 'folder' or 'both'. If no value is provided, the default is 'file'.
+     * @param mode Specify the file browser mode, the value can be "file", "folder" or "both". If no value is provided, the default is "file".
      * @param info A small message to show what the file browser is opened for
      * @param doesOpenLast Should the file browser open the lastly visited directory?
      * @param defaultDir Default directory to open.

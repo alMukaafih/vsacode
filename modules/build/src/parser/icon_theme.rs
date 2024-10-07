@@ -2,108 +2,158 @@ use std::fs::File;
 use std::io::{BufReader, Write};
 use std::path::PathBuf;
 
+use crate::css::StyleSheet;
 use crate::types::env::RsEnv;
 use crate::types::icon_theme::IFileIconTheme;
 use crate::types::package_json::IconThemeMeta;
-use crate::util::{FolderType, CSS};
+use crate::css::FolderType;
+use crate::util::{filter, vs_to_ace};
 
 use super::Parser;
+
+macro_rules! verify {
+    ( $x:expr, $defs:expr ) => {{
+        if $x.is_some() {
+            if $defs.get(ok!($x.as_ref())).is_none() {
+                $x = None;
+            }
+        }
+    }};
+}
+
+macro_rules! ok_or {
+    ( $x:expr, $y:expr ) => {{
+        if $x.is_some() {
+            ok!($x.as_ref()).clone()
+        } else {
+            $y
+        }
+    }};
+}
 
 pub struct IconThemeParser {
     pub meta: IconThemeMeta,
     pub icon_json: IFileIconTheme,
     pub env: RsEnv,
     pub root: PathBuf,
+    pub sheet: StyleSheet,
 }
 
 impl IconThemeParser {
-    pub fn new(meta: IconThemeMeta, env: RsEnv) -> Self {
+    pub fn new(env: RsEnv) -> Self {
         Self {
-            meta,
-            env,
+            meta: Default::default(),
+            env: env.clone(),
             icon_json: Default::default(),
             root: Default::default(),
+            sheet: StyleSheet::new((
+                Default::default(),
+                join!(ok!(env.build_dir.as_ref()), "dist", "1"),
+            )),
         }
     }
 
-    fn generate_styles(&mut self) -> String {
-        let file = self.icon_json.file.get_or_insert(own!("null"));
-        let folder = self.icon_json.folder.get_or_insert(own!("null"));
-        let folder_expanded = self.icon_json.folder_expanded.get_or_insert(folder.clone());
-        let root_folder = self.icon_json.root_folder.get_or_insert(folder.clone());
-        let root_folder_expanded = self
-            .icon_json
-            .root_folder_expanded
-            .get_or_insert(root_folder.clone());
+    pub fn set_meta(&mut self, meta: IconThemeMeta) {
+        self.meta = meta;
+    }
 
+    fn generate_styles(&mut self) -> String {
         let defs = &mut self.icon_json.icon_definitions;
 
-        let mut css = CSS::new(self.env.clone(), self.root.clone());
-        let mut styles = if self.icon_json.fonts.is_some() {
-            css.generate_fonts_css(ok!(self.icon_json.fonts.as_ref()))
+        verify!(self.icon_json.file, defs);
+        verify!(self.icon_json.folder, defs);
+        verify!(self.icon_json.folder_expanded, defs);
+        verify!(self.icon_json.root_folder, defs);
+        verify!(self.icon_json.root_folder_expanded, defs);
+
+        let file = ok_or!(self.icon_json.file, own!(""));
+        let folder = ok_or!(self.icon_json.folder, own!(""));
+        let folder_expanded = ok_or!(self.icon_json.folder_expanded, folder.clone());
+
+        let root_folder = ok_or!(self.icon_json.root_folder, folder.clone());
+        let root_folder_expanded = if self.icon_json.root_folder.is_some() {
+            ok_or!(self.icon_json.root_folder_expanded, root_folder.clone())
         } else {
-            "".to_owned()
+            ok_or!(self.icon_json.root_folder_expanded, folder_expanded.clone())
         };
-        self.icon_json.fonts = None;
-        styles = styles
-            + ".file,.folder{"
-            + "background-size:contain;"
-            + "background-repeat:no-repeat;"
-            + "display:inline-block;"
-            + "height:1em;"
-            + "width:1em;}";
-        styles += &css.generate_css(file, ".file_type_default::before", defs);
-        self.icon_json.file = None;
 
-        styles += &css.generate_css(folder, ".hidden>*[data-type=\"dir\"]>.folder::before", defs);
-        styles += &css.generate_css(folder, "*[type^=\"dir\"]>.folder::before", defs);
-        self.icon_json.folder = None;
+        self.sheet.route.0 = self.root.clone();
+        let sheet = &mut self.sheet;
 
-        styles += &css.generate_css(
-            folder_expanded,
-            "*[data-type=\"dir\"]>.folder::before",
+        if self.icon_json.fonts.is_some() {
+            sheet.insert_fonts(ok!(self.icon_json.fonts.as_ref()))
+        }
+        sheet.insert_css(file, own!(".file_type_default:before"), defs);
+
+        sheet.insert_css(
+            folder.clone(),
+            own!(".list.collapsible.hidden>.tile[data-type='dir']>.folder:before"),
             defs,
         );
-        self.icon_json.folder_expanded = None;
 
-        styles += &css.generate_css(
+        sheet.insert_css(folder, own!("*[type^='dir']>.folder:before"), defs);
+
+        sheet.insert_css(
+            folder_expanded.clone(),
+            own!("*[data-type='dir']>.folder:before"),
+            defs,
+        );
+
+        sheet.insert_css(
             root_folder,
-            ".hidden>*[data-type=\"root\"]>.folder::before",
+            own!(".list.collapsible.hidden>.tile[data-type='root']>.folder:before"),
             defs,
         );
-        self.icon_json.root_folder = None;
 
-        styles += &css.generate_css(
+        sheet.insert_css(
             root_folder_expanded,
-            "*[data-type=\"root\"]>.folder::before",
+            own!("*[data-type='root']>.folder:before"),
             defs,
         );
-        self.icon_json.root_folder_expanded = None;
 
-        styles += &css.generate_folders_css(&self.icon_json.folder_names, defs, FolderType::Normal);
-        self.icon_json.folder_names = None;
+        sheet.insert_folders_css(&self.icon_json.folder_names, defs, FolderType::Normal);
 
-        styles += &css.generate_folders_css(
-            &self.icon_json.folder_names_expanded,
-            defs,
-            FolderType::Expanded,
-        );
-        self.icon_json.folder_names_expanded = None;
+        if self.icon_json.folder_expanded.is_some() {
+            sheet.insert_folders_css(
+                &self.icon_json.folder_names_expanded,
+                defs,
+                FolderType::Expanded,
+            );
+        } else {
+            sheet.insert_folders_css(
+                &self.icon_json.folder_names,
+                defs,
+                FolderType::Expanded,
+            );
+        }
 
-        styles +=
-            &css.generate_folders_css(&self.icon_json.root_folder_names, defs, FolderType::Root);
-        self.icon_json.root_folder_names = None;
+        sheet.insert_folders_css(&self.icon_json.root_folder_names, defs, FolderType::Root);
 
-        styles += &css.generate_folders_css(
+        sheet.insert_folders_css(
             &self.icon_json.root_folder_names_expanded,
             defs,
             FolderType::RootExpanded,
         );
+
+        self.icon_json.fonts = None;
+        self.icon_json.file = None;
+        self.icon_json.folder = None;
+        self.icon_json.folder_expanded = None;
+        self.icon_json.root_folder = None;
+        self.icon_json.root_folder_expanded = None;
+        self.icon_json.folder_names = None;
+        self.icon_json.folder_names_expanded = None;
+        self.icon_json.root_folder_names = None;
         self.icon_json.root_folder_names_expanded = None;
 
-        css.bundle(defs);
+        vs_to_ace(&mut self.icon_json.language_ids);
 
-        styles
+        sheet.bundle(&self.icon_json.file_extensions, defs);
+        sheet.bundle(&self.icon_json.file_names, defs);
+        sheet.bundle(&self.icon_json.language_ids, defs);
+        filter(defs);
+
+        format!("{}", sheet.optimize())
     }
 }
 
@@ -130,7 +180,7 @@ impl Parser for IconThemeParser {
         let mut out = ok!(File::create(join!(
             ok!(self.env.build_dir.as_ref()),
             "dist",
-            "iconThemes",
+            "0",
             format!("{}.css", &self.meta.id)
         )));
         let _ = write!(out, "{}", self.generate_styles());

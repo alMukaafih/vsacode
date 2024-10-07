@@ -7,7 +7,7 @@ use serde::{Deserialize, Deserializer};
 use serde::de::{self, MapAccess, Visitor};
 use void::Void;
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct IconThemeMeta {
     pub id: String,

@@ -16,9 +16,11 @@ pub struct DefinitionProperties {
     pub font_size: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", rename(serialize = "4"))]
     pub font_id: Option<String>,
+    #[serde(skip_serializing, skip_deserializing)]
+    pub is_bundled: bool,
 }
 
-#[derive(Deserialize, Serialize, Debug, Default)]
+#[derive(Clone, Deserialize, Serialize, Debug, Default)]
 pub struct Src {
     #[serde(rename(serialize = "0"))]
     pub path: String,
@@ -26,7 +28,7 @@ pub struct Src {
     pub format: String,
 }
 
-#[derive(Deserialize, Serialize, Debug, Default)]
+#[derive(Clone, Deserialize, Serialize, Debug, Default)]
 pub struct FontProperties {
     pub id: String,
     pub src: Vec<Src>,
@@ -35,25 +37,28 @@ pub struct FontProperties {
     pub size: Option<String>,
 }
 
+pub type Defs = HashMap<String, DefinitionProperties>;
+pub type Mapping = Option<HashMap<String, String>>;
+
 #[derive(Deserialize, Debug, Default)]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct IFileIconTheme {
     pub hides_explorer_arrows: Option<bool>,
     pub fonts: Option<Vec<FontProperties>>,
-    pub icon_definitions: HashMap<String, DefinitionProperties>,
+    pub icon_definitions: Defs,
     pub file: Option<String>,
     pub folder: Option<String>,
     pub folder_expanded: Option<String>,
-    pub folder_names: Option<HashMap<String, String>>,
-    pub folder_names_expanded: Option<HashMap<String, String>>,
+    pub folder_names: Mapping,
+    pub folder_names_expanded: Mapping,
     pub root_folder: Option<String>,
     pub root_folder_expanded: Option<String>,
-    pub root_folder_names: Option<HashMap<String, String>>,
-    pub root_folder_names_expanded: Option<HashMap<String, String>>,
-    pub language_ids: Option<HashMap<String, String>>,
+    pub root_folder_names: Mapping,
+    pub root_folder_names_expanded: Mapping,
+    pub language_ids: Mapping,
 
-    pub file_extensions: Option<HashMap<String, String>>,
-    pub file_names: Option<HashMap<String, String>>,
+    pub file_extensions: Mapping,
+    pub file_names: Mapping,
     pub light: Option<HashMap<String, Value>>,
     pub high_contrast: Option<HashMap<String, Value>>,
 }
@@ -73,12 +78,12 @@ macro_rules! skip_if_none {
     };
 }
 
-type Map = HashMap<String, i32>;
-type DefsMap = HashMap<i32, DefinitionProperties>;
+type I32map = HashMap<String, i32>;
+type I32DefsMap = HashMap<i32, DefinitionProperties>;
 
 impl IFileIconTheme {
-    fn minify_icon_defs(&self) -> (Map, DefsMap) {
-        let mut defsmap = DefsMap::new();
+    fn minify_icon_defs(&self) -> (I32map, I32DefsMap) {
+        let mut defsmap = I32DefsMap::new();
         let mut map = HashMap::new();
         let mut i = 0;
         for (k, v) in &self.icon_definitions {
@@ -89,8 +94,8 @@ impl IFileIconTheme {
         (map, defsmap)
     }
 
-    fn link_map(from: &HashMap<String, String>, to: &Map) -> Map {
-        let mut map = Map::new();
+    fn link_map(from: &HashMap<String, String>, to: &I32map) -> I32map {
+        let mut map = I32map::new();
         for (k, v) in from {
             let val = to.get(v);
             if let Some(val) = val {
@@ -111,6 +116,7 @@ impl Serialize for IFileIconTheme {
         state.serialize_field("0", &defsmap)?;
         skip_if_none!(state, "1", self.file_extensions, map);
         skip_if_none!(state, "2", self.file_names, map);
+        skip_if_none!(state, "3", self.language_ids, map);
         state.end()
     }
 }

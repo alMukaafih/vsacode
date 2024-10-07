@@ -31,6 +31,7 @@ pub(crate) mod runtime;
 mod types;
 pub(crate) mod util;
 pub(crate) mod write;
+mod css;
 
 /// Main Component.
 #[napi]
@@ -109,18 +110,19 @@ impl Binding {
             b_code[0] = true;
 
             self.create_build_dir(package_json.name);
-            self.create_contrib_dir("iconThemes");
+            self.create_contrib_dir("iconThemes", 0);
 
             let mut list = vec![];
+
+            let mut parser = IconThemeParser::new(self.env.clone());
             for icon_theme_meta in icon_theme_metas {
                 list.push([icon_theme_meta.id.clone(), icon_theme_meta.label.clone()]);
-                let env = self.env.clone();
-                let mut parser = IconThemeParser::new(icon_theme_meta, env);
+                parser.set_meta(icon_theme_meta);
                 parser.parse()?;
                 write::contrib(
                     "iconThemes",
                     &parser.meta.id,
-                    parser.icon_json,
+                    &parser.icon_json,
                     ok!(self.env.build_dir.as_ref()),
                 )
             }
@@ -181,9 +183,9 @@ impl Binding {
         Ok(())
     }
 
-    fn create_contrib_dir(&self, contrib: &str) {
+    fn create_contrib_dir(&self, contrib: &str, to: u8) {
         let _ = create_dir_all(join!(ok!(self.env.build_dir.as_ref()), "src", contrib));
-        let dist = join!(ok!(self.env.build_dir.as_ref()), "dist", contrib);
+        let dist = join!(ok!(self.env.build_dir.as_ref()), "dist", to.to_string());
         let _ = create_dir_all(dist);
     }
 

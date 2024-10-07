@@ -47,7 +47,7 @@ pub struct PluginJson {
 impl From<PackageJson> for PluginJson {
     fn from(p: PackageJson) -> Self {
         Self {
-            id: format!("{}.{}",p.publisher, p.name),
+            id: p.name, //format!("{}.{}",p.publisher, p.name),
             name: p.display_name,
             main: own!("main.js"),
             version: p.version,
