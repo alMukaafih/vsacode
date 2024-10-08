@@ -30,7 +30,7 @@ function fantasicon(userOptions: RunnerOptions) {
     generateFonts(userOptions).then(() => {});
 }
 
-export class Main {
+export class Main implements Vsa.Component {
     binding: Binding;
     env: Env;
 

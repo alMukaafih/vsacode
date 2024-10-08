@@ -1,17 +1,8 @@
 {
+    "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "module": "nodenext",
-        "moduleResolution": "nodenext",
-        "resolveJsonModule": true,
-        "allowJs": true,
-        "removeComments": false,
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "noImplicitAny": true,
-        "downlevelIteration": true,
-        "strict": true,
-        "declaration": true,
+        "rootDir": "lib",
         "outDir": "dist"
     },
-    "include": ["./lib", "index.d.ts"]
+    "include": ["./lib", "index.d.ts", "../../core/typings/vsacode.d.ts"]
 }
