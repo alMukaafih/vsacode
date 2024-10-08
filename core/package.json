@@ -26,6 +26,7 @@
   ],
   "dependencies": {
     "@vsacode/build": "workspace:",
+    "@vsacode/info": "workspace:",
     "smol-toml": "^1.3.0",
     "ziyy": "^2.0.0-beta.1"
   },

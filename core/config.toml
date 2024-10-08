@@ -13,6 +13,13 @@ import = "@vsacode/build"
 tmpDir = true
 vsix = true
 
+# Get info about vsix file
+[modules.info]
+import = "@vsacode/info"
+[modules.info.attributes]
+tmpDir = true
+vsix = false
+
 # Manage vsacode
 [modules.mgr]
 import = "@vsacode/mgr"
