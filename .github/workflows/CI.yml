@@ -28,64 +28,64 @@ jobs:
         settings:
           - host: macos-latest
             target: x86_64-apple-darwin
-            build: ./vsa mgr build --hoist --target x86_64-apple-darwin
+            build: ./vsa mgr build --runtime --hoist --target x86_64-apple-darwin
           - host: windows-latest
-            build: ./vsa mgr build --hoist --target x86_64-pc-windows-msvc
+            build: ./vsa mgr build --runtime --hoist --target x86_64-pc-windows-msvc
             target: x86_64-pc-windows-msvc
           - host: windows-latest
             build: |
-              ./vsa mgr build --hoist --target i686-pc-windows-msvc
+              ./vsa mgr build --runtime --hoist --target i686-pc-windows-msvc
               ./vsa mgr test
             target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
             build: |
-              ./vsa mgr build --hoist --target x86_64-unknown-linux-gnu
+              ./vsa mgr build --runtime --hoist --target x86_64-unknown-linux-gnu
           - host: ubuntu-latest
             target: x86_64-unknown-linux-musl
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
             build: |
-              ./vsa mgr build --hoist --target x86_64-unknown-linux-musl
+              ./vsa mgr build --runtime --hoist --target x86_64-unknown-linux-musl
           - host: macos-latest
             target: aarch64-apple-darwin
-            build: ./vsa mgr build --hoist --target aarch64-apple-darwin
+            build: ./vsa mgr build --runtime --hoist --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
             build: |
-              ./vsa mgr build --hoist --target aarch64-unknown-linux-gnu
+              ./vsa mgr build --runtime --hoist --target aarch64-unknown-linux-gnu
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
             setup: |
               sudo apt-get update
               sudo apt-get install gcc-arm-linux-gnueabihf -y
-            build: ./vsa mgr build --hoist --target armv7-unknown-linux-gnueabihf
+            build: ./vsa mgr build --runtime --hoist --target armv7-unknown-linux-gnueabihf
           - host: ubuntu-latest
             target: armv7-unknown-linux-musleabihf
-            build: ./vsa mgr build --hoist --target armv7-unknown-linux-musleabihf
+            build: ./vsa mgr build --runtime --hoist --target armv7-unknown-linux-musleabihf
           - host: ubuntu-latest
             target: aarch64-linux-android
-            build: ./vsa mgr build --hoist --target aarch64-linux-android
+            build: ./vsa mgr build --runtime --hoist --target aarch64-linux-android
           - host: ubuntu-latest
             target: armv7-linux-androideabi
-            build: ./vsa mgr build --hoist --target armv7-linux-androideabi
+            build: ./vsa mgr build --runtime --hoist --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
             build: |-
               set -e &&
               rustup target add aarch64-unknown-linux-musl &&
-              ./vsa mgr build --hoist --target aarch64-unknown-linux-musl
+              ./vsa mgr build --runtime --hoist --target aarch64-unknown-linux-musl
           - host: windows-latest
             target: aarch64-pc-windows-msvc
-            build: ./vsa mgr build --hoist --target aarch64-pc-windows-msvc
+            build: ./vsa mgr build --runtime --hoist --target aarch64-pc-windows-msvc
           - host: ubuntu-latest
             target: riscv64gc-unknown-linux-gnu
             setup: |
               sudo apt-get update
               sudo apt-get install gcc-riscv64-linux-gnu -y
-            build: ./vsa mgr build --hoist --target riscv64gc-unknown-linux-gnu
+            build: ./vsa mgr build --runtime --hoist --target riscv64gc-unknown-linux-gnu
     name: stable - ${{ matrix.settings.target }} - node@20
     runs-on: ${{ matrix.settings.host }}
     steps:
@@ -187,7 +187,7 @@ jobs:
             env
             freebsd-version
             yarn install
-            ./vsa mgr build --hoist --target x86_64-unknown-freebsd
+            ./vsa mgr build --runtime --hoist --target x86_64-unknown-freebsd
             rm -rf node_modules
             rm -rf target
             rm -rf .yarn/cache
